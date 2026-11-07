@@ -1,0 +1,5 @@
+# Local course masters, captures and instructor files stay off public main.
+# Only the public project description and this allowlist belong on main.
+/*
+!/.gitignore
+!/README.md
