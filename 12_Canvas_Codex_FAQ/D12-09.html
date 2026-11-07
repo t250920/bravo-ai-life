@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>외부 의존 제거 · Bravo AI Life</title><link href="../assets/course.css" rel="stylesheet"/><script defer="" src="../assets/course.js"></script><link href="../assets/reader.css" rel="stylesheet"/></head><body><main><p class="reader-location">12차시　›　예제 09 · 외부 의존 제거</p><header class="hero"><div><h1>외부 의존 제거</h1><p>규정을 구현한 FAQ의 오류를 재현하고 오프라인·모바일·키보드 사용을 시험합니다.</p></div><div class="folio"><span>12차시 실습 예제</span><div><b>09</b> / 11</div><meter aria-label="12차시 실습 예제" max="11" min="0" value="9"></meter></div></header><section class="prerequisites"><h2>시작 전 준비 자료</h2><p>새 대화에 이 파일을 첨부하거나, 아래 ‘공통 원자료’에서 같은 내용을 복사하세요. 이어서 실습 프롬프트를 보냅니다.</p><div><a download="출고_FAQ_요구사항.pdf" href="출고_FAQ_요구사항.pdf">↓ 출고_FAQ_요구사항.pdf</a></div><section class="attachment-guide reading-section"><h3 class="reading-title">ChatGPT에 자료 첨부하기 · 실제 화면</h3><p>Windows에서 촬영한 ChatGPT 메뉴와 매출마감 Excel 첨부 예시입니다. 카드에는 직접 선택한 파일 이름이 표시됩니다.</p><div class="attachment-steps"><figure><button aria-label="① 입력창 왼쪽 ＋를 누르고 ‘사진 및 파일 추가’를 선택하세요. 확대" class="photo" type="button"><img alt="① 입력창 왼쪽 ＋를 누르고 ‘사진 및 파일 추가’를 선택하세요." loading="lazy" src="../media/첨부_메뉴.png"/></button><figcaption>① 입력창 왼쪽 ＋를 누르고 ‘사진 및 파일 추가’를 선택하세요.</figcaption></figure><p class="file-choice"><b>② 파일 선택</b><br/>Windows 열기 창에서 <strong>출고_FAQ_요구사항.pdf</strong>을 고르고 <b>열기</b>를 누르세요.</p><figure><button aria-label="③ 입력창에 파일 카드가 보이면 이름을 확인하고 아래 프롬프트를 보내세요. 확대" class="photo" type="button"><img alt="③ 입력창에 파일 카드가 보이면 이름을 확인하고 아래 프롬프트를 보내세요." loading="lazy" src="../media/첨부_엑셀카드.png"/></button><figcaption>③ 입력창에 파일 카드가 보이면 이름을 확인하고 아래 프롬프트를 보내세요.</figcaption></figure></div></section></section><aside class="capture-note">이 예제는 11월 2일 시행 v1.1 규정 묶음을 사용합니다. 9차시의 F02(11월 1일 시행)와는 별도 사례이므로 이 페이지 원자료를 새 대화에 넣으세요.</aside><aside class="capture-note">구판 실제 촬영 자료 · ChatGPT Pro에서 생성된 응답입니다. Plus 수업용 연습 자료로 재편집했으며 이 예제의 Plus 재실행 완료를 뜻하지 않습니다. 입력·답변 전문을 복사해 자신의 계정에서 실습하세요.</aside><section id="first"><section class="source reading-section"><h3 class="reading-title">① 수업 원자료 · 처음 한 번만 복사해 대화에 넣으세요</h3><div class="copybox" data-copy-kind="reference"><header><b>공통 원자료</b><button aria-label="공통 원자료 복사" class="copy" title="공통 원자료 복사" type="button"></button></header><pre>모리문구 가상 사내자료. 발송 v1.0: 국내 일반 주문, 영업일은 월~금(공휴일 제외). 14:00 미만 결제 당일 발송 예정, 14:00부터 또는 비영업일 결제 다음 영업일 발송 예정. 발송은 택배사 인계, 도착 보장 아님. 해외 지역·가격 미정. 배송지 변경 v1.0: 포장 전 고객센터 접수 가능, 포장 중 물류 확인 후 가능 여부 안내, 발송 완료 후 고객센터 변경 불가. 상태를 모르면 먼저 확인. 실제 주소·연락처를 요구하지 않음. 개정 공지 발송 v1.1: 11월 2일 결제부터 국내 일반 주문 기준을 15:00 미만 당일, 15:00부터 다음 영업일로 변경. 다른 조항과 배송지 변경 규정은 유지. 이 연습에서 10월 30일 금요일, 11월 2일 월요일, 해당 주 공휴일 없음. 결과물은 인터넷 없이 여는 단일 HTML. 주소를 수집하지 않고 화면에 결제일·시각·주문 상태와 규정만 표시한다. FAQ 질문은 버튼으로 펼치고 키보드로도 조작할 수 있어야 한다.
+인수 결함: 정각을 당일 처리, 포장 중 주소변경 보장, 모바일 360px에서 표 넘침, 오프라인에서 외부 CSS 로딩 실패, 키보드 펼침 상태 누락. 인수자는 운영 담당자와 QA 1명.</pre></div></section><div class="pair"><section class="panel"><small>내가 보낸 요청</small><h2>② AI에 맡기기</h2><button aria-label="실제 입력창에 넣은 요청 확대" class="photo"><img alt="실제 입력창에 넣은 요청" src="D12-09-in.jpg"/></button><div class="copybox" data-copy-kind="prompt"><header><b>실습 프롬프트</b><button aria-label="실습 프롬프트 복사" class="copy" title="실습 프롬프트 복사" type="button"></button></header><pre>외부 의존 제거를 완성해 줘. 붙여넣을 수 있는 구현 코드 또는 패치와 입력별 재현·기대 결과를 포함해. 검수 중 들어온 실제 조건도 함께 해결해: 개정 전 금요일 결제 예시에서 적용 버전이 잘못 표시됐어. 고칠 위치와 검증법을 정해 줘.</pre></div></section><section class="panel"><small>ChatGPT의 실제 답변</small><h2>③ 결과물 읽기</h2><button aria-label="실제 답변의 일부 확대" class="photo"><img alt="실제 답변의 일부" src="D12-09-out.jpg"/></button><div class="answer"><p>단일 HTML 내부에 CSS와 JavaScript를 포함하고 외부 폰트·CDN·이미지·라이브러리를 제거한다. 금요일 결제에 v1.1을 잘못 표시한 버전 판정 조건도 수정한다.</p><p>&lt;!doctype html&gt;<br/>&lt;html lang="ko"&gt;<br/>&lt;head&gt;<br/>&lt;meta charset="utf-8"&gt;<br/>&lt;meta name="viewport"<br/> content="width=device-width,initial-scale=1"&gt;<br/>&lt;style&gt;<br/>body { font-family: sans-serif; margin: 16px; }<br/>&lt;/style&gt;<br/>&lt;/head&gt;<br/>&lt;body&gt;<br/>&lt;h1&gt;모리문구 FAQ&lt;/h1&gt;<br/>&lt;p id="version"&gt;&lt;/p&gt;<br/>&lt;script&gt;<br/>const date = "2026-10-30";<br/>document.getElementById("version").textContent =<br/>  date &gt;= "2026-11-02" ? "v1.1" : "v1.0";<br/>&lt;/script&gt;<br/>&lt;/body&gt;<br/>&lt;/html&gt;</p><div class="tablewrap"><table><tr><th>검증 조건</th><th>기대 결과</th></tr><tr><td>10/30 결제</td><td>v1.0</td></tr><tr><td>11/2 결제</td><td>v1.1</td></tr><tr><td>네트워크 차단</td><td>화면 정상 표시</td></tr><tr><td>외부 CSS 차단</td><td>영향 없음</td></tr></table></div><p>수정 위치는 버전 출력부의 날짜 비교식이다. HTML을 로컬 파일로 열어 검증한다.</p></div><section class="reading-section"><div class="copybox" data-copy-kind="answer" data-image-answer=""><header><b>답변 원문</b><button aria-label="답변 원문 복사" class="copy" title="답변 원문 복사" type="button"></button></header><pre hidden="">단일 HTML 내부에 CSS와 JavaScript를 포함하고 외부 폰트·CDN·이미지·라이브러리를 제거한다. 금요일 결제에 v1.1을 잘못 표시한 버전 판정 조건도 수정한다.
+
+
+&lt;!doctype html&gt;
+&lt;html lang="ko"&gt;
+&lt;head&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;meta name="viewport"
+ content="width=device-width,initial-scale=1"&gt;
+&lt;style&gt;
+body { font-family: sans-serif; margin: 16px; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;모리문구 FAQ&lt;/h1&gt;
+&lt;p id="version"&gt;&lt;/p&gt;
+&lt;script&gt;
+const date = "2026-10-30";
+document.getElementById("version").textContent =
+  date &gt;= "2026-11-02" ? "v1.1" : "v1.0";
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+검증 조건 | 기대 결과
+10/30 결제 | v1.0
+11/2 결제 | v1.1
+네트워크 차단 | 화면 정상 표시
+외부 CSS 차단 | 영향 없음
+
+수정 위치는 버전 출력부의 날짜 비교식이다. HTML을 로컬 파일로 열어 검증한다.</pre></div></section></section></div></section><h2 class="reader-step">조건을 바꿔 다시 해보기</h2><section id="revision"><div class="pair"><section class="panel"><small>독립 실습</small><h2>조건을 바꿔 다시 요청하기</h2><div class="copybox" data-copy-kind="prompt"><header><b>같은 대화에서 보낼 요청</b><button aria-label="같은 대화에서 보낼 요청 복사" class="copy" title="같은 대화에서 보낼 요청 복사" type="button"></button></header><pre>폰트 서버도 연결되지 않는다. 이 조건으로 달라지는 항목을 먼저 밝히고, 수정 전후 표와 최종 납품본을 다시 작성해 줘.</pre></div></section><section class="panel"><h2>수정본 대조하기</h2><p>행동과 화면 표시를 함께 시험하세요. 정각, 포장 상태 미상, 오프라인, 키보드 Enter·Space에서 기대 결과를 적습니다.</p><p>근거가 되는 원자료를 표시하고 계산·판정·표현 중 달라진 부분을 설명하세요.</p></section></div></section><nav aria-label="교재 이동" class="reader-pager"><div><a href="D12-08.html" rel="prev">← 이전</a><a class="reader-toc" href="../index.html#day-12">목차</a><a class="reader-next" href="D12-10.html" rel="next">다음 →</a></div></nav></main><dialog><button class="close">닫기</button><img alt="확대된 실습 화면"/></dialog><output role="status"></output></body></html>

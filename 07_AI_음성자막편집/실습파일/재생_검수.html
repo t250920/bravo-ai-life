@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html data-edition="tool" lang="ko"><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>모리문구 · 완성본 검수</title><style>body{max-width:900px;margin:3vh auto;background:#153a3b;color:#f2f3e7;font:18px/1.6 Malgun Gothic,sans-serif;padding:0 16px}video{width:100%}button{font:inherit;background:#ffedc3;border:0;border-radius:6px;padding:6px 15px;margin-right:8px}</style><style id="course-path-style">
+.course-path{position:sticky;top:0;z-index:8;display:flex;align-items:center;gap:.45em;flex-wrap:wrap;padding:6px clamp(12px,3vw,40px);background:#f3faf7;color:#34534d;border-bottom:1px solid #bad4ca;font:600 14px/1.5 "Malgun Gothic",sans-serif}
+.course-path a,.course-menu a{color:#075a4e;text-underline-offset:3px}.course-path a{padding:4px}.course-menu{background:#eff7f4;border:1px solid #bad4ca;border-radius:8px;padding:10px 14px;margin:0 0 16px;color:#173e37}.course-menu summary{font-weight:700;cursor:pointer}.course-menu a{display:inline-block;padding:5px 10px}.course-path a:focus-visible,.course-menu a:focus-visible{outline:3px solid #bf6114}
+@media print{.course-path,.course-menu{display:none!important}}</style><style id="white-edition">@media screen {
+:root{--ink:#20242b;--muted:#59616b;--line:#e2e5ea;--wash:#f6f7f9;--link:#2459a8;--gutter:clamp(18px,4vw,52px)}
+body{background:#fff;color:var(--ink);font-family:"Segoe UI","Malgun Gothic",sans-serif;line-height:1.68}
+a,summary,.report summary{color:var(--link)}a{text-underline-offset:4px}
+:is(a,button,summary,select):focus-visible{outline:3px solid #5484d4;outline-offset:3px}
+h1,h2,h3{letter-spacing:-.04em;text-wrap:pretty}
+.course-path{background:white;border-color:var(--line);color:var(--muted);padding:7px var(--gutter);font-weight:500}.course-path a,.course-menu a{color:var(--link)}
+.course-path a{text-decoration:none}.course-path a:hover,.course-menu a:hover{text-decoration:underline}
+.course-path span{color:#858e99}.tag,.kicker,.label,nav b,.guide small{color:var(--muted);font-weight:600}
+.course-menu{background:#fff;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:0 0 10px;margin:0 0 24px;color:var(--ink);grid-column:1/-1}.course-menu div{padding:6px 0}
+html[data-edition=directory] body>header,html[data-edition=directory] main{width:min(100%,1160px);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter)}
+html[data-edition=directory] body>header{background:white;color:var(--ink);padding-top:clamp(40px,7vw,84px);padding-bottom:24px}
+html[data-edition=directory] header small{color:var(--muted);font-size:12px;font-weight:650;letter-spacing:.14em}
+html[data-edition=directory] h1{font-size:clamp(34px,5.2vw,62px);line-height:1.16;margin:14px 0}
+html[data-edition=directory] header p,.grid article p,.lead{color:var(--muted)}
+html[data-edition=directory] .note{background:white;color:var(--muted);padding:18px 0;border-block:1px solid var(--line);border-radius:0;font-size:15px}
+html[data-edition=directory] h2{font-size:clamp(23px,3vw,32px);margin:44px 0 8px}
+html[data-edition=directory] .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(28px,5vw,64px)}
+html[data-edition=directory] article{border:0;border-top:1px solid var(--line);border-radius:0;padding:22px 0 26px;display:flex;flex-direction:column;align-items:flex-start}
+html[data-edition=directory] article h3{margin:7px 0 0;font-size:clamp(20px,2vw,25px)}
+html[data-edition=directory] article p{margin:7px 0 17px}.buttons{margin-top:auto}
+.buttons a,.buttons a:first-child{background:white;border-radius:0;color:var(--muted);padding:3px 0;text-decoration:none;font-size:15px}.buttons a:first-child{color:var(--link);font-weight:650;margin-right:16px}.buttons a:first-child::after{content:" →"}.buttons a:hover{text-decoration:underline}
+html[data-edition=directory] footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted)}
+html[data-edition=lesson] body>header{background:#fff;color:var(--muted);font-size:14px;font-weight:500;padding:18px var(--gutter) 0}
+html[data-edition=lesson] main{max-width:1290px;padding:0 var(--gutter);margin:30px auto 70px;gap:clamp(24px,4vw,65px)}
+html[data-edition=lesson] nav{top:58px;max-height:calc(100vh - 75px);overflow:auto}nav a{color:var(--muted);padding:7px 10px}nav a:hover{background:var(--wash)}nav a[aria-current]{background:#f1f4fa;color:#183e79}
+html[data-edition=lesson] article{grid-template-columns:minmax(0,1fr);border:0;padding:0;gap:36px}
+.page{border:0;border-radius:0;padding:0;max-width:none}.page+.page{border-top:1px solid var(--line);padding-top:32px}.page h2{font-size:clamp(24px,2.5vw,34px)}
+.shots,figure{background:white;border:0;padding:0;gap:12px}.shots{margin:20px 0}.copybox,.copyarea{background:var(--wash);border:0;border-radius:8px;padding:14px 18px}.copybox header,.copyarea header{color:var(--ink)}
+.copy,html[data-edition=templates] button{background:#273344;color:white;border:0;border-radius:6px;padding:6px 14px}pre{line-height:1.65}
+aside{border-left:2px solid #bdc5d0}footer,.pager a{border-color:var(--line);color:var(--muted)}.pager a,select,.mobile{background:#fff;border:1px solid #cbd1da;border-radius:6px;padding:7px 12px;color:var(--ink)}
+html[data-edition=tool] main{border:0}html[data-edition=tool] header{background:white;color:var(--ink);border-bottom:1px solid var(--line)}html[data-edition=tool] :is(button,select,input){background:var(--wash);color:var(--ink);border:1px solid #cbd1da;border-radius:6px}html[data-edition=tool] :is(#note,.bg-indigo-50){color:var(--ink);background:var(--wash);border-color:#b2bdcd}
+html[data-edition=templates] article{padding:24px 0;border:0;border-top:1px solid var(--line);border-radius:0}html[data-edition=templates] pre{background:var(--wash)}html[data-edition=templates] p{color:var(--muted)}
+@media(max-width:760px){html[data-edition=directory] .grid{grid-template-columns:1fr}html[data-edition=lesson] main{display:block;margin-top:18px}html[data-edition=lesson] nav{position:static}.course-path{font-size:13px}.pair{grid-template-columns:minmax(0,1fr)}.copybox,.copyarea{padding:12px}}
+}
+@media screen {
+:root{--gold:#896639;--hair:#e5e0d9;--shell:min(1280px,92%)}
+.ed-head,.ed-sub{background:#fff;border-bottom:1px solid var(--hair)}
+.ed-row{width:var(--shell);margin:auto;display:flex;align-items:center;gap:32px}
+.ed-head .ed-row{min-height:72px;justify-content:space-between}
+.ed-brand{display:inline-flex;gap:11px;align-items:center;font:600 15px/1.1 "Segoe UI",sans-serif;letter-spacing:.16em;white-space:nowrap}
+.ed-head a,.ed-sub a{color:#22201e;text-decoration:none}
+.ed-nav{display:flex;align-items:center;gap:clamp(16px,4vw,58px)}
+.ed-nav a,.ed-sub a{padding:12px 0;font-size:15px}.ed-nav a:hover,.ed-sub a:hover{text-decoration:underline;text-underline-offset:7px}
+.ed-head small,.ed-copy small,.ed-plate{font:600 11px/1.5 "Segoe UI","Malgun Gothic",sans-serif;letter-spacing:.12em;color:#655e55}
+.ed-sub .ed-row{min-height:48px}.ed-sub a:first-child{box-shadow:inset 0 -2px #29251e}
+.ed-cover{width:var(--shell);margin:auto;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:stretch}
+.ed-art{position:relative;min-height:430px;aspect-ratio:1.16;background:#f3e9cf;overflow:hidden}
+.ed-art img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:83% center}
+.ed-plate,.ed-legend{position:absolute;left:22px;background:#fffdf7ed;padding:8px 12px}.ed-plate{top:20px}.ed-legend{bottom:20px;display:grid;gap:3px}
+.ed-legend a,.ed-art a.pin{color:#45341f;text-decoration:none}.ed-legend a{font-size:13px;padding:3px}.ed-legend a:hover{text-decoration:underline}
+.ed-art a.pin{position:absolute;display:grid;place-items:center;border:1px solid #fff9;border-radius:50%;width:32px;height:32px;background:#d6b379;box-shadow:0 0 0 6px #fff7;font:600 14px Georgia,serif}
+.pin:hover{transform:scale(1.1)}.pin-1{left:68%;top:24%}.pin-2{left:60%;top:48%}.pin-3{left:84%;top:70%}
+.ed-copy{align-self:center;padding:36px clamp(18px,4vw,64px)}
+html[data-edition=directory] .ed-copy h1{font-size:clamp(38px,4.6vw,72px);line-height:1.24;font-weight:350;letter-spacing:-.065em;color:#221f1d;margin:32px 0 17px}
+.ed-copy h1 strong{font-weight:720}.ed-copy p{font-size:clamp(16px,1.3vw,20px);line-height:1.8;color:#5d5852;margin:0;max-width:31em}
+.ed-tags{color:var(--gold);font-weight:650;font-size:14px;margin:21px 0}.ed-copy>a{display:inline-block;color:#27221e;font-weight:650;text-decoration:none;border-bottom:1px solid;padding:4px 0}
+#curriculum{scroll-margin-top:20px}html[data-edition=directory] main#curriculum{width:var(--shell);max-width:none;padding:0;margin:34px auto 0}
+#curriculum h2 small{display:block;font:650 11px/1.5 "Segoe UI",sans-serif;letter-spacing:.15em;color:var(--gold);margin-bottom:4px}
+html[data-edition=directory] .label,.tag,.kicker,.course-path a,.course-menu a,.buttons a:first-child,.report summary{color:var(--gold)}
+nav a[aria-current]{color:#624925;background:#f6f2eb}.copy{background:#2f2b27}
+html[data-edition=lesson] body>header{color:#726553}html[data-edition=lesson] .course-path{background:#fffdfb}
+@media(max-width:760px){.ed-row,.ed-cover,html[data-edition=directory] main#curriculum{width:calc(100% - 32px)}.ed-head .ed-row{flex-wrap:wrap;min-height:0;padding:14px 0 0;gap:4px 12px}.ed-brand{font-size:12px}.ed-brand svg{width:23px;height:23px}.ed-head small{margin-left:auto;order:1}.ed-nav{order:2;width:100%;gap:22px}.ed-nav a,.ed-sub a{font-size:13px}.ed-sub .ed-row{min-height:36px}.ed-cover{display:flex;flex-direction:column}.ed-art{min-height:0;aspect-ratio:1.6}.ed-copy{padding:22px 0 10px;width:100%}html[data-edition=directory] .ed-copy h1{margin:12px 0;font-size:39px}.ed-legend{bottom:12px;left:12px;gap:0;padding:4px 8px}.ed-plate{top:12px;left:12px}.ed-art a.pin{width:26px;height:26px}.ed-tags{margin:12px 0}.ed-sub .ed-row{gap:20px}}
+}
+@media print{.ed-head,.ed-sub,.ed-art,.ed-copy>a{display:none}}
+@media screen {
+.ed-row{width:min(1120px,92%)}
+.reading-intro{max-width:880px;margin:auto;text-align:center;padding:clamp(34px,4vw,58px) 20px 24px}
+html[data-edition=directory] .reading-intro h1{margin:0;font-size:clamp(32px,3.1vw,49px);font-weight:400;letter-spacing:-.045em;line-height:1.34;color:#201f1d}
+.reading-intro h1 strong{font-weight:700}.reading-intro p{margin:18px 0 0;color:#585653;font-size:17px;line-height:1.7}
+html[data-edition=directory] main#curriculum{width:min(940px,calc(100% - 40px));margin:0 auto 64px}
+#curriculum h2 small{display:none}
+html[data-edition=directory] #curriculum h2{font-size:20px;margin:32px 0 14px;scroll-margin-top:20px}
+html[data-edition=directory] .grid{gap:18px}
+html[data-edition=directory] .grid article{border:1px solid #efeeec;border-radius:18px;padding:clamp(20px,2.1vw,32px);background:white;box-shadow:0 5px 22px rgba(48,38,26,.065)}
+html[data-edition=directory] .grid h3{font-size:clamp(20px,1.65vw,26px);line-height:1.4;margin:10px 0 0;font-weight:680}
+html[data-edition=directory] .grid article p{font-size:17px;line-height:1.7;color:#55514d;margin:12px 0 18px}
+html[data-edition=directory] .label{font-size:14px;letter-spacing:0;color:#7c614b}
+html[data-edition=directory] .buttons a{font-size:14px}.buttons a:first-child{color:#41382f}
+html[data-edition=lesson] .page{max-width:850px}
+html[data-edition=lesson] :is(.page>p,.page li,.lead,aside p){font-size:17px;line-height:1.75;max-width:52em}
+html[data-edition=lesson] .copybox pre,html[data-edition=lesson] .copyarea pre{font-size:16px;line-height:1.75}
+html[data-edition=lesson] .pair{grid-template-columns:minmax(0,1fr);gap:22px}
+@media(max-width:760px){.reading-intro{padding:28px 18px 10px}.reading-intro p{font-size:16px;max-width:26em;margin:14px auto 0}html[data-edition=directory] .grid{gap:14px}html[data-edition=directory] main#curriculum{width:calc(100% - 32px)}}
+}
+</style><!--course-links--><div aria-label="상위 목차" class="course-path" role="navigation"><a href="../../index.html#day-07">전체 차시 목차</a> <span aria-hidden="true">›</span> <a href="../07_실습교본.html#lab">7차시 대표 실습으로</a> <span aria-hidden="true">›</span> 재생 검수</div><!--/course-links--><h1>독서대 받침 고정하는 법</h1><video controls="" preload="auto" src="독서대_사용안내_20초.mp4"></video><p><button onclick="seek(0)">① 준비</button><button onclick="seek(5)">② 고정</button><button onclick="seek(13)">③ 확인</button></p><p>Windows 합성 음성과 화면 자막이 같은 순서인지 확인하세요. 스피커 버튼으로 무음 상태에서도 점검할 수 있습니다.</p><script>function seek(t){const v=document.querySelector("video");v.currentTime=t;v.pause()}</script></html>

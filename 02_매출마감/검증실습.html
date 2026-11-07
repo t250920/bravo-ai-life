@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>AI Excel 재계산 검증 · Bravo AI Life</title><link href="../assets/course.css" rel="stylesheet"/><script defer="" src="../assets/course.js"></script><link href="../assets/reader.css" rel="stylesheet"/></head><body><main><p class="reader-location">2차시　›　Excel에서 수량을 바꿔 검증하기</p><header class="hero"><div><small>BRAVO AI LIFE 1 · 2회 · 검증 실습</small><h1>AI가 만든 파일,<br/>숫자를 바꿔 확인해요</h1><p>수식이 있다는 사실만으로는 충분하지 않습니다. 같은 원자료를 서로 다른 경로로 계산해 비교합니다.</p></div></header><section class="prerequisites"><h2>시작 전 준비 자료</h2><p>수량을 바꿔 시험할 최종 수정본입니다. 내려받아 Windows Excel에서 여세요.</p><div><a download="bravo_sales_checked.xlsx" href="../media/bravo_sales_checked.xlsx">↓ bravo_sales_checked.xlsx</a></div></section><section class="panel guide-step"><small class="step-number">01</small><h2>Excel에서 발견한 오류를 AI에 전달해요</h2><figure><button aria-label="① 중간 수정본의 실제 Excel 오류 · 검산 차이가 0이 아닙니다. 확대" class="photo"><img alt="① 중간 수정본의 실제 Excel 오류 · 검산 차이가 0이 아닙니다." src="../media/excel-check-failed.jpg"/></button><figcaption>① 중간 수정본의 실제 Excel 오류 · 검산 차이가 0이 아닙니다.</figcaption></figure><p>수량을 4개에서 5개로 바꾸자 집계값은 9,800원 늘었지만 독립 검산값이 달랐습니다. 오류 셀, 현재값, 기대값과 보존할 원자료를 지정해 수정 요청을 보냅니다.</p><figure><button aria-label="② 같은 대화에 보낸 실제 수정 요청 확대" class="photo"><img alt="② 같은 대화에 보낸 실제 수정 요청" src="../media/sales-validation-in.jpg"/></button><figcaption>② 같은 대화에 보낸 실제 수정 요청</figcaption></figure><div class="copybox" data-copy-kind="prompt"><header><b>실제로 보낸 후속 프롬프트</b><button aria-label="실제로 보낸 후속 프롬프트 복사" class="copy" title="실제로 보낸 후속 프롬프트 복사" type="button"></button></header><pre>Windows Excel 전체 재계산(Ctrl+Alt+F9)에서 독립 검산식 오류를 확인했어. 원본 사본의 F1992를 4→5로 바꾸면 집계 10월 순매출은 90,871,800으로 정상 증가하지만 검산 B10은 92,222,500, C10은 90,871,800이야. B8도 2,948,400으로 반품 합계 4,640,500과 달라. 배열 INDEX/MATCH를 SUMPRODUCT 안에서 쓰는 독립식이 Excel에서 제대로 계산되지 않는 것으로 보여. 검산 시트 오른쪽에 반품 272행의 독립 보조 계산표를 만들어, 각 행에서 원본_반품을 참조하고 원본_주문의 단가·귀속월·상태를 단일 VLOOKUP 또는 INDEX/MATCH로 찾고 마감 승인·완료 조건의 차감액을 IF로 구해 줘. B8·B9·B10은 이 보조표와 원본 주문에서 독립 계산하고 집계 시트를 참조하지 않게 해. 원본 값은 원래대로(원본_주문 F1992=4) 보존해. 기준 합계는 8월 92535800, 9월 97999600, 10월 90862000, 총 반품 4640500이야. 고정값으로 맞추지 마. 날짜 서식과 숫자 캐시 문제도 해결한 bravo_sales_checked.xlsx를 만들어 줘. 원자료 변경에 따라 실제로 계산될 수식을 넣고 수정된 셀과 검산 결과를 설명해 줘.</pre></div></section><section class="panel guide-step"><small class="step-number">02</small><h2>AI가 수정한 파일과 계산 경로를 확인해요</h2><figure><button aria-label="③ 실제 Plus 응답 · 독립 보조 계산표를 추가한 결과 확대" class="photo"><img alt="③ 실제 Plus 응답 · 독립 보조 계산표를 추가한 결과" src="../media/sales-validation-out.jpg"/></button><figcaption>③ 실제 Plus 응답 · 독립 보조 계산표를 추가한 결과</figcaption></figure><p><a download="" href="../media/bravo_sales_checked.xlsx">AI 최종 수정 Excel 받기</a></p><p>검산 시트의 G:O열은 원본 반품 272건을 직접 참조합니다. 각 반품의 단가·귀속월·주문상태를 찾아 반품차감액을 계산합니다. AI가 보고한 검산값과 Windows Excel에서 직접 재계산한 결과를 구분하세요.</p><div class="copybox" data-copy-kind="reference"><header><b>검산!O2 · 승인·마감일·완료 조건</b><button aria-label="검산!O2 · 승인·마감일·완료 조건 복사" class="copy" title="검산!O2 · 승인·마감일·완료 조건 복사" type="button"></button></header><pre>=IF(AND(K2="승인",I2&lt;=DATE(2026,10,31),N2="완료"),J2*L2,0)</pre></div><div class="copybox" data-copy-kind="reference"><header><b>검산!B8 · 반품 합계</b><button aria-label="검산!B8 · 반품 합계 복사" class="copy" title="검산!B8 · 반품 합계 복사" type="button"></button></header><pre>=SUM(O2:O273)</pre></div><div class="copybox" data-copy-kind="reference"><header><b>검산!B10 · 10월 독립 순매출</b><button aria-label="검산!B10 · 10월 독립 순매출 복사" class="copy" title="검산!B10 · 10월 독립 순매출 복사" type="button"></button></header><pre>=SUMPRODUCT((원본_주문!C2:C3001="2026-10")*(원본_주문!H2:H3001="완료")*원본_주문!F2:F3001*원본_주문!G2:G3001)-SUMIF(M2:M273,"2026-10",O2:O273)</pre></div><section class="reading-section"><div class="copybox formatted-answer" data-copy-kind="answer" data-image-answer=""><header><b>실제 답변</b><button aria-label="실제 답변 복사" class="copy" title="실제 답변 복사" type="button"></button></header><div class="answer"><p>요청하신 독립 검산식 오류를 수정한 Excel 파일을 만들었습니다. 배열 INDEX/MATCH를 사용하던 반품 계산을 행별 VLOOKUP 보조표로 교체했습니다.</p><p>bravo_sales_checked.xlsx</p><p>Excel · 11개 시트 · 약 441KB</p><p> 수정된 Excel 파일 다운로드</p><h3>1. 독립 검산 결과</h3><p>원본 데이터에서 별도로 계산한 결과입니다.</p><div aria-label="답변 표" class="tablewrap" role="region" tabindex="0"><table><thead><tr><th scope="col">항목</th><th scope="col">검산 결과</th><th scope="col">기준값</th><th scope="col">비교</th></tr></thead><tbody><tr><td>8월 순매출</td><td>92,535,800</td><td>92,535,800</td><td>일치</td></tr><tr><td>9월 순매출</td><td>97,999,600</td><td>97,999,600</td><td>일치</td></tr><tr><td>10월 순매출</td><td>90,862,000</td><td>90,862,000</td><td>일치</td></tr><tr><td>전체 반품차감액</td><td>4,640,500</td><td>4,640,500</td><td>일치</td></tr></tbody></table></div><p>이 값들은 Excel 수식의 캐시값을 읽은 것이 아니라, 원본 주문·반품 입력값을 별도 계산하여 확인한 결과입니다.</p><h3>2. 수정한 셀과 수식</h3><p>검산 시트 오른쪽 G1:O273에 반품 272건의 독립 보조 계산표를 추가했습니다.</p><div aria-label="답변 표" class="tablewrap" role="region" tabindex="0"><table><thead><tr><th scope="col">열</th><th scope="col">계산 내용</th></tr></thead><tbody><tr><td>G:K</td><td>원본_반품의 번호·주문번호·날짜·수량·상태 직접 참조</td></tr><tr><td>L</td><td>원본_주문에서 실판매단가 조회</td></tr><tr><td>M</td><td>원본_주문에서 귀속월 조회</td></tr><tr><td>N</td><td>원본_주문에서 주문상태 조회</td></tr><tr><td>O</td><td>승인·마감일·완료 조건에 따른 반품차감액</td></tr></tbody></table></div><p>검산!L2 — 단가 조회</p><p>excel<br/>=IFERROR(VLOOKUP(H2,원본_주문!$A$2:$H$3001,7,FALSE),0)</p><p>검산!O2 — 반품차감액</p><p>excel<br/>=IF(AND(K2="승인",I2&lt;=DATE(2026,10,31),N2="완료"),J2*L2,0)</p><p>두 수식을 포함한 보조표 수식은 273행까지 적용했습니다.</p><p>검산!B8 — 전체 반품차감액</p><p>excel<br/>=SUM(O2:O273)</p><p>검산!B9 — 전체 순매출</p><p>excel<br/>=B7-B8</p><p>검산!B10 — 10월 독립 순매출</p><p>excel<br/>=SUMPRODUCT(<br/>(원본_주문!C2:C3001="2026-10")*<br/>(원본_주문!H2:H3001="완료")*<br/>원본_주문!F2:F3001*<br/>원본_주문!G2:G3001<br/>)-SUMIF(M2:M273,"2026-10",O2:O273)</p><p>B8·B9·B10은 월별집계나 계산_주문 시트에 의존하지 않습니다.</p><h3>3. 파일 구조 검사</h3><div aria-label="답변 표" class="tablewrap" role="region" tabindex="0"><table><thead><tr><th scope="col">검사 항목</th><th scope="col">결과</th></tr></thead><tbody><tr><td>원본 입력값 변경</td><td>0개</td></tr><tr><td>원본_주문!F1992</td><td>4 유지</td></tr><tr><td>전체 계산식 개수</td><td>44,592개</td></tr><tr><td>숫자 타입 수식 셀의 문자열 캐시</td><td>0건</td></tr><tr><td>XLSX 압축 구조</td><td>정상</td></tr><tr><td>날짜 표시</td><td>yyyy-mm-dd</td></tr><tr><td>금액 표시</td><td>#,##0</td></tr></tbody></table></div><p>파일은 openpyxl로 저장했으며, 수식 캐시를 XML에 임의로 삽입하지 않았습니다. Excel에서 열 때 전체 재계산하도록 설정했습니다.</p><p>남은 확인: Windows Excel에서 실제 Ctrl+Alt+F9 재계산까지 직접 실행한 것은 아닙니다. 따라서 복구 경고가 사라졌는지와 재계산 결과는 Windows Excel에서 최종 확인이 필요합니다.</p><p>원본 사본의 F1992를 4에서 5로 변경해 재계산하면, 10월 집계 순매출과 독립 검산 B10이 모두 90,871,800원으로 변경되는 것이 예상 결과입니다.</p><p>bravo_sales_checked.xlsx<br/>Excel</p></div><pre hidden="">요청하신 독립 검산식 오류를 수정한 Excel 파일을 만들었습니다. 배열 INDEX/MATCH를 사용하던 반품 계산을 행별 VLOOKUP 보조표로 교체했습니다.
+
+bravo_sales_checked.xlsx
+
+Excel · 11개 시트 · 약 441KB
+
+ 수정된 Excel 파일 다운로드
+
+1. 독립 검산 결과
+
+원본 데이터에서 별도로 계산한 결과입니다.
+
+항목	검산 결과	기준값	비교
+8월 순매출	92,535,800	92,535,800	일치
+9월 순매출	97,999,600	97,999,600	일치
+10월 순매출	90,862,000	90,862,000	일치
+전체 반품차감액	4,640,500	4,640,500	일치
+
+이 값들은 Excel 수식의 캐시값을 읽은 것이 아니라, 원본 주문·반품 입력값을 별도 계산하여 확인한 결과입니다.
+
+2. 수정한 셀과 수식
+
+검산 시트 오른쪽 G1:O273에 반품 272건의 독립 보조 계산표를 추가했습니다.
+
+열	계산 내용
+G:K	원본_반품의 번호·주문번호·날짜·수량·상태 직접 참조
+L	원본_주문에서 실판매단가 조회
+M	원본_주문에서 귀속월 조회
+N	원본_주문에서 주문상태 조회
+O	승인·마감일·완료 조건에 따른 반품차감액
+
+검산!L2 — 단가 조회
+
+excel
+=IFERROR(VLOOKUP(H2,원본_주문!$A$2:$H$3001,7,FALSE),0)
+
+검산!O2 — 반품차감액
+
+excel
+=IF(AND(K2="승인",I2&lt;=DATE(2026,10,31),N2="완료"),J2*L2,0)
+
+두 수식을 포함한 보조표 수식은 273행까지 적용했습니다.
+
+검산!B8 — 전체 반품차감액
+
+excel
+=SUM(O2:O273)
+
+검산!B9 — 전체 순매출
+
+excel
+=B7-B8
+
+검산!B10 — 10월 독립 순매출
+
+excel
+=SUMPRODUCT(
+(원본_주문!C2:C3001="2026-10")*
+(원본_주문!H2:H3001="완료")*
+원본_주문!F2:F3001*
+원본_주문!G2:G3001
+)-SUMIF(M2:M273,"2026-10",O2:O273)
+
+B8·B9·B10은 월별집계나 계산_주문 시트에 의존하지 않습니다.
+
+3. 파일 구조 검사
+
+검사 항목	결과
+원본 입력값 변경	0개
+원본_주문!F1992	4 유지
+전체 계산식 개수	44,592개
+숫자 타입 수식 셀의 문자열 캐시	0건
+XLSX 압축 구조	정상
+날짜 표시	yyyy-mm-dd
+금액 표시	#,##0
+
+파일은 openpyxl로 저장했으며, 수식 캐시를 XML에 임의로 삽입하지 않았습니다. Excel에서 열 때 전체 재계산하도록 설정했습니다.
+
+남은 확인: Windows Excel에서 실제 Ctrl+Alt+F9 재계산까지 직접 실행한 것은 아닙니다. 따라서 복구 경고가 사라졌는지와 재계산 결과는 Windows Excel에서 최종 확인이 필요합니다.
+
+원본 사본의 F1992를 4에서 5로 변경해 재계산하면, 10월 집계 순매출과 독립 검산 B10이 모두 90,871,800원으로 변경되는 것이 예상 결과입니다.
+
+bravo_sales_checked.xlsx
+Excel</pre></div></section></section><section class="panel guide-step"><small class="step-number">03</small><h2>수량을 바꾼 뒤 원상 복원해요</h2><figure><button aria-label="④ Windows Excel 전체 재계산 · 기준값과 집계값 일치 확대" class="photo"><img alt="④ Windows Excel 전체 재계산 · 기준값과 집계값 일치" src="../media/excel-check-baseline.jpg"/></button><figcaption>④ Windows Excel 전체 재계산 · 기준값과 집계값 일치</figcaption></figure><p>파일을 열어 Ctrl+Alt+F9로 전체 재계산합니다. 검산 시트의 차이 D열이 모두 0인지 확인합니다.</p><figure><button aria-label="⑤ 원본_주문!F1992를 4 → 5로 변경한 실제 결과 확대" class="photo"><img alt="⑤ 원본_주문!F1992를 4 → 5로 변경한 실제 결과" src="../media/excel-check-changed.jpg"/></button><figcaption>⑤ 원본_주문!F1992를 4 → 5로 변경한 실제 결과</figcaption></figure><p>이름 상자에 <b>원본_주문!F1992</b>를 입력하고 Enter를 누릅니다. 수량을 5로 바꾼 뒤 검산 시트에서 B10과 C10이 모두 <b>90,871,800원</b>인지 확인합니다. 단가 9,800원만큼 늘어야 합니다.</p><figure><button aria-label="⑥ 수량을 4로 되돌리고 저장한 기준 결과 확대" class="photo"><img alt="⑥ 수량을 4로 되돌리고 저장한 기준 결과" src="../media/excel-check-restored.jpg"/></button><figcaption>⑥ 수량을 4로 되돌리고 저장한 기준 결과</figcaption></figure><p>F1992를 다시 4로 되돌립니다. B10과 C10이 <b>90,862,000원</b>으로 복원되고 차이는 0이어야 합니다. 복원 후 저장하세요.</p></section><section class="panel"><h2>검산 결과 확인</h2><p>수량을 4개에서 5개로 바꾸면 두 계산 경로 모두 9,800원 증가하고 차이는 0원입니다. 주문 추가 시 3,001행까지인 수식 범위를 넓히도록 AI에 다시 요청합니다.</p></section><nav aria-label="교재 이동" class="reader-pager"><div><a href="실제실습.html" rel="prev">← 이전</a><a class="reader-toc" href="../index.html#day-02">목차</a><a class="reader-next" href="D02-01.html" rel="next">다음 →</a></div></nav></main><dialog><button class="close">닫기</button><img alt="확대된 학습 화면"/></dialog><output role="status"></output></body></html>

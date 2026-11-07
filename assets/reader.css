@@ -1,0 +1,68 @@
+.reader-home{padding-top:52px;padding-bottom:24px}.reader-home h1{margin-top:12px}
+.reader-start,.reader-pager .reader-next{background:#244967;color:#fff;text-decoration:none;border-radius:8px}
+.reader-start{display:inline-block;margin-top:22px;padding:11px 22px;font-weight:650}
+.course-heading{margin:40px 0 12px;font-size:1.4rem}.toc-row{border-top:1px solid #dbe3ea;display:flex;align-items:flex-start;gap:20px;padding:18px 0;scroll-margin-top:16px}
+.toc-row h3{margin:2px 0;font-size:1.24rem}.toc-row h3 a{color:#193750;text-decoration:none}.toc-row a:hover{text-decoration:underline}
+.toc-row small,.reader-location{color:#4d667a}.toc-row details{margin:4px 0 0}.toc-row summary,.reader-files summary,.lesson-toc summary{font-size:.92rem}.toc-row ol,.lesson-toc ol{padding-left:1.6em}.toc-row li,.lesson-toc li{padding:4px 0}
+.reader-files{margin:24px 0}.reader-location{font-size:.9rem;padding:24px 0 0;margin:0}.reader-step{margin:38px 0 14px;font-size:1.35rem}
+main:has(.reader-pager){padding-bottom:104px}.reader-pager{position:fixed;bottom:0;left:0;right:0;display:block;padding:9px 16px calc(9px + env(safe-area-inset-bottom));background:#fafbfdf7;border-top:1px solid #d4dfe7;z-index:4}.reader-pager div{max-width:480px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:12px;text-align:center}
+.reader-pager a{font-size:16px;padding:9px 12px;line-height:1.6}.reader-pager [rel=prev]{border:1px solid #bdcbd6;border-radius:8px;text-decoration:none;background:#fff}.reader-toc{text-underline-offset:4px}.reader-end{font-size:14px;color:#536879}
+main:has(.reader-pager)~output:not(:empty){bottom:80px}
+@media(max-width:580px){.toc-row{gap:12px}.reader-pager div{gap:6px}}
+@media print{.reader-pager,.reader-start{display:none}.reader-location{padding-top:0}main:has(.reader-pager){padding-bottom:0}}
+.prerequisites{margin:0 0 1.5rem;padding:1.15rem 1.4rem;border:1px solid #cfdfdd;border-radius:12px;background:#f2f8f7;color:#203c3b}
+.prerequisites h2{font-size:1.18rem;margin:0;color:#183e3a}.prerequisites p{margin:.4rem 0 .8rem;color:#38534f;line-height:1.6}.prerequisites>div{display:flex;gap:.5rem;flex-wrap:wrap}.prerequisites a{max-width:100%;padding:.5rem .85rem;border-radius:7px;background:#fff;border:1px solid #9cbdb6;color:#1d5148;text-decoration:underline;text-underline-offset:.2em;overflow-wrap:anywhere}.prerequisites a:hover,.prerequisites a:focus-visible{background:#e4f1ed}
+
+.attachment-guide{margin:1rem 0 0;padding:.75rem 0 0;border:0;border-top:1px solid #c8dcd7;background:transparent}
+.attachment-guide summary{font-weight:700;color:#1e4743;cursor:pointer}.attachment-guide>p{font-size:.92rem}
+.attachment-steps{display:flex;gap:1.15rem;align-items:flex-start;flex-wrap:wrap}
+.attachment-steps figure,.attachment-steps .file-choice{flex:1 1 210px;min-width:0;margin:.5rem 0}
+.attachment-steps .photo{padding:0;display:block;width:100%;max-width:550px;background:white;border:1px solid #c9dad6;border-radius:8px;overflow:hidden}
+.attachment-steps img{display:block;width:100%;height:auto}.attachment-steps figcaption,.attachment-steps .file-choice{color:#20403e;line-height:1.65;font-size:1rem}.attachment-steps .file-choice{flex:.8 1 180px;padding:.4rem .25rem}.attachment-steps .file-choice strong{overflow-wrap:anywhere}
+@media(max-width:680px){.attachment-steps{display:block}.attachment-steps figure,.attachment-steps .file-choice{margin:1rem 0}}
+.reading-section{min-width:0;margin-block:1.25rem}
+.reading-title{margin:0 0 .65rem;font-size:1.04rem;line-height:1.55;color:#24405a}
+.toc-row .reading-title{margin-top:.8rem;font-size:.93rem}
+.attachment-guide>.reading-title{color:#1e4743}
+/* Read the task, then its result, at the full width of the lesson. */
+main .pair{grid-template-columns:minmax(0,1fr);gap:20px}
+.pair .panel .photo,.guide-step .photo{width:100%;max-width:100%}
+.pair .panel .photo img,.guide-step .photo img{width:100%;height:auto;max-height:none}
+.guide .photos{display:block}
+.guide .photos figure{margin:12px 0}
+.guide .photos img{width:auto;max-width:100%;height:auto}
+.attachment-steps{display:block}
+.attachment-steps figure{margin:1rem 0 1.4rem}
+.attachment-steps .photo{max-width:780px;margin-left:0}
+@media screen{
+  .panel:has([data-image-answer])>.answer,[data-image-answer]>.answer{display:none}
+  .copybox[data-image-answer],.copyarea[data-image-answer]{padding:4px 12px;margin:10px 0 0;background:transparent;border:0}
+  [data-image-answer]>header{justify-content:flex-end;gap:10px}
+}
+
+[data-copy-kind],.panel>.answer {
+  --ink:#214e82; --wash:#f1f6ff; --edge:#bed2eb;
+  margin:16px 0; padding:16px 20px; border:1px solid var(--edge);
+  border-radius:12px; background:var(--wash); min-width:0;
+}
+[data-copy-kind="answer"],.panel>.answer {
+  --ink:#195b47; --wash:#eef8f3; --edge:#b8d9ca;
+}
+[data-copy-kind="reference"] {--ink:#475465; --wash:#f5f6f8; --edge:#cfd5dd}
+[data-copy-kind]>header {
+  display:flex; align-items:center; justify-content:space-between; gap:18px;
+  color:var(--ink); background:transparent; padding:0; font-size:16px;
+}
+[data-copy-kind]>pre {color:#203248; font:inherit; line-height:1.65; margin:12px 0 0; padding:0; background:transparent; white-space:pre-wrap; overflow-wrap:anywhere}
+[data-copy-kind]>.answer {margin:12px 0 0;padding:0}
+[data-copy-kind] .copy {
+  box-sizing:border-box; display:inline-grid; place-items:center; flex:none; width:44px; height:44px;
+  padding:0; border:1px solid var(--edge); border-radius:9px; color:var(--ink); background:white; cursor:pointer;
+}
+.copy::before {content:"";width:20px;height:20px;background:currentColor;mask:var(--copy-icon) center/contain no-repeat}
+.copy {--copy-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'%3E%3Crect x='8' y='8' width='12' height='13' rx='2'/%3E%3Cpath d='M15 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h2'/%3E%3C/svg%3E")}
+.copy[data-copied] {--copy-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 12 5 5L20 6'/%3E%3C/svg%3E")}
+[data-copy-kind] .copy:hover {border-color:var(--ink)}
+[data-copy-kind] .copy:focus-visible {outline:3px solid var(--ink);outline-offset:3px}
+@media(max-width:550px){[data-copy-kind],.panel>.answer{padding:14px}}
+@media print{[data-copy-kind] .copy{display:none}}

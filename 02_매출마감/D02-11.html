@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>다음달 인수 테스트 · Bravo AI Life</title><link href="../assets/course.css" rel="stylesheet"/><script defer="" src="../assets/course.js"></script><link href="../assets/reader.css" rel="stylesheet"/></head><body><main><p class="reader-location">2차시　›　예제 11 · 다음달 인수 테스트</p><header class="hero"><div><h1>다음달 인수 테스트</h1><p>원장의 판매·반품을 월별로 대조하고, 재무팀에 전달할 차이 분석표를 만듭니다.</p></div><div class="folio"><span>2차시 실습 예제</span><div><b>11</b> / 11</div><meter aria-label="2차시 실습 예제" max="11" min="0" value="11"></meter></div></header><section class="prerequisites"><h2>시작 전 준비 자료</h2><p>새 대화에 이 파일을 첨부하거나, 아래 ‘공통 원자료’에서 같은 내용을 복사하세요. 이어서 실습 프롬프트를 보냅니다.</p><div><a download="월별_채널별_매출검산표.xlsx" href="월별_채널별_매출검산표.xlsx">↓ 월별_채널별_매출검산표.xlsx</a></div><section class="attachment-guide reading-section"><h3 class="reading-title">ChatGPT에 자료 첨부하기 · 실제 화면</h3><p>Windows에서 촬영한 ChatGPT 메뉴와 매출마감 Excel 첨부 예시입니다. 카드에는 직접 선택한 파일 이름이 표시됩니다.</p><div class="attachment-steps"><figure><button aria-label="① 입력창 왼쪽 ＋를 누르고 ‘사진 및 파일 추가’를 선택하세요. 확대" class="photo" type="button"><img alt="① 입력창 왼쪽 ＋를 누르고 ‘사진 및 파일 추가’를 선택하세요." loading="lazy" src="../media/첨부_메뉴.png"/></button><figcaption>① 입력창 왼쪽 ＋를 누르고 ‘사진 및 파일 추가’를 선택하세요.</figcaption></figure><p class="file-choice"><b>② 파일 선택</b><br/>Windows 열기 창에서 <strong>월별_채널별_매출검산표.xlsx</strong>을 고르고 <b>열기</b>를 누르세요.</p><figure><button aria-label="③ 입력창에 파일 카드가 보이면 이름을 확인하고 아래 프롬프트를 보내세요. 확대" class="photo" type="button"><img alt="③ 입력창에 파일 카드가 보이면 이름을 확인하고 아래 프롬프트를 보내세요." loading="lazy" src="../media/첨부_엑셀카드.png"/></button><figcaption>③ 입력창에 파일 카드가 보이면 이름을 확인하고 아래 프롬프트를 보내세요.</figcaption></figure></div></section></section><aside class="capture-note">구판 실제 촬영 자료 · ChatGPT Pro에서 생성된 응답입니다. Plus 수업용 연습 자료로 재편집했으며 이 예제의 Plus 재실행 완료를 뜻하지 않습니다. 입력·답변 전문을 복사해 자신의 계정에서 실습하세요.</aside><section id="first"><section class="source reading-section"><h3 class="reading-title">① 수업 원자료 · 처음 한 번만 복사해 대화에 넣으세요</h3><div class="copybox" data-copy-kind="reference"><header><b>공통 원자료</b><button aria-label="공통 원자료 복사" class="copy" title="공통 원자료 복사" type="button"></button></header><pre>가상 학생용 엑셀 원장 3,000건, 반품 272행에서 독립 집계한 기준표. 열은 월, 채널, 주문수, 판매액, 승인차감액, 순매출(원).
+2026-08,기업납품,246,70023000,249800,69773200
+2026-08,매장,256,7976900,338400,7638500
+2026-08,오픈마켓,269,8515400,652300,7863100
+2026-08,자사몰,240,7536800,275800,7261000
+2026-09,기업납품,285,77668000,366000,77302000
+2026-09,매장,213,6188100,427200,5760900
+2026-09,오픈마켓,247,8070100,825600,7244500
+2026-09,자사몰,234,7846900,154700,7692200
+2026-10,기업납품,253,69187000,403300,68783700
+2026-10,매장,246,8301300,363600,7937700
+2026-10,오픈마켓,253,6899000,488400,6410600
+2026-10,자사몰,258,7825400,95400,7730000</pre></div></section><div class="pair"><section class="panel"><small>내가 보낸 요청</small><h2>② AI에 맡기기</h2><button aria-label="실제 입력창에 넣은 요청 확대" class="photo"><img alt="실제 입력창에 넣은 요청" src="D02-11-in.jpg"/></button><div class="copybox" data-copy-kind="prompt"><header><b>실습 프롬프트</b><button aria-label="실습 프롬프트 복사" class="copy" title="실습 프롬프트 복사" type="button"></button></header><pre>다음 달 원장 수식 재사용을 위해 0원, 전액차감, 월 경계, 채널 누락 사례의 입력·기대값·오류조치와 마감 승인표 작성해 줘.</pre></div></section><section class="panel"><small>ChatGPT의 실제 답변</small><h2>③ 결과물 읽기</h2><button aria-label="실제 답변의 일부 확대" class="photo"><img alt="실제 답변의 일부" src="D02-11-out.jpg"/></button><div class="answer"><p>목적: 11월 원장에 기존 순매출 수식을 재사용하기 전, 계산 오류와 집계 누락을 검증한다. 기존 10월 기준 순매출은 90,862,000원이다.</p><p>1. 인수 테스트표 (단위: 원)</p><div class="tablewrap"><table><tr><th>사례</th><th>입력값</th><th>기대값</th><th>오류조치</th></tr><tr><td>0원</td><td>판매 0, 차감 0</td><td>순매출 0</td><td>0원 정상 처리</td></tr><tr><td>전액차감</td><td>판매 10,000, 차감 10,000</td><td>순매출 0</td><td>음수 발생 시 수식 점검</td></tr><tr><td>월 경계</td><td>10/31·11/1 각 10,000</td><td>각 월 10,000</td><td>날짜·귀속월 확인</td></tr><tr><td>채널 누락</td><td>판매 20,000, 채널 공란</td><td>집계 제외·오류 표시</td><td>채널 확인 후 재집계</td></tr></table></div><p>2. 엑셀 검증식</p><p>순매출: =D2-E2</p><p>오류검사: =IF(B2="","채널확인",IF(OR(D2&lt;0,E2&lt;0,E2&gt;D2),"금액확인","PASS"))</p><p>3. 월마감 승인표</p><div class="tablewrap"><table><tr><th>검수 항목</th><th>승인 기준</th><th>상태</th></tr><tr><td>순매출 계산</td><td>판매액−차감액 일치</td><td>미정</td></tr><tr><td>월별 귀속</td><td>월 경계 오류 0건</td><td>미정</td></tr><tr><td>채널 집계</td><td>누락 채널 0건</td><td>미정</td></tr><tr><td>월계 대사</td><td>계산 차이 0원</td><td>미정</td></tr><tr><td>최종 승인</td><td>담당자 검토 완료</td><td>미정</td></tr></table></div><p>인수 안내문: 11월 마감 전 네 가지 테스트를 실시하고, 오류 수정 후 전체 수식을 재계산해 주시기 바랍니다. 검산 차이가 0원이고 필수 항목 누락이 없을 때만 최종 승인을 요청합니다.</p></div><section class="reading-section"><div class="copybox" data-copy-kind="answer" data-image-answer=""><header><b>답변 원문</b><button aria-label="답변 원문 복사" class="copy" title="답변 원문 복사" type="button"></button></header><pre hidden="">목적: 11월 원장에 기존 순매출 수식을 재사용하기 전, 계산 오류와 집계 누락을 검증한다. 기존 10월 기준 순매출은 90,862,000원이다.
+
+1. 인수 테스트표 (단위: 원)
+
+사례 | 입력값 | 기대값 | 오류조치
+0원 | 판매 0, 차감 0 | 순매출 0 | 0원 정상 처리
+전액차감 | 판매 10,000, 차감 10,000 | 순매출 0 | 음수 발생 시 수식 점검
+월 경계 | 10/31·11/1 각 10,000 | 각 월 10,000 | 날짜·귀속월 확인
+채널 누락 | 판매 20,000, 채널 공란 | 집계 제외·오류 표시 | 채널 확인 후 재집계
+
+2. 엑셀 검증식
+
+순매출: =D2-E2
+
+오류검사: =IF(B2="","채널확인",IF(OR(D2&lt;0,E2&lt;0,E2&gt;D2),"금액확인","PASS"))
+
+3. 월마감 승인표
+
+검수 항목 | 승인 기준 | 상태
+순매출 계산 | 판매액−차감액 일치 | 미정
+월별 귀속 | 월 경계 오류 0건 | 미정
+채널 집계 | 누락 채널 0건 | 미정
+월계 대사 | 계산 차이 0원 | 미정
+최종 승인 | 담당자 검토 완료 | 미정
+
+인수 안내문: 11월 마감 전 네 가지 테스트를 실시하고, 오류 수정 후 전체 수식을 재계산해 주시기 바랍니다. 검산 차이가 0원이고 필수 항목 누락이 없을 때만 최종 승인을 요청합니다.</pre></div></section></section></div></section><h2 class="reader-step">조건을 바꿔 다시 해보기</h2><section id="revision"><div class="pair"><section class="panel"><small>독립 실습</small><h2>조건을 바꿔 다시 요청하기</h2><div class="copybox" data-copy-kind="prompt"><header><b>같은 대화에서 보낼 요청</b><button aria-label="같은 대화에서 보낼 요청 복사" class="copy" title="같은 대화에서 보낼 요청 복사" type="button"></button></header><pre>다음 달 신규 채널이 하나 들어왔다. 누락을 막는 수식과 인수 시험 기대표를 추가해 줘.</pre></div></section><section class="panel"><h2>수정본 대조하기</h2><p>10월 순매출은 90,862,000원입니다. 판매액에서 승인 차감액을 뺀 뒤 월·채널 합계가 원장과 맞는지 확인하세요.</p><p>근거가 되는 원자료를 표시하고 계산·판정·표현 중 달라진 부분을 설명하세요.</p></section></div></section><nav aria-label="교재 이동" class="reader-pager"><div><a href="D02-10.html" rel="prev">← 이전</a><a class="reader-toc" href="../index.html#day-02">목차</a><a class="reader-next" href="../03_Work_운영회의/index.html" rel="next">다음 →</a></div></nav></main><dialog><button class="close">닫기</button><img alt="확대된 실습 화면"/></dialog><output role="status"></output></body></html>

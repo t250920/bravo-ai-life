@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>월마감 원장 재구성 · Bravo AI Life</title><link href="../assets/course.css" rel="stylesheet"/><script defer="" src="../assets/course.js"></script><link href="../assets/reader.css" rel="stylesheet"/></head><body><main><p class="reader-location">2차시　›　예제 01 · 월마감 원장 재구성</p><header class="hero"><div><h1>월마감 원장 재구성</h1><p>원장의 판매·반품을 월별로 대조하고, 재무팀에 전달할 차이 분석표를 만듭니다.</p></div><div class="folio"><span>2차시 실습 예제</span><div><b>01</b> / 11</div><meter aria-label="2차시 실습 예제" max="11" min="0" value="1"></meter></div></header><section class="prerequisites"><h2>시작 전 준비 자료</h2><p>새 대화에 이 파일을 첨부하거나, 아래 ‘공통 원자료’에서 같은 내용을 복사하세요. 이어서 실습 프롬프트를 보냅니다.</p><div><a download="월별_채널별_매출검산표.xlsx" href="월별_채널별_매출검산표.xlsx">↓ 월별_채널별_매출검산표.xlsx</a></div><section class="attachment-guide reading-section"><h3 class="reading-title">ChatGPT에 자료 첨부하기 · 실제 화면</h3><p>Windows에서 촬영한 ChatGPT 메뉴와 매출마감 Excel 첨부 예시입니다. 카드에는 직접 선택한 파일 이름이 표시됩니다.</p><div class="attachment-steps"><figure><button aria-label="① 입력창 왼쪽 ＋를 누르고 ‘사진 및 파일 추가’를 선택하세요. 확대" class="photo" type="button"><img alt="① 입력창 왼쪽 ＋를 누르고 ‘사진 및 파일 추가’를 선택하세요." loading="lazy" src="../media/첨부_메뉴.png"/></button><figcaption>① 입력창 왼쪽 ＋를 누르고 ‘사진 및 파일 추가’를 선택하세요.</figcaption></figure><p class="file-choice"><b>② 파일 선택</b><br/>Windows 열기 창에서 <strong>월별_채널별_매출검산표.xlsx</strong>을 고르고 <b>열기</b>를 누르세요.</p><figure><button aria-label="③ 입력창에 파일 카드가 보이면 이름을 확인하고 아래 프롬프트를 보내세요. 확대" class="photo" type="button"><img alt="③ 입력창에 파일 카드가 보이면 이름을 확인하고 아래 프롬프트를 보내세요." loading="lazy" src="../media/첨부_엑셀카드.png"/></button><figcaption>③ 입력창에 파일 카드가 보이면 이름을 확인하고 아래 프롬프트를 보내세요.</figcaption></figure></div></section></section><aside class="capture-note">구판 실제 촬영 자료 · ChatGPT Pro에서 생성된 응답입니다. Plus 수업용 연습 자료로 재편집했으며 이 예제의 Plus 재실행 완료를 뜻하지 않습니다. 입력·답변 전문을 복사해 자신의 계정에서 실습하세요.</aside><section id="first"><section class="source reading-section"><h3 class="reading-title">① 수업 원자료 · 처음 한 번만 복사해 대화에 넣으세요</h3><div class="copybox" data-copy-kind="reference"><header><b>공통 원자료</b><button aria-label="공통 원자료 복사" class="copy" title="공통 원자료 복사" type="button"></button></header><pre>가상 학생용 엑셀 원장 3,000건, 반품 272행에서 독립 집계한 기준표. 열은 월, 채널, 주문수, 판매액, 승인차감액, 순매출(원).
+2026-08,기업납품,246,70023000,249800,69773200
+2026-08,매장,256,7976900,338400,7638500
+2026-08,오픈마켓,269,8515400,652300,7863100
+2026-08,자사몰,240,7536800,275800,7261000
+2026-09,기업납품,285,77668000,366000,77302000
+2026-09,매장,213,6188100,427200,5760900
+2026-09,오픈마켓,247,8070100,825600,7244500
+2026-09,자사몰,234,7846900,154700,7692200
+2026-10,기업납품,253,69187000,403300,68783700
+2026-10,매장,246,8301300,363600,7937700
+2026-10,오픈마켓,253,6899000,488400,6410600
+2026-10,자사몰,258,7825400,95400,7730000</pre></div></section><div class="pair"><section class="panel"><small>내가 보낸 요청</small><h2>② AI에 맡기기</h2><button aria-label="실제 입력창에 넣은 요청 확대" class="photo"><img alt="실제 입력창에 넣은 요청" src="D02-01-in.jpg"/></button><div class="copybox" data-copy-kind="prompt"><header><b>실습 프롬프트</b><button aria-label="실습 프롬프트 복사" class="copy" title="실습 프롬프트 복사" type="button"></button></header><pre>12개 그룹의 판매·차감·순매출 대조표와 월계 3행, 차이 0 검산식 및 엑셀 수식 제안해 줘.</pre></div></section><section class="panel"><small>ChatGPT의 실제 답변</small><h2>③ 결과물 읽기</h2><button aria-label="실제 답변의 일부 확대" class="photo"><img alt="실제 답변의 일부" src="D02-01-out.jpg"/></button><div class="answer"><p>월별 판매·차감·순매출 대조표 (단위: 원)</p><div class="tablewrap"><table><tr><th>월·채널</th><th>판매액</th><th>승인차감액</th><th>순매출</th></tr><tr><td>8월 기업납품</td><td>70,023,000</td><td>249,800</td><td>69,773,200</td></tr><tr><td>8월 매장</td><td>7,976,900</td><td>338,400</td><td>7,638,500</td></tr><tr><td>8월 오픈마켓</td><td>8,515,400</td><td>652,300</td><td>7,863,100</td></tr><tr><td>8월 자사몰</td><td>7,536,800</td><td>275,800</td><td>7,261,000</td></tr><tr><td>8월계</td><td>94,052,100</td><td>1,516,300</td><td>92,535,800</td></tr><tr><td>9월 기업납품</td><td>77,668,000</td><td>366,000</td><td>77,302,000</td></tr><tr><td>9월 매장</td><td>6,188,100</td><td>427,200</td><td>5,760,900</td></tr><tr><td>9월 오픈마켓</td><td>8,070,100</td><td>825,600</td><td>7,244,500</td></tr><tr><td>9월 자사몰</td><td>7,846,900</td><td>154,700</td><td>7,692,200</td></tr><tr><td>9월계</td><td>99,773,100</td><td>1,773,500</td><td>97,999,600</td></tr><tr><td>10월 기업납품</td><td>69,187,000</td><td>403,300</td><td>68,783,700</td></tr><tr><td>10월 매장</td><td>8,301,300</td><td>363,600</td><td>7,937,700</td></tr><tr><td>10월 오픈마켓</td><td>6,899,000</td><td>488,400</td><td>6,410,600</td></tr><tr><td>10월 자사몰</td><td>7,825,400</td><td>95,400</td><td>7,730,000</td></tr><tr><td>10월계</td><td>92,212,700</td><td>1,350,700</td><td>90,862,000</td></tr></table></div><p>검산 및 엑셀 수식: A열 월, B열 채널, D열 판매액, E열 차감액, F열 순매출로 배치한다.</p><p>F2=D2-E2, G2=D2-E2-F2를 12행에 복사한다. 월계는 SUMIF(A2:A13,"2026-10",F2:F13)으로 계산한다. 12개 그룹과 월계 3행의 검산 차이는 모두 0원이다.</p></div><section class="reading-section"><div class="copybox" data-copy-kind="answer" data-image-answer=""><header><b>답변 원문</b><button aria-label="답변 원문 복사" class="copy" title="답변 원문 복사" type="button"></button></header><pre hidden="">월별 판매·차감·순매출 대조표 (단위: 원)
+
+월·채널 | 판매액 | 승인차감액 | 순매출
+8월 기업납품 | 70,023,000 | 249,800 | 69,773,200
+8월 매장 | 7,976,900 | 338,400 | 7,638,500
+8월 오픈마켓 | 8,515,400 | 652,300 | 7,863,100
+8월 자사몰 | 7,536,800 | 275,800 | 7,261,000
+8월계 | 94,052,100 | 1,516,300 | 92,535,800
+9월 기업납품 | 77,668,000 | 366,000 | 77,302,000
+9월 매장 | 6,188,100 | 427,200 | 5,760,900
+9월 오픈마켓 | 8,070,100 | 825,600 | 7,244,500
+9월 자사몰 | 7,846,900 | 154,700 | 7,692,200
+9월계 | 99,773,100 | 1,773,500 | 97,999,600
+10월 기업납품 | 69,187,000 | 403,300 | 68,783,700
+10월 매장 | 8,301,300 | 363,600 | 7,937,700
+10월 오픈마켓 | 6,899,000 | 488,400 | 6,410,600
+10월 자사몰 | 7,825,400 | 95,400 | 7,730,000
+10월계 | 92,212,700 | 1,350,700 | 90,862,000
+
+검산 및 엑셀 수식: A열 월, B열 채널, D열 판매액, E열 차감액, F열 순매출로 배치한다.
+
+F2=D2-E2, G2=D2-E2-F2를 12행에 복사한다. 월계는 SUMIF(A2:A13,"2026-10",F2:F13)으로 계산한다. 12개 그룹과 월계 3행의 검산 차이는 모두 0원이다.</pre></div></section></section></div></section><h2 class="reader-step">조건을 바꿔 다시 해보기</h2><section id="revision"><div class="pair"><section class="panel"><small>독립 실습</small><h2>조건을 바꿔 다시 요청하기</h2><div class="copybox" data-copy-kind="prompt"><header><b>같은 대화에서 보낼 요청</b><button aria-label="같은 대화에서 보낼 요청 복사" class="copy" title="같은 대화에서 보낼 요청 복사" type="button"></button></header><pre>9월 자사몰 차감이 10,000원 추가됐다. 12그룹 중 영향을 받은 행과 월계·전체 순매출을 별표로 표시해 줘.</pre></div></section><section class="panel"><h2>수정본 대조하기</h2><p>10월 순매출은 90,862,000원입니다. 판매액에서 승인 차감액을 뺀 뒤 월·채널 합계가 원장과 맞는지 확인하세요.</p><p>근거가 되는 원자료를 표시하고 계산·판정·표현 중 달라진 부분을 설명하세요.</p></section></div></section><nav aria-label="교재 이동" class="reader-pager"><div><a href="검증실습.html" rel="prev">← 이전</a><a class="reader-toc" href="../index.html#day-02">목차</a><a class="reader-next" href="D02-02.html" rel="next">다음 →</a></div></nav></main><dialog><button class="close">닫기</button><img alt="확대된 실습 화면"/></dialog><output role="status"></output></body></html>

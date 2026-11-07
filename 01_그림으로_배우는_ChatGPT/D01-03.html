@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>수불 기록 재구성 · Bravo AI Life</title><link href="../assets/course.css" rel="stylesheet"/><script defer="" src="../assets/course.js"></script><link href="../assets/reader.css" rel="stylesheet"/></head><body><main><p class="reader-location">1차시　›　예제 03 · 수불 기록 재구성</p><header class="hero"><div><h1>수불 기록 재구성</h1><p>예제 1에서 PDF를 첨부한 채팅에 아래 프롬프트를 보내세요. 이번 예제는 PDF의 원래 수량과 주문을 기준으로 합니다.</p></div><div class="folio"><span>1차시 실습 예제</span><div><b>03</b> / 09</div><meter aria-label="1차시 실습 예제" max="9" min="0" value="3"></meter></div></header><section id="first"><div class="pair"><section class="panel"><small>내가 보낸 요청</small><h2>① 같은 채팅에 요청하기</h2><button aria-label="실제 입력창에 넣은 요청 확대" class="photo"><img alt="실제 입력창에 넣은 요청" src="D01-03-in.jpg"/></button><div class="copybox" data-copy-kind="prompt"><header><b>실습 프롬프트</b><button aria-label="실습 프롬프트 복사" class="copy" title="실습 프롬프트 복사" type="button"></button></header><pre>시각순 사건 원장과 각 사건이 장부·실사 어느 쪽에 반영되는지 기록하고 이중 반영을 막는 점검표 작성해 줘.</pre></div></section><section class="panel"><small>ChatGPT의 실제 답변</small><h2>② 결과 확인하기</h2><button aria-label="실제 답변의 일부 확대" class="photo"><img alt="실제 답변의 일부" src="D01-03-out.jpg"/></button><div class="answer"><p>시각순 사건 원장</p><div class="tablewrap"><table><tr><th>시각</th><th>사건</th><th>장부 반영</th><th>실사 반영</th></tr><tr><td>09:00</td><td>기초 장부</td><td>A120/B80/C200</td><td>-</td></tr><tr><td>10:00</td><td>실사</td><td>없음</td><td>A111/B84/C190</td></tr><tr><td>10:10</td><td>B 4개 입고 확인</td><td>+4 필요</td><td>이미 포함</td></tr><tr><td>10:20</td><td>A6/C10 포장 출고 확인</td><td>-6/-10 필요</td><td>이미 제외</td></tr><tr><td>11:00</td><td>A 2개 발견</td><td>없음</td><td>A +2</td></tr></table></div><p>10:10과 10:20은 사건 확인 시각이며, 입고·포장은 실사에 이미 반영된 것으로 처리합니다.</p><p>이중 반영 방지 점검표</p><p>B 입고 4개를 실사에 다시 더하지 않는다.<br/>A 6개·C 10개를 실사에서 다시 빼지 않는다.<br/>A 발견 2개를 장부 입고로 중복 처리하지 않는다.<br/>미전표 처리 여부와 증빙번호를 확인한다.</p><p>최종 대조는 장부 A114/B84/C190, 실사 A113/B84/C190입니다. A 1개 부족은 원인 미정으로 남깁니다.</p></div><section class="reading-section"><div class="copybox" data-copy-kind="answer" data-image-answer=""><header><b>답변 원문</b><button aria-label="답변 원문 복사" class="copy" title="답변 원문 복사" type="button"></button></header><pre hidden="">시각순 사건 원장
+
+시각 | 사건 | 장부 반영 | 실사 반영
+09:00 | 기초 장부 | A120/B80/C200 | -
+10:00 | 실사 | 없음 | A111/B84/C190
+10:10 | B 4개 입고 확인 | +4 필요 | 이미 포함
+10:20 | A6/C10 포장 출고 확인 | -6/-10 필요 | 이미 제외
+11:00 | A 2개 발견 | 없음 | A +2
+
+10:10과 10:20은 사건 확인 시각이며, 입고·포장은 실사에 이미 반영된 것으로 처리합니다.
+
+이중 반영 방지 점검표
+
+B 입고 4개를 실사에 다시 더하지 않는다.
+A 6개·C 10개를 실사에서 다시 빼지 않는다.
+A 발견 2개를 장부 입고로 중복 처리하지 않는다.
+미전표 처리 여부와 증빙번호를 확인한다.
+
+최종 대조는 장부 A114/B84/C190, 실사 A113/B84/C190입니다. A 1개 부족은 원인 미정으로 남깁니다.</pre></div></section></section></div></section><aside class="capture-note">구판 실제 촬영 자료 · ChatGPT Pro에서 생성된 응답입니다. Plus 수업용 연습 자료로 재편집했으며 이 예제의 Plus 재실행 완료를 뜻하지 않습니다. 입력·답변 전문을 복사해 자신의 계정에서 실습하세요.</aside><h2 class="reader-step">조건을 바꿔 다시 해보기</h2><section id="revision"><div class="pair"><section class="panel"><small>독립 실습</small><h2>조건을 바꿔 다시 요청하기</h2><div class="copybox" data-copy-kind="prompt"><header><b>같은 대화에서 보낼 요청</b><button aria-label="같은 대화에서 보낼 요청 복사" class="copy" title="같은 대화에서 보낼 요청 복사" type="button"></button></header><pre>B 입고 4개가 장부에 방금 반영됐다. 중복 반영을 막는 원장과 인계표로 바꿔 줘.</pre></div></section><section class="panel"><h2>수정본 대조하기</h2><p>A 조정 장부 114개, 정정 실사 113개. B와 C의 차이는 0개입니다. 기본 주문을 모두 예약하면 가용 수량은 A 3개, B 2개, C 160개입니다.</p><p>근거가 되는 원자료를 표시하고 계산·판정·표현 중 달라진 부분을 설명하세요.</p></section></div></section><nav aria-label="교재 이동" class="reader-pager"><div><a href="D01-02.html" rel="prev">← 이전</a><a class="reader-toc" href="../index.html#day-01">목차</a><a class="reader-next" href="D01-04.html" rel="next">다음 →</a></div></nav></main><dialog><button class="close">닫기</button><img alt="확대된 실습 화면"/></dialog><output role="status"></output></body></html>
