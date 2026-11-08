@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>브라우저 Codex로 좌석 함수 시험하기 · Bravo AI Life</title><link href="../assets/course.css" rel="stylesheet"/><script defer="" src="../assets/course.js"></script><link href="../assets/reader.css" rel="stylesheet"/><link href="../assets/practice.css" rel="stylesheet"/></head><body><main><p class="reader-location">12차시　›　브라우저 Codex로 좌석 함수 시험하기</p><header class="hero"><div><h1>브라우저 Codex로 좌석 함수 시험하기</h1><p>개인 Plus 계정의 웹 Codex에서 클라우드·기본 환경을 선택한 실제 예입니다. 예약 인원보다 좌석이 적거나 많을 때를 모두 시험해 달라고 하세요.</p></div></header><section class="panel"><h2>① AI에 요청하기</h2><figure><button aria-label="실제 입력 화면 크게 보기" class="photo"><img alt="실제 입력 화면" src="../media/film-class/codex-in.png"/></button><figcaption>실제 입력 화면</figcaption></figure><div class="copyarea" data-copy-kind="prompt"><header><b>프롬프트 원문</b><button aria-label="프롬프트 원문 복사" class="copy" title="프롬프트 원문 복사" type="button"></button></header><pre tabindex="0">영화제 좌석 안내를 검증하는 작은 함수를 작성해 줘. 예약 30명에 좌석 24석, 28석, 32석일 때 부족 좌석과 남는 좌석을 각각 계산하고 테스트를 실제로 실행해서 결과를 보여 줘. 이 클라우드 작업 안에서만 작업해 줘.</pre></div></section><section class="panel"><h2>② 결과 확인하기</h2><figure><button aria-label="실제 답변 또는 결과 파일 미리보기 · 일부 발췌 크게 보기" class="photo"><img alt="실제 답변 또는 결과 파일 미리보기 · 일부 발췌" src="../media/film-class/codex-out.png"/></button><figcaption>실제 답변 또는 결과 파일 미리보기 · 일부 발췌</figcaption></figure><div class="copyarea" data-copy-kind="answer" data-image-answer=""><header><b>실제 답변 원문</b><button aria-label="실제 답변 원문 복사" class="copy" title="실제 답변 원문 복사" type="button"></button></header><pre hidden="" tabindex="0">클라우드 작업 안에서만 파이썬 함수를 작성하고 테스트를 실행했습니다.
+
+```python
+def seat_balance(reservations: int, seats: int) -&gt; tuple[int, int]:
+    """(부족 좌석, 남는 좌석)을 반환한다."""
+    return max(reservations - seats, 0), max(seats - reservations, 0)
+```
+
+예약 30명 기준 실제 실행 결과입니다.
+
+| 좌석 수 | 부족 좌석 | 남는 좌석 |
+|---:|---:|---:|
+| 24석 | 6석 | 0석 |
+| 28석 | 2석 | 0석 |
+| 32석 | 0석 | 2석 |
+
+각 경우의 기대값을 검증한 테스트 **3개 모두 통과**했습니다.
+
+```text
+Ran 3 tests in 0.000s
+OK
+```</pre></div><h3>원자료와 대조하세요</h3><p>24·28·32석의 세 테스트가 통과한 결과를 확인하세요. 다음으로 예약과 좌석이 같은 경우를 추가하면 반환값은 (0, 0)이어야 합니다.</p><h3>한 번 더 해 보기</h3><p>예약 0명과 좌석 0석의 입력도 테스트에 추가해 보세요.</p></section><p class="reader-location">Windows Chrome · 개인용 ChatGPT Plus · 2026. 11. 8. 실제 촬영</p><nav aria-label="교재 이동" class="reader-pager"><div><a href="실제실습.html" rel="prev">← 이전</a><a class="reader-toc" href="../index.html#day-12">목차</a><a class="reader-next" href="D12-01.html" rel="next">다음 →</a></div></nav></main><dialog><button class="close">닫기</button><img alt="확대된 실습 화면"/></dialog><output role="status"></output></body></html>

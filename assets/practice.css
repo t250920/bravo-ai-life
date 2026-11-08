@@ -1,0 +1,2 @@
+
+.panel{margin:22px 0;padding:clamp(18px,4vw,40px)} .panel h2{margin-top:0}.panel p,.panel li{max-width:65ch;line-height:1.8}.panel figure{margin:24px 0 18px}.panel button.photo{display:block;width:100%;background:#fff;border:1px solid #dce2ea;border-radius:12px;padding:clamp(8px,2vw,22px);cursor:zoom-in}.panel .photo img{display:block;width:auto;max-width:100%;max-height:none;margin:auto}.panel figcaption{font-size:.87rem;margin-top:8px}.panel h3{margin-bottom:6px}.panel h3+p{margin-top:0}.panel .copyarea{margin:12px 0 22px}

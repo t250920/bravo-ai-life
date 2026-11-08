@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Spreadsheets로 좌석 계산표 만들기 · Bravo AI Life</title><link href="../assets/course.css" rel="stylesheet"/><script defer="" src="../assets/course.js"></script><link href="../assets/reader.css" rel="stylesheet"/><link href="../assets/practice.css" rel="stylesheet"/></head><body><main><p class="reader-location">1차시　›　Spreadsheets로 좌석 계산표 만들기</p><header class="hero"><div><h1>Spreadsheets로 좌석 계산표 만들기</h1><p>예약이 달라질 때 다시 계산하는 Excel 파일을 만듭니다. ＋에서 Spreadsheets를 고른 뒤 세 가지 좌석 수와 수식 조건을 전달하세요.</p></div></header><section class="panel"><h2>① AI에 요청하기</h2><figure><button aria-label="실제 입력 화면 크게 보기" class="photo"><img alt="실제 입력 화면" src="../media/film-class/sheets-in.png"/></button><figcaption>실제 입력 화면</figcaption></figure><div class="copyarea" data-copy-kind="prompt"><header><b>프롬프트 원문</b><button aria-label="프롬프트 원문 복사" class="copy" title="프롬프트 원문 복사" type="button"></button></header><pre tabindex="0">영화제 접수 담당자가 바로 쓸 엑셀 좌석표를 만들어 줘. 예약은 30명이고 좌석이 24석, 28석, 32석인 세 경우야. 예약·좌석·부족·남음 열을 두고 부족과 남음은 0 아래로 내려가지 않는 수식으로 계산해 줘. 내려받을 XLSX와 검산 결과를 줘.</pre></div></section><section class="panel"><h2>② 결과 확인하기</h2><figure><button aria-label="실제 답변 또는 결과 파일 미리보기 · 일부 발췌 크게 보기" class="photo"><img alt="실제 답변 또는 결과 파일 미리보기 · 일부 발췌" src="../media/film-class/sheets-out.png"/></button><figcaption>실제 답변 또는 결과 파일 미리보기 · 일부 발췌</figcaption></figure><div class="copyarea" data-copy-kind="answer" data-image-answer=""><header><b>실제 답변 원문</b><button aria-label="실제 답변 원문 복사" class="copy" title="실제 답변 원문 복사" type="button"></button></header><pre hidden="" tabindex="0">영화제 접수 담당자가 바로 사용할 수 있는 **엑셀 좌석표(XLSX)**를 만들었습니다. 예약 30명 기준으로 세 가지 좌석 시나리오를 계산하고 수식도 검산했습니다.
+
+festival_seat_scenarios.xlsx
+
+수식 포함 · Excel 편집 가능
+
+엑셀 좌석표 다운로드
+
+검산 결과
+
+예약	좌석	부족	남음
+
+30명	24석	6석	0석
+
+30명	28석	2석	0석
+
+30명	32석	0석	2석
+
+적용 수식
+
+부족(C5): =MAX(A5-B5,0)
+
+남음(D5): =MAX(B5-A5,0)
+
+각 행에 같은 수식을 적용했습니다. 두 계산값 모두 0 미만으로 내려가지 않습니다.
+
+검산 완료: 3개 시나리오의 계산값이 모두 일치하며, 수식 오류 검색에서도 오류가 발견되지 않았습니다.
+
+엑셀에서 연한 파란색의 예약·좌석 값을 수정하면 부족·남음이 자동으로 재계산됩니다.
+
+현재 운영 기준인 28석에서는 2석 부족합니다. 추가 좌석 확보 또는 입장 운영 방침 확인이 필요하며, 좌석 배정 기준은 임의로 정하지 않았습니다.
+
+festival_seat_scenarios.xlsx
+Excel</pre></div><p><a download="" href="../media/film-class/festival_seat_scenarios.xlsx">실습 결과 파일 받기 · XLSX</a></p><div class="copyarea" data-copy-kind="prompt"><header><b>부족 좌석 수식</b><button aria-label="부족 좌석 수식 복사" class="copy" title="부족 좌석 수식 복사" type="button"></button></header><pre tabindex="0">=MAX(A5-B5,0)</pre></div><div class="copyarea" data-copy-kind="prompt"><header><b>남는 좌석 수식</b><button aria-label="남는 좌석 수식 복사" class="copy" title="남는 좌석 수식 복사" type="button"></button></header><pre tabindex="0">=MAX(B5-A5,0)</pre></div><h3>원자료와 대조하세요</h3><p>24석은 6석 부족, 28석은 2석 부족, 32석은 2석 남음입니다. 예약을 좌석과 같게 바꾸면 부족과 남음이 모두 0이어야 합니다.</p><h3>한 번 더 해 보기</h3><p>파일을 복사해 예약 인원을 한 명 늘리고 표와 자신의 계산을 대조하세요.</p></section><p class="reader-location">Windows Chrome · 개인용 ChatGPT Plus · 2026. 11. 8. 실제 촬영</p><nav aria-label="교재 이동" class="reader-pager"><div><a href="실습-doc.html" rel="prev">← 이전</a><a class="reader-toc" href="../index.html#day-01">목차</a><a class="reader-next" href="재고_대조.html" rel="next">다음 →</a></div></nav></main><dialog><button class="close">닫기</button><img alt="확대된 실습 화면"/></dialog><output role="status"></output></body></html>
