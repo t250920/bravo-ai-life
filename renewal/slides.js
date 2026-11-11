@@ -11,6 +11,16 @@ for(const s of D.slides){
  if(!r||r.day!==s.day||r.name!==s.section){r={day:s.day,name:s.section,slides:[]};runs.push(r);}
  r.slides.push(s);runOf.set(s.id,r);
 }
+// An optional series is a former exercise kept whole: its slides follow each other
+// with Next, and the last one returns to the lesson.
+const seriesMap=new Map();
+for(const e of D.extras){
+ if(!e.series)continue;
+ const key=e.day+'|'+e.series;
+ if(!seriesMap.has(key))seriesMap.set(key,[]);
+ seriesMap.get(key).push(e);
+}
+const matesOf=s=>s&&s.series?seriesMap.get(s.day+'|'+s.series):null;
 const lessonOf=day=>D.lessons.find(l=>l.day===day);
 const sectionsOf=day=>runs.filter(r=>r.day===day&&r.name!=='시작');
 const courseNames=['','AI로 똑똑하게 일하기','AI 영상 놀이터','나에게 딱 맞는 AI 만들기'];
@@ -49,7 +59,7 @@ function figure(s){
 
 function cover(){
  const last=saved();
- let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions"><button class="primary start" id="startButton">1차시 시작　→</button>';
+ let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions"><button class="primary start" id="startButton">1차시 시작　→</button>';
  if(last&&last.number>1)html+='<button class="resume" id="resumeButton">이어서 보기 · '+last.day+'차시 '+last.number+'번째 장</button>';
  html+='</div><p class="small">다른 차시를 보려면 오른쪽 위 ‘목차’를 누르세요.</p><div class="cover-steps"><span>① 화면 보기</span>→<span>② 직접 해 보기</span>→<span>③ 다음 장</span></div></article>';
  $('#stage').innerHTML=html;
@@ -63,6 +73,7 @@ function chapter(s){
  const m=s.meta||{},secs=sectionsOf(s.day);
  let html='<article class="slide chapter'+(s.media?' has-art':'')+'"><div class="ch-main"><p class="ch-kicker"><b>'+s.day+'차시</b><span>Bravo AI Life '+(m.course||'')+' · '+esc(courseNames[m.course]||'')+'</span>'+(m.date?'<span>'+esc(m.date)+'</span>':'')+'</p><h1>'+esc(s.title)+'</h1>';
  if(s.text?.length)html+='<p class="ch-lead">'+esc(s.text[0])+'</p>';
+ if(m.story)html+='<p class="ch-story"><b>PACE 01 창업 이야기</b><span>'+esc(m.story)+'</span></p>';
  html+='<div class="ch-grid">';
  if(m.goals?.length)html+='<section><h2>오늘 할 일</h2><ol class="goals">'+m.goals.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ol></section>';
  if(m.outputs?.length)html+='<section><h2>오늘 만드는 결과물</h2><ul class="outputs">'+m.outputs.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ul></section>';
@@ -73,19 +84,32 @@ function chapter(s){
  return html+'</article>';
 }
 
+// The map of the whole course: three courses, twelve lessons, one business.
+function journeyMap(j){
+ let html='<div class="journey">';
+ j.courses.forEach((name,c)=>{
+  html+='<section class="j-course'+(c+1===j.course?' now':'')+'"><h2><small>Bravo AI Life '+(c+1)+'</small>'+esc(name)+'</h2><ol>';
+  html+=j.stages.filter(st=>Math.ceil(st.day/4)===c+1).map(st=>'<li'+(st.day===j.day?' class="here"':'')+'><button data-jump="day-'+st.day+'"><b>'+st.day+'</b><span>'+esc(st.name)+'<small>'+esc(st.tool)+'</small></span>'+(st.day===j.day?'<em>오늘</em>':'')+'</button></li>').join('');
+  html+='</ol></section>';
+ });
+ return html+'</div>';
+}
+
 function slide(s,extra){
- const run=runOf.get(s.id),ps=s.prompts||[],tp=s.template||[],split=s.layout==='split'&&s.media;
+ const run=runOf.get(s.id),ps=s.prompts||[],tp=s.template||[],split=s.layout==='split'&&s.media,mates=matesOf(s);
  const copies=[...ps,...tp];
  let cls='slide role-'+(s.role||'action')+(s.kind?' kind-'+s.kind:'')+(s.media?'':' no-media')+(split?' split':'');
  let head='<header class="slide-head"><p class="crumb"><span class="badge">'+esc(s.phase)+'</span>';
  if(s.tool)head+='<span class="section">'+esc(s.tool)+' 기본 사용법</span>';
  else if(!extra&&s.section)head+='<span class="section">'+esc(s.section)+'</span>';
  if(!extra&&run&&run.slides.length>1)head+='<span class="step">'+(run.slides.indexOf(s)+1)+' / '+run.slides.length+'</span>';
+ if(mates)head+='<span class="series">선택 실습 · '+esc(s.series)+'</span><span class="step">'+(mates.indexOf(s)+1)+' / '+mates.length+'</span>';
  head+='</p><h1>'+esc(s.title)+'</h1></header>';
  let lead='';
  if(s.text?.length)lead+='<div class="instructions">'+s.text.map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>';
  if(s.steps?.length)lead+='<ol class="steps">'+s.steps.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ol>';
  if(s.points?.length)lead+='<ul class="points">'+s.points.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>';
+ if(s.journey)lead+=journeyMap(s.journey);
  if(s.openLink)lead+='<p><a class="open-platform" href="'+esc(s.openLink.url)+'" target="_blank" rel="noopener">'+esc(s.openLink.name)+'</a></p>';
  if(s.downloads?.length)lead+='<div class="downloads">'+s.downloads.map(a=>'<a download href="'+esc(a.url)+'">'+esc(a.name)+'</a>').join('')+'</div>';
  let after='';
@@ -130,13 +154,14 @@ function render(){
  if(s.kind==='chapter')$('#stage').innerHTML=chapter(s);else slide(s,extra);
  $$('#stage [data-jump]').forEach(b=>b.onclick=()=>go(b.dataset.jump));
  $('#prev').disabled=false;
- $('#next').textContent=extra?'수업으로 돌아가기 →':ix===D.slides.length-1?'처음으로 →':'다음 →';
+ const mates=extra?matesOf(s):null,mi=mates?mates.indexOf(s):-1,mateNext=mates?mates[mi+1]:null;
+ $('#next').textContent=extra?(mateNext?'다음 →':'수업으로 돌아가기 →'):ix===D.slides.length-1?'처음으로 →':'다음 →';
  $('#location').textContent=s.day+'차시 · '+lesson.title;
- $('#counter').textContent=extra?'선택 예제':s.day+'차시　'+s.number+' / '+s.total;
+ $('#counter').textContent=mates?'선택 실습　'+(mi+1)+' / '+mates.length:extra?'선택 예제':s.day+'차시　'+s.number+' / '+s.total;
  const next=D.slides[ix+1];
- $('#nextHint').textContent=extra?'원래 보던 수업으로 돌아갑니다':next?(next.day!==s.day?'다음: '+next.day+'차시 시작':'다음: '+next.title):'전체 수업의 마지막 장입니다';
- $('#progress').style.width=extra?'100%':(s.number/s.total*100)+'%';
- document.title=(extra?'선택 예제':s.day+'차시 '+s.number+'/'+s.total)+' · '+s.title;
+ $('#nextHint').textContent=extra?(mateNext?'다음: '+mateNext.title:'원래 보던 수업으로 돌아갑니다'):next?(next.day!==s.day?'다음: '+next.day+'차시 시작':'다음: '+next.title):'전체 수업의 마지막 장입니다';
+ $('#progress').style.width=mates?((mi+1)/mates.length*100)+'%':extra?'100%':(s.number/s.total*100)+'%';
+ document.title=(mates?'선택 실습 '+(mi+1)+'/'+mates.length:extra?'선택 예제':s.day+'차시 '+s.number+'/'+s.total)+' · '+s.title;
  $('#stage').scrollTop=0;$('#stage').focus({preventScroll:true});more();
  if(!extra){try{localStorage.setItem('bravo-slide',s.id);}catch(e){}}
 }
@@ -146,8 +171,12 @@ function more(){const st=$('#stage');$('#more').hidden=st.scrollHeight-st.scroll
 $('#more').onclick=()=>$('#stage').scrollBy({top:$('#stage').clientHeight*.75,behavior:'smooth'});
 $('#stage').addEventListener('scroll',more,{passive:true});window.addEventListener('resize',more);
 
-function next(){if(!current)return go(D.slides[0].id);const i=D.slides.indexOf(current);if(i<0)return go(optionalReturn||lessonOf(current.day).id);go(D.slides[i+1]?.id||'start');}
-function prev(){if(!current)return;const i=D.slides.indexOf(current);if(i<0)return go(optionalReturn||lessonOf(current.day).id);go(D.slides[i-1]?.id||'start');}
+function leaveExtra(step){
+ const mates=matesOf(current),to=mates?mates[mates.indexOf(current)+step]:null;
+ go(to?to.id:optionalReturn||lessonOf(current.day).id);
+}
+function next(){if(!current)return go(D.slides[0].id);const i=D.slides.indexOf(current);if(i<0)return leaveExtra(1);go(D.slides[i+1]?.id||'start');}
+function prev(){if(!current)return;const i=D.slides.indexOf(current);if(i<0)return leaveExtra(-1);go(D.slides[i-1]?.id||'start');}
 
 function toc(){
  let lessons='';
@@ -156,10 +185,12 @@ function toc(){
   lessons+=D.lessons.filter(l=>Math.ceil(l.day/4)===c).map(l=>'<button data-day="'+l.day+'"'+(l.day===tocDay?' class="active" aria-current="true"':'')+'><b>'+l.day+'</b><span>'+esc(l.title)+'</span></button>').join('');
  }
  $('#tocLessons').innerHTML=lessons;
- const lesson=lessonOf(tocDay),first=byId.get(lesson.id),extras=D.extras.filter(e=>e.day===tocDay);
+ const lesson=lessonOf(tocDay),first=byId.get(lesson.id),dayExtras=D.extras.filter(e=>e.day===tocDay);
+ const series=[...seriesMap.entries()].filter(([k])=>k.startsWith(tocDay+'|')).map(([,v])=>v),extras=dayExtras.filter(e=>!e.series);
  let html='<h3>'+tocDay+'차시 · '+esc(lesson.title)+(first.meta?.date?'<small>'+esc(first.meta.date)+'</small>':'')+'</h3>';
  html+='<div class="toc-list"><button class="from-start" data-jump="'+lesson.id+'"><b>▶</b><span>처음부터 보기</span><small>'+first.total+'장</small></button>';
  html+=sectionsOf(tocDay).map((r,i)=>'<button data-jump="'+r.slides[0].id+'"'+(current&&runOf.get(current.id)===r?' class="here"':'')+'><b>'+(i+1)+'</b><span>'+esc(r.name)+'</span><small>'+r.slides.length+'장</small></button>').join('')+'</div>';
+ if(series.length)html+='<h4>선택 실습 '+series.length+'개 <small>다른 소재로 한 번 더 연습합니다</small></h4><div class="toc-list extra">'+series.map(v=>'<button data-jump="'+v[0].id+'" data-extra="1"'+(current&&matesOf(current)===v?' class="here"':'')+'><span>'+esc(v[0].series)+'</span><small>'+v.length+'장</small></button>').join('')+'</div>';
  if(extras.length)html+='<h4>선택 예제·참고 '+extras.length+'개 <small>본 수업 순서와 별개입니다</small></h4><div class="toc-list extra">'+extras.map(e=>'<button data-jump="'+e.id+'" data-extra="1"><span>'+esc(e.title)+'</span></button>').join('')+'</div>';
  $('#tocSections').innerHTML=html;
  $$('#tocLessons button').forEach(b=>b.onclick=()=>{tocDay=Number(b.dataset.day);toc();$('#tocSections').scrollTop=0;});

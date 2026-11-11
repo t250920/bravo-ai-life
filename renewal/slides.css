@@ -12,7 +12,8 @@
   color:var(--ink); background:var(--bg);
 }
 *{box-sizing:border-box}
-body{margin:0;height:100dvh;display:grid;grid-template-rows:60px minmax(0,1fr) 78px}
+/* one column that may shrink: a long lesson title in the top bar must not widen the page on phones */
+body{margin:0;height:100dvh;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:60px minmax(0,1fr) 78px}
 button,a{-webkit-tap-highlight-color:transparent}
 button{font:inherit;cursor:pointer;border:0;color:inherit}
 a{color:var(--accent);text-underline-offset:4px}
@@ -24,7 +25,7 @@ p,li{word-break:keep-all;overflow-wrap:anywhere}
 .top{padding:0 28px;display:flex;align-items:center;gap:22px;background:var(--top);color:#f4f4f2}
 .brand{text-decoration:none;color:#f6f6f4;letter-spacing:2px;font-size:16px;font-weight:800;white-space:nowrap}
 .brand span{font-weight:400}
-#location{font-size:15px;color:#d3d5d6;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#location{font-size:15px;color:#d3d5d6;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tools{display:flex;gap:8px}
 .tools button{padding:9px 14px;background:#3b3e41;color:#f4f4f2;border-radius:8px;font-size:15px}
 .tools button:hover{background:#4a4e52}
@@ -49,6 +50,7 @@ button:disabled{opacity:.35;cursor:default}
 .crumb .section{color:var(--sub)}
 .crumb .step{color:var(--mute);font-weight:500}
 .crumb .step::before{content:"·";margin-right:10px}
+.crumb .series{color:var(--prep);font-weight:700}
 .slide h1{font-size:clamp(26px,2.6vw,36px);line-height:1.32;letter-spacing:-.8px;margin-top:10px;word-break:keep-all}
 .role-input .badge{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-line)}
 .role-result .badge{background:var(--result-soft);color:var(--result);border-color:var(--result-line)}
@@ -125,6 +127,7 @@ button:disabled{opacity:.35;cursor:default}
 .cover .label{color:var(--mute);font-size:14px;letter-spacing:3px;font-weight:800}
 .cover h1{font-size:clamp(36px,4.8vw,58px);line-height:1.2;letter-spacing:-2px;margin:10px 0 12px}
 .cover p{font-size:21px;line-height:1.7;color:var(--sub)}
+.cover .cover-story{max-width:760px;border-left:5px solid var(--top);padding-left:16px;margin-bottom:10px;color:var(--ink)}
 .cover-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px}
 .cover .start{padding:18px 32px;font-size:22px;border-radius:12px;font-weight:800}
 .cover .resume{padding:18px 26px;font-size:19px;border-radius:12px;font-weight:700;background:#fff;border:2px solid var(--accent-line);color:var(--accent)}
@@ -139,6 +142,8 @@ button:disabled{opacity:.35;cursor:default}
 .ch-kicker span+span::before{content:"·";margin-right:12px}
 .chapter h1{font-size:clamp(34px,4vw,54px);line-height:1.2;letter-spacing:-1.6px;margin:0}
 .ch-lead{font-size:23px;line-height:1.6;color:var(--sub)}
+.ch-story{display:flex;gap:14px;align-items:baseline;font-size:18.5px;line-height:1.6;color:var(--sub);border-left:5px solid var(--top);padding:4px 0 4px 16px}
+.ch-story b{flex:none;font-size:14px;letter-spacing:.3px;color:var(--ink)}
 .ch-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;margin-top:4px}
 .ch-grid section{background:var(--soft);border-radius:14px;padding:18px 22px}
 .chapter h2{font-size:15px;font-weight:800;color:var(--mute);letter-spacing:.3px;margin-bottom:10px}
@@ -156,6 +161,23 @@ button:disabled{opacity:.35;cursor:default}
 .ch-outline small{color:var(--mute);font-weight:500;font-size:13px}
 .ch-art{margin:0;flex:0 0 34%;display:flex;align-items:center;justify-content:center}
 .ch-art img{display:block;max-width:100%;max-height:calc(100dvh - 250px);object-fit:contain;border-radius:14px}
+
+/* ---------- the map of the course: one business, twelve lessons ---------- */
+.journey{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:1180px}
+.j-course{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:16px 16px 12px}
+.j-course h2{font-size:21px;letter-spacing:-.4px;margin-bottom:12px;display:flex;flex-direction:column;gap:2px}
+.j-course h2 small{font-size:13.5px;color:var(--mute);font-weight:700;letter-spacing:.2px}
+.j-course ol{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.j-course button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:17.5px;font-weight:700;line-height:1.35}
+.j-course button:hover{border-color:var(--accent)}
+.j-course b{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--soft);font-size:15px}
+.j-course span{flex:1;display:flex;flex-direction:column}
+.j-course span small{font-size:13.5px;font-weight:500;color:var(--mute)}
+.j-course em{font-style:normal;font-size:13px;font-weight:800;background:var(--accent);color:#fff;border-radius:999px;padding:4px 10px}
+.j-course.now{background:#fff;border-color:var(--top);box-shadow:0 0 0 2px var(--top) inset}
+.j-course .here button{border-color:var(--accent);background:var(--accent-soft)}
+.j-course .here b{background:var(--accent);color:#fff}
+.kind-journey{justify-content:center}
 
 /* ---------- "more below" hint ---------- */
 #more{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);z-index:20;background:var(--top);color:#fff;padding:11px 22px;border-radius:999px;font-size:16px;font-weight:700;box-shadow:0 6px 18px #0000002e}
@@ -206,6 +228,8 @@ noscript{display:block;padding:24px;font-size:18px}
   .instructions{font-size:18.5px}
   .controls button{padding:10px 24px}
   .chapter h1{font-size:40px}.ch-lead{font-size:20px}.goals,.outputs{font-size:17.5px}
+  .ch-story{font-size:17px}
+  .j-course button{padding:8px 11px;font-size:16.5px}.j-course h2{font-size:19px;margin-bottom:9px}
   #more{bottom:80px}
 }
 
@@ -241,6 +265,8 @@ noscript{display:block;padding:24px;font-size:18px}
   .chapter{flex-direction:column;padding:22px 18px;gap:18px}
   .chapter h1{font-size:30px}.ch-lead{font-size:18px}
   .ch-grid{grid-template-columns:1fr}
+  .ch-story{flex-direction:column;gap:2px;font-size:16.5px}
+  .journey{grid-template-columns:1fr}
   .goals,.outputs{font-size:17px}
   .ch-art{flex:none;max-height:240px}.ch-art img{max-height:240px}
   .slide.split{display:flex;flex-direction:column;gap:14px}
