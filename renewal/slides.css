@@ -81,6 +81,10 @@ button:disabled{opacity:.35;cursor:default}
 .visual audio{width:min(720px,100%)}
 .image-open{position:absolute;bottom:10px;right:10px;background:#fffffff0;color:#2e3b48;padding:8px 13px;font-size:14px;font-weight:600;border-radius:8px;border:1px solid #cfd5db}
 .image-open:hover{background:#fff}
+/* a frame is drawn in the bottom-right corner of this picture: the button moves to a free corner */
+.image-open.tr{bottom:auto;top:10px}
+.image-open.bl{right:auto;left:10px}
+.image-open.tl{bottom:auto;top:10px;right:auto;left:10px}
 .visual figcaption{align-self:stretch;font-size:13.5px;line-height:1.6;color:var(--mute);padding:0 4px}
 .visual.reference .frame{border-style:dashed;border-color:#b9bfc5}
 .visual.reference img{max-width:min(var(--mw,1040px),640px);opacity:.92}
@@ -144,8 +148,12 @@ button:disabled{opacity:.35;cursor:default}
 .ch-lead{font-size:23px;line-height:1.6;color:var(--sub)}
 .ch-story{display:flex;gap:14px;align-items:baseline;font-size:18.5px;line-height:1.6;color:var(--sub);border-left:5px solid var(--top);padding:4px 0 4px 16px}
 .ch-story b{flex:none;font-size:14px;letter-spacing:.3px;color:var(--ink)}
-.ch-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;margin-top:4px}
-.ch-grid section{background:var(--soft);border-radius:14px;padding:18px 22px}
+.ch-goals{background:var(--soft);border-radius:14px;padding:20px 24px;max-width:760px;margin-top:4px}
+.ch-goals .goals{font-size:21px;gap:12px}
+.ch-start{display:flex;flex-wrap:wrap;align-items:center;gap:14px;font-size:16px;color:var(--mute)}
+.ch-start button{display:flex;align-items:center;gap:10px;padding:11px 18px;background:#fff;border:1px solid var(--line);border-radius:10px;font-size:17px;font-weight:700}
+.ch-start button:hover{border-color:var(--accent);color:var(--accent)}
+.ch-start small{color:var(--mute);font-weight:500;font-size:14px}
 .chapter h2{font-size:15px;font-weight:800;color:var(--mute);letter-spacing:.3px;margin-bottom:10px}
 .chapter h2 small{font-weight:500;margin-left:8px}
 .goals,.outputs{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:19px;line-height:1.5}

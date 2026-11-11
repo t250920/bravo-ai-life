@@ -47,7 +47,7 @@ function figure(s){
    const w=s.mediaW,cap=Math.min(w>1300?1240:1040,Math.round(w*(w<400?2.2:w<800?1.5:1.3)));
    style=' style="--mw:'+cap+'px;aspect-ratio:'+w+'/'+s.mediaH+'"';
   }
-  inner='<img id="slideImage" src="'+esc(s.media)+'" alt="'+esc(s.alt||s.title)+'"'+style+'><button class="image-open" id="zoomButton">⛶ 크게 보기</button>';
+  inner='<img id="slideImage" src="'+esc(s.media)+'" alt="'+esc(s.alt||s.title)+'"'+style+'><button class="image-open'+(s.zoomAt?' '+esc(s.zoomAt):'')+'" id="zoomButton">⛶ 크게 보기</button>';
  }
  let html='<figure class="visual'+(s.refImage?' reference':'')+(s.fit?' fit':'')+' '+esc(s.mediaType||'img')+'">';
  if(s.refImage)html+='<p class="ribbon">참고 화면 · 이 단계를 직접 찍은 화면이 아닙니다</p>';
@@ -73,12 +73,9 @@ function chapter(s){
  const m=s.meta||{},secs=sectionsOf(s.day);
  let html='<article class="slide chapter'+(s.media?' has-art':'')+'"><div class="ch-main"><p class="ch-kicker"><b>'+s.day+'차시</b><span>Bravo AI Life '+(m.course||'')+' · '+esc(courseNames[m.course]||'')+'</span>'+(m.date?'<span>'+esc(m.date)+'</span>':'')+'</p><h1>'+esc(s.title)+'</h1>';
  if(s.text?.length)html+='<p class="ch-lead">'+esc(s.text[0])+'</p>';
- if(m.story)html+='<p class="ch-story"><b>PACE 01 창업 이야기</b><span>'+esc(m.story)+'</span></p>';
- html+='<div class="ch-grid">';
- if(m.goals?.length)html+='<section><h2>오늘 할 일</h2><ol class="goals">'+m.goals.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ol></section>';
- if(m.outputs?.length)html+='<section><h2>오늘 만드는 결과물</h2><ul class="outputs">'+m.outputs.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ul></section>';
- html+='</div>';
- if(secs.length>1)html+='<section class="ch-outline"><h2>오늘의 순서 <small>누르면 그 부분으로 바로 갑니다</small></h2><ol>'+secs.map((r,i)=>'<li><button data-jump="'+r.slides[0].id+'"><b>'+(i+1)+'</b><span>'+esc(r.name)+'</span><small>'+r.slides.length+'장</small></button></li>').join('')+'</ol></section>';
+ // Kept short on purpose: the story is on the map slide, the results on the closing slide, the order in the table of contents.
+ if(m.goals?.length)html+='<section class="ch-goals"><h2>오늘 할 일</h2><ol class="goals">'+m.goals.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ol></section>';
+ html+='<p class="ch-start"><button data-open-toc>오늘의 순서 보기<small>'+secs.length+'부분 · '+s.total+'장</small></button><span>아래 ‘다음’을 누르면 시작합니다</span></p>';
  html+='</div>';
  if(s.media)html+='<figure class="ch-art"><img src="'+esc(s.media)+'" alt=""></figure>';
  return html+'</article>';
@@ -153,6 +150,7 @@ function render(){
  tocDay=s.day;
  if(s.kind==='chapter')$('#stage').innerHTML=chapter(s);else slide(s,extra);
  $$('#stage [data-jump]').forEach(b=>b.onclick=()=>go(b.dataset.jump));
+ $$('#stage [data-open-toc]').forEach(b=>b.onclick=()=>$('#tocButton').click());
  $('#prev').disabled=false;
  const mates=extra?matesOf(s):null,mi=mates?mates.indexOf(s):-1,mateNext=mates?mates[mi+1]:null;
  $('#next').textContent=extra?(mateNext?'다음 →':'수업으로 돌아가기 →'):ix===D.slides.length-1?'처음으로 →':'다음 →';
