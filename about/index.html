@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
 <title>Bravo AI Life · 수업 소개</title>
 <meta name="description" content="Bravo AI Life 3과목 12차시 수업을 소개하는 발표 자료입니다.">
 <style>
@@ -653,7 +654,7 @@ html:not(.present) .end figcaption span{font-size:15px}
   function layout(){           // wide stage: the 1280 x 720 slide scaled to fit; narrow: the slide laid out to be read
     var w=stage.clientWidth,h=stage.clientHeight,wide=window.innerWidth>=900&&w>=h*1.15;
     root.classList.toggle('present',wide);
-    if(wide)deck.style.setProperty('--k',Math.max(.2,Math.min((w-56)/1280,(h-36)/720)).toFixed(4));
+    if(wide)deck.style.setProperty('--k',Math.max(.05,Math.min((w-56)/1280,(h-36)/720)).toFixed(4));
   }
   function full(){
     if(document.fullscreenElement){document.exitFullscreen()}
