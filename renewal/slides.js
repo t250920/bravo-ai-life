@@ -2,6 +2,8 @@
 const D=window.BRAVO_DECK,$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const all=[...D.slides,...D.extras],byId=new Map(all.map(s=>[s.id,s]));
+// A topic edition (another subject, same lessons) carries its own cover text and remembers its own place.
+const E=D.edition||null,KEY='bravo-slide'+(E?'-'+E.key:''),EDITIONS=window.BRAVO_EDITIONS||[];
 let current=null,optionalReturn=null,tocDay=1;
 
 // A section is a run of consecutive slides that share a name inside one lesson.
@@ -30,7 +32,7 @@ const doneIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 function go(id){if(location.hash.slice(1)===id)render();else location.hash=id;}
 let toastTimer;
 function toast(t){$('#toast').textContent=t;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').textContent='',2600);}
-function saved(){try{return byId.get(localStorage.getItem('bravo-slide'));}catch(e){return null;}}
+function saved(){try{return byId.get(localStorage.getItem(KEY));}catch(e){return null;}}
 
 function copyBox(text,i,label,kind){
  return '<section class="prompt '+kind+'"><div class="prompt-head"><span>'+esc(label)+'</span><button class="copy" data-copy="'+i+'" aria-label="복사" title="복사">'+copyIcon+'</button></div><pre>'+esc(text)+'</pre></section>';
@@ -59,12 +61,15 @@ function figure(s){
 
 function cover(){
  const last=saved();
- let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions"><button class="primary start" id="startButton">1차시 시작　→</button>';
+ let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">'+(E?esc(E.cover):'12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.')+'</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions"><button class="primary start" id="startButton">1차시 시작　→</button>';
  if(last&&last.number>1)html+='<button class="resume" id="resumeButton">이어서 보기 · '+last.day+'차시 '+last.number+'번째 장</button>';
- html+='</div><p class="small">다른 차시를 보려면 오른쪽 위 ‘목차’를 누르세요.</p><div class="cover-steps"><span>① 화면 보기</span>→<span>② 직접 해 보기</span>→<span>③ 다음 장</span></div></article>';
+ html+='</div><p class="small">다른 차시를 보려면 오른쪽 위 ‘목차’를 누르세요.</p><div class="cover-steps"><span>① 화면 보기</span>→<span>② 직접 해 보기</span>→<span>③ 다음 장</span></div>';
+ // The same lessons on another subject: one line of links, the current edition marked.
+ if(EDITIONS.length>1)html+='<nav class="cover-editions" aria-label="주제 고르기"><b>주제 고르기</b>'+EDITIONS.map(x=>(x.key===(E?E.key:'pace')?'<span class="here">':'<a href="'+esc(x.href)+'">')+esc(x.name)+'<small>'+esc(x.scope)+'</small>'+(x.key===(E?E.key:'pace')?'</span>':'</a>')).join('')+'</nav>';
+ html+='</article>';
  $('#stage').innerHTML=html;
  $('#location').textContent='한 장씩 따라 하는 AI 수업';$('#counter').textContent='여기서 시작하세요';$('#nextHint').textContent='1차시 · '+lessonOf(1).title;
- $('#prev').disabled=true;$('#next').textContent='수업 시작 →';$('#progress').style.width='0%';document.title='Bravo AI Life · 한 장씩 따라 하기';
+ $('#prev').disabled=true;$('#next').textContent='수업 시작 →';$('#progress').style.width='0%';document.title='Bravo AI Life · 한 장씩 따라 하기'+(E?' · '+E.name:'');
  $('#startButton').onclick=()=>go(D.slides[0].id);
  if($('#resumeButton'))$('#resumeButton').onclick=()=>go(last.id);
 }
@@ -83,7 +88,7 @@ function chapter(s){
 
 // The map of the whole course: three courses, twelve lessons, one business.
 function journeyMap(j){
- let html='<div class="journey">';
+ let html='<div class="journey'+(j.courses.length===1?' one':'')+'">';
  j.courses.forEach((name,c)=>{
   html+='<section class="j-course'+(c+1===j.course?' now':'')+'"><h2><small>Bravo AI Life '+(c+1)+'</small>'+esc(name)+'</h2><ol>';
   html+=j.stages.filter(st=>Math.ceil(st.day/4)===c+1).map(st=>'<li'+(st.day===j.day?' class="here"':'')+'><button data-jump="day-'+st.day+'"><b>'+st.day+'</b><span>'+esc(st.name)+'<small>'+esc(st.tool)+'</small></span>'+(st.day===j.day?'<em>오늘</em>':'')+'</button></li>').join('');
@@ -157,11 +162,11 @@ function render(){
  $('#location').textContent=s.day+'차시 · '+lesson.title;
  $('#counter').textContent=mates?'선택 실습　'+(mi+1)+' / '+mates.length:extra?'선택 예제':s.day+'차시　'+s.number+' / '+s.total;
  const next=D.slides[ix+1];
- $('#nextHint').textContent=extra?(mateNext?'다음: '+mateNext.title:'원래 보던 수업으로 돌아갑니다'):next?(next.day!==s.day?'다음: '+next.day+'차시 시작':'다음: '+next.title):'전체 수업의 마지막 장입니다';
+ $('#nextHint').textContent=extra?(mateNext?'다음: '+mateNext.title:'원래 보던 수업으로 돌아갑니다'):next?(next.day!==s.day?'다음: '+next.day+'차시 시작':'다음: '+next.title):(E?E.last:'전체 수업의 마지막 장입니다');
  $('#progress').style.width=mates?((mi+1)/mates.length*100)+'%':extra?'100%':(s.number/s.total*100)+'%';
  document.title=(mates?'선택 실습 '+(mi+1)+'/'+mates.length:extra?'선택 예제':s.day+'차시 '+s.number+'/'+s.total)+' · '+s.title;
  $('#stage').scrollTop=0;$('#stage').focus({preventScroll:true});more();
- if(!extra){try{localStorage.setItem('bravo-slide',s.id);}catch(e){}}
+ if(!extra){try{localStorage.setItem(KEY,s.id);}catch(e){}}
 }
 
 // Tell the reader when the rest of a slide is below the visible area.
@@ -179,6 +184,7 @@ function prev(){if(!current)return;const i=D.slides.indexOf(current);if(i<0)retu
 function toc(){
  let lessons='';
  for(let c=1;c<=3;c++){
+  if(!D.lessons.some(l=>Math.ceil(l.day/4)===c))continue;   // a topic edition may hold one course only
   lessons+='<h3>Bravo AI Life '+c+'<small>'+esc(courseNames[c])+'</small></h3>';
   lessons+=D.lessons.filter(l=>Math.ceil(l.day/4)===c).map(l=>'<button data-day="'+l.day+'"'+(l.day===tocDay?' class="active" aria-current="true"':'')+'><b>'+l.day+'</b><span>'+esc(l.title)+'</span></button>').join('');
  }
