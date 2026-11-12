@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Bravo AI Life · 수업 소개</title>
+<meta name="description" content="Bravo AI Life 3과목 12차시 수업을 소개하는 발표 자료입니다.">
+<style>
+/* The mentor presentation as a web page, in the frame of the student reader (renewal/slides.css):
+   charcoal top bar, one slide per page, 이전/다음 at the bottom. */
+:root{--bg:#e9e9e7;--ink:#1F252B;--dark:#27292B;--paper:#FFFFFF;--card:#F1F2F1;--accent:#E24A26;--blue:#2C5A9C;--green:#256E4E;--muted:#59636D;--line:#d5d8db;--top:#27292b}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",Arial,sans-serif;font-synthesis:none;line-height:1.45;word-break:keep-all;overflow-wrap:break-word}
+h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0;padding:0}
+ul,ol{list-style:none}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:0}
+button:focus-visible,a:focus-visible{outline:3px solid #e39b22;outline-offset:3px}
+button:disabled{opacity:.35;cursor:default}
+
+/* ---- frame: top bar, stage, pager (same measures as the student reader) */
+html.js body{height:100dvh;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:60px minmax(0,1fr) 78px}
+.top{min-height:54px;padding:0 28px;display:flex;align-items:center;gap:22px;background:var(--top);color:#f4f4f2}
+.brand{text-decoration:none;color:#f6f6f4;letter-spacing:2px;font-size:16px;font-weight:800;white-space:nowrap}
+.brand span{font-weight:400}
+#location{font-size:15px;color:#d3d5d6;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:flex;gap:8px}
+.tools button{display:flex;align-items:center;gap:7px;padding:9px 14px;background:#3b3e41;color:#f4f4f2;border-radius:8px;font-size:15px}
+.tools button:hover{background:#4a4e52}
+#stage{position:relative;min-height:0;overflow:auto;padding:18px 28px;outline:0}
+.controls{position:relative;display:flex;align-items:center;gap:22px;justify-content:center;padding:12px 28px;background:#f7f7f5;border-top:1px solid var(--line)}
+.progress-track{height:4px;position:absolute;top:-1px;left:0;right:0;background:var(--line)}
+#progress{height:100%;width:0;background:#4f73a3;transition:width .2s}
+.controls button{border-radius:11px;padding:13px 28px;font-weight:700;min-width:132px;font-size:18px}
+.primary{background:var(--blue);color:#fff}
+.primary:hover{background:#244c86}
+.back{background:#e4e7e9;color:#2e3843}
+.back:hover{background:#d8dcdf}
+.position{min-width:260px;max-width:46vw;text-align:center;display:flex;flex-direction:column;gap:3px}
+.position strong{font-size:16px}
+.position span{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html:not(.js) .tools,html:not(.js) .controls{display:none}
+dialog{border:1px solid var(--line);border-radius:18px;padding:22px 24px;color:var(--ink);background:#fbfbfa;width:min(560px,94vw);max-height:90dvh;box-shadow:0 30px 100px #0d1c2c55}
+dialog::backdrop{background:#111a24b8}
+.dialog-head{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:14px}
+.dialog-head small{font-size:13px;color:var(--muted)}
+.dialog-head h2{font-size:22px;margin-top:2px}
+.dialog-head button{background:#e4e7e9;color:#2e3843;border-radius:9px;padding:9px 14px;font-size:15px;font-weight:700}
+#tocList{display:grid;gap:6px}
+#tocList .sec{font-size:13px;font-weight:700;color:var(--blue);margin-top:8px}
+#tocList button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:var(--card);border-radius:10px;padding:10px 14px;font-size:16px}
+#tocList button:hover{background:#e6e8e9}
+#tocList button[aria-current="true"]{background:#e8eff8;font-weight:700}
+#tocList button span{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700}
+@media(max-height:720px) and (min-width:801px){
+  html.js body{grid-template-rows:52px minmax(0,1fr) 68px}
+  .controls button{padding:10px 24px}
+}
+@media(max-width:800px){
+  html.js body{grid-template-rows:54px minmax(0,1fr) 72px}
+  .top{padding:0 12px;gap:10px}
+  .brand{font-size:12px;letter-spacing:1px}
+  #location{font-size:12px}
+  .tools button{padding:8px 10px}
+  .tools button span{display:none}
+  #stage{padding:8px}
+  .controls{padding:10px 12px;gap:10px}
+  .controls button{padding:12px 14px;min-width:84px;font-size:16px}
+  .position{min-width:0;flex:1}
+  .position strong{font-size:13px}
+  .position span{font-size:11px}
+}
+
+/* ---- parts of the slides used in both layouts */
+.slide{position:relative;background:var(--paper);overflow:hidden}
+.slide.dark{background:var(--dark);color:#fff}
+html.js .slide{display:none}
+html.js .slide.on{display:block}
+.slide h1,.slide h2{font-weight:700;letter-spacing:-.02em}
+.muted{color:var(--muted)}
+.card{background:var(--card);border-radius:12px}
+.shot{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.shot img{width:100%}
+.cap{color:var(--muted)}
+.dark .cap{color:var(--card)}
+.label{font-weight:700;color:var(--blue)}
+.kicker{font-weight:700;color:var(--accent);letter-spacing:.08em}
+.dot{display:grid;place-items:center;flex:none;width:var(--dot);height:var(--dot);border-radius:50%;background:var(--accent);color:#fff;font-weight:700;line-height:1}
+.dot.ink{background:var(--ink)}
+.dot.ok{background:var(--green)}
+.row{display:flex;align-items:flex-start}
+.row b{display:block;line-height:1.3}
+.row p{color:var(--muted)}
+.steps4 li{display:flex;flex-direction:column}
+.steps4 b{line-height:1.3}
+.steps4 p{color:var(--muted)}
+.steps4 em{font-style:normal;font-weight:700;color:var(--blue)}
+.avatar{border-radius:22px;border:1px solid var(--line)}
+.name{font-weight:700;line-height:1.2}
+.career dl div{display:grid}
+.career dt{font-weight:700}
+.quote{background:var(--dark);color:#fff;border-radius:12px}
+.q1,.q3{font-weight:700;line-height:1.3}
+.q2{color:var(--card)}
+.q3{color:var(--accent)}
+.course ol li{display:flex;align-items:center}
+.tiles b{display:block}
+.tiles p{color:var(--muted)}
+.chips li{display:grid;place-items:center;text-align:center;font-weight:700;background:var(--card);border-radius:12px}
+.num{font-weight:700;color:var(--accent)}
+.real{font-weight:700}
+.addr{display:inline-block;font-weight:700;text-decoration:none}
+.practice li b{display:block;line-height:1.3}
+.pitch{background:var(--dark);color:#fff;border-radius:12px;font-weight:700;line-height:1.4}
+.qa dt{font-weight:700}
+.qa dt span{color:var(--accent)}
+.checks li{display:flex;align-items:center}
+.checks b{display:block}
+.checks p{color:var(--muted)}
+.end figcaption b{display:block}
+.end figcaption span{color:var(--card)}
+.end .pic a{display:block;background:#fff;border-radius:12px}
+
+/* ---- narrow windows and phones: the same slide, one per page, laid out to be read */
+html:not(.present) .deck{max-width:760px;margin:0 auto}
+html:not(.present) .slide{border:1px solid var(--line);border-radius:14px;padding:24px 18px 26px;--dot:42px}
+html:not(.js) .slide{margin:10px auto}
+html:not(.present) .slide>h2{font-size:25px;line-height:1.3;margin-bottom:18px}
+html:not(.present) h3{font-size:20px;line-height:1.3}
+html:not(.present) .lede{font-size:17px;margin-bottom:16px}
+html:not(.present) .after{font-size:15.5px;margin-top:16px}
+html:not(.present) .cap{font-size:14px;margin-top:8px}
+html:not(.present) .label{font-size:15px}
+html:not(.present) .dot{font-size:18px}
+html:not(.present) .row{gap:14px;margin-top:18px}
+html:not(.present) .row b{font-size:19px;padding-top:8px}
+html:not(.present) .row p{font-size:16px;margin-top:4px}
+html:not(.present) .two>*+*{margin-top:24px}
+html:not(.present) .cover{padding:36px 22px 30px}
+html:not(.present) .kicker{font-size:14px}
+html:not(.present) .cover h1{font-size:34px;line-height:1.25;margin-top:14px}
+html:not(.present) .cover .sub{font-size:17px;margin-top:16px;color:var(--card)}
+html:not(.present) .cover .by{font-size:15px;margin-top:22px;color:var(--card)}
+html:not(.present) .cover .pic{margin-top:28px}
+html:not(.present) .steps4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+html:not(.present) .steps4 li{padding:16px}
+html:not(.present) .steps4 b{font-size:18px;margin-top:12px}
+html:not(.present) .steps4 p{font-size:15px;margin-top:8px}
+html:not(.present) .steps4 em{font-size:16px;margin-top:auto;padding-top:10px}
+html:not(.present) .idline{display:flex;gap:16px;align-items:center}
+html:not(.present) .avatar{width:92px;height:92px}
+html:not(.present) .name{font-size:32px}
+html:not(.present) .role{font-size:15.5px}
+html:not(.present) .intro{font-size:16.5px;margin-top:16px}
+html:not(.present) .career{margin-top:16px;padding:14px 18px 16px}
+html:not(.present) .career dl div{grid-template-columns:96px 1fr;font-size:15px;padding-top:8px}
+html:not(.present) .quote{padding:28px 24px}
+html:not(.present) .q1{font-size:27px}
+html:not(.present) .q2{font-size:14px;margin-top:8px}
+html:not(.present) .q3{font-size:20px;margin-top:28px}
+html:not(.present) .courses{display:grid;gap:12px}
+html:not(.present) .course{padding:18px 20px 20px;--dot:32px}
+html:not(.present) .course h3{margin-top:2px}
+html:not(.present) .course .dates{font-size:15.5px;margin-top:2px}
+html:not(.present) .course ol{margin-top:12px}
+html:not(.present) .course ol li{gap:12px;font-size:16.5px;padding:5px 0}
+html:not(.present) .course .dot{font-size:14.5px}
+html:not(.present) .course .tools{font-size:14.5px;margin-top:12px}
+html:not(.present) .tiles{display:grid;grid-template-columns:1fr 1fr;gap:18px 12px}
+html:not(.present) .tiles b{font-size:15.5px;margin-top:8px;line-height:1.3}
+html:not(.present) .tiles p{font-size:14px;margin-top:2px}
+html:not(.present) .chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+html:not(.present) .chips li{font-size:13.5px;padding:10px 4px;line-height:1.25}
+html:not(.present) .num{font-size:64px;line-height:1.1}
+html:not(.present) .real{font-size:24px;margin-top:4px}
+html:not(.present) .big .muted{font-size:16px;margin-top:10px}
+html:not(.present) .cards3{display:grid;gap:10px;margin-top:22px}
+html:not(.present) .cards3 li{padding:16px 20px}
+html:not(.present) .cards3 .label{font-size:17px}
+html:not(.present) .cards3 p+p{font-size:16px;margin-top:4px}
+html:not(.present) .open .qr{display:none}
+html:not(.present) .addr{font-size:19px;padding:10px 20px;margin-bottom:18px}
+html:not(.present) .practice li div{font-size:16.5px}
+html:not(.present) .practice li span.muted{font-size:14px}
+html:not(.present) .practice ol li{padding:7px 0}
+html:not(.present) .pitch{font-size:18px;padding:22px 22px}
+html:not(.present) .pitch br{display:none}
+html:not(.present) .qa{display:grid;gap:10px;margin-top:14px}
+html:not(.present) .qa .card{padding:16px 20px}
+html:not(.present) .qa dt{font-size:17.5px}
+html:not(.present) .qa dt span{margin-right:10px}
+html:not(.present) .qa dd{font-size:16px;margin-top:6px}
+html:not(.present) .checks{display:grid;gap:10px}
+html:not(.present) .checks li{padding:16px 18px;gap:16px}
+html:not(.present) .checks b{font-size:18px}
+html:not(.present) .checks p{font-size:15.5px;margin-top:2px}
+html:not(.present) .end .pic{text-align:center}
+html:not(.present) .end .pic a{width:232px;padding:16px;margin:0 auto}
+html:not(.present) .end figcaption{margin-top:14px}
+html:not(.present) .end figcaption b{font-size:16px}
+html:not(.present) .end figcaption span{font-size:15px}
+
+/* ---- wide windows: a 1280 x 720 slide scaled to fill the stage */
+.present #stage{overflow:hidden;padding:0}
+.present .deck{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform:translate(-50%,-50%) scale(var(--k,1));transform-origin:50% 50%}
+.present .slide{position:absolute;left:0;top:0;width:1280px;height:720px;border-radius:calc(18px / var(--k,1));box-shadow:0 0 0 calc(1px / var(--k,1)) var(--line);--dot:56px}
+.present .slide>h2{position:absolute;left:58px;top:44px;width:1164px;height:82px;display:flex;align-items:center;font-size:42.7px;line-height:1.15}
+.present .slide>.body{position:absolute;left:58px;top:152px;width:1164px;height:520px}
+.present .two{display:grid;grid-template-columns:var(--l) 1fr;column-gap:var(--g,38px);align-items:start}
+.present h3{font-size:24px;line-height:1.3}
+.present .cap{font-size:16px;margin-top:9px}
+.present .label{font-size:17.3px}
+.present .dot{font-size:23px}
+.present .rows{display:grid;grid-auto-rows:120px}
+.present .row{gap:24px}
+.present .row b{font-size:25.3px;padding-top:11px}
+.present .row p{font-size:19.3px;margin-top:10px}
+/* 1, 14 */
+.present .cover .lead{position:absolute;left:77px;top:139px;width:566px;height:520px}
+.present .kicker{font-size:18.7px;line-height:38px}
+.present .cover h1{font-size:53.3px;line-height:1.25;margin-top:20px}
+.present .cover .sub{font-size:24px;margin-top:56px;color:var(--card)}
+.present .cover .by{position:absolute;left:0;top:466px;font-size:18.7px;color:var(--card)}
+.present .cover .pic{position:absolute;left:667px;top:168px;width:552px}
+.present .cover .pic .cap{margin-top:13px}
+.present .end .pic{left:730px;width:499px;text-align:center}
+.present .end .pic a{width:317px;height:317px;padding:24px;margin:0 auto}
+.present .end .pic img{width:269px;height:269px}
+.present .end figcaption{margin-top:19px}
+.present .end figcaption b{font-size:18.7px}
+.present .end figcaption span{font-size:17.3px}
+/* 2 */
+.present .steps4{display:grid;grid-template-columns:repeat(4,276px);justify-content:space-between;padding-top:19px}
+.present .steps4 li{height:418px;padding:29px}
+.present .steps4 .dot{--dot:67px;font-size:28px}
+.present .steps4 b{font-size:26.7px;margin-top:24px;min-height:91px}
+.present .steps4 p{font-size:19.3px;margin-top:15px}
+.present .steps4 em{font-size:21.3px;margin-top:auto;padding-bottom:8px}
+.present #s2 .after{position:absolute;left:0;top:461px;font-size:19.3px}
+/* 3 */
+.present .idline{display:flex;gap:24px;align-items:center;margin-top:5px}
+.present .avatar{width:125px;height:125px}
+.present .name{font-size:48px}
+.present .role{font-size:19.3px;margin-top:4px}
+.present .intro{font-size:19.3px;margin-top:20px}
+.present .career{margin-top:26px;padding:14px 29px 16px}
+.present .career .label{line-height:36px}
+.present .career dl div{grid-template-columns:110px 1fr;font-size:16.5px;line-height:38px}
+.present .keeps h3{margin-top:29px;height:43px}
+.present .keeps .rows{margin-top:29px}
+/* 4 */
+.present .quote{height:451px;margin-top:19px;padding:48px 38px;position:relative}
+.present .q1{font-size:37.3px}
+.present .q2{font-size:16px;margin-top:57px}
+.present .q3{font-size:26.7px;position:absolute;left:38px;top:293px}
+.present #s4 .rows{grid-auto-rows:149px;padding-top:34px}
+.present #s4 .row b{font-size:26.7px}
+/* 5, 11 */
+.present #s5 .lede{position:absolute;left:0;top:-17px;font-size:20px}
+.present .courses{display:grid;grid-template-columns:repeat(3,374px);justify-content:space-between}
+.present #s5 .courses{padding-top:38px}
+.present .course{position:relative;--dot:38px}
+.present .course .dot{font-size:16px}
+.present #s5 .course{height:470px;padding:19px 29px}
+.present .course .label{line-height:31px}
+.present .course h3{font-size:26.7px;line-height:48px}
+.present .course .dates{font-size:18.7px;line-height:34px;margin-top:3px}
+.present #s5 .course ol{margin-top:19px}
+.present #s5 .course ol li{gap:12px;height:53.8px;font-size:18px}
+.present .course .tools{position:absolute;left:29px;right:29px;top:384px;font-size:16px}
+.present .open{display:flex;justify-content:space-between;align-items:center;height:128px}
+.present .open .how{width:900px}
+.present .open .lede{font-size:20px}
+.present .addr{margin-top:12px;padding:7px 22px;font-size:22.7px}
+.present .open .qr{display:flex;align-items:center;gap:14px}
+.present .open .qr img{width:124px;height:124px;order:2}
+.present .open .qr .cap{margin:0;text-align:right}
+.present .practice{padding-top:18px}
+.present .practice .course{height:374px;padding:16px 26px}
+.present .practice .label{line-height:34px}
+.present .practice ol{margin-top:8px}
+.present .practice ol li{gap:14px;height:74px}
+.present .practice li b{font-size:19.3px}
+.present .practice li span.muted{font-size:15.5px}
+/* 6 */
+.present #s6 .lede{position:absolute;left:0;top:-12px;font-size:21.3px}
+.present #s6 .map{position:absolute;left:0;top:48px;width:1164px}
+.present #s6 .after{position:absolute;left:0;top:440px;font-size:19.3px}
+/* 7 */
+.present .tiles{display:grid;grid-template-columns:repeat(4,273.6px);grid-auto-rows:261px;justify-content:space-between}
+.present .tiles b{font-size:18.7px;margin-top:10px;line-height:31px}
+.present .tiles p{font-size:16px;line-height:1.4}
+/* 8 */
+.present #s8{--dot:48px}
+.present #s8 .rows{padding-top:10px}
+.present #s8 .dot{font-size:20px}
+.present #s8 .row{gap:20px}
+.present #s8 .row b{font-size:22px;padding-top:9px}
+.present #s8 .row p{font-size:18px;margin-top:8px}
+/* 9 */
+.present #s9 .lede{font-size:21.3px;margin-top:5px;height:163px}
+.present #s9 .label{font-size:18.7px}
+.present .chips{display:grid;grid-template-columns:repeat(3,144px);justify-content:space-between;row-gap:13.4px;margin-top:20px}
+.present .chips li{height:44px;font-size:16px}
+/* 10 */
+.present .num{font-size:88px;line-height:110px}
+.present .real{font-size:32px;line-height:48px;margin-top:5px}
+.present .big .muted{font-size:19.3px;margin-top:10px}
+.present #s10 figure{padding-top:10px}
+.present .cards3{display:grid;grid-template-columns:repeat(3,374px);justify-content:space-between;position:absolute;left:0;top:312px;width:1164px}
+.present .cards3 li{height:187px;padding:17px 29px}
+.present .cards3 .label{font-size:21.3px;line-height:38px}
+.present .cards3 p+p{font-size:18.7px;margin-top:5px}
+/* 12 */
+.present .pitch{height:120px;padding:0 38px;display:flex;align-items:center;font-size:25.3px}
+.present .qa{display:grid;grid-template-columns:repeat(2,571px);justify-content:space-between;row-gap:16px;margin-top:24px}
+.present .qa .card{height:178px;padding:17px 29px}
+.present .qa dt{font-size:22px;line-height:40px}
+.present .qa dt span{margin-right:14px}
+.present .qa dd{font-size:18.7px;margin-top:8px}
+/* 13 */
+.present .checks{display:grid;grid-template-columns:repeat(2,571px);justify-content:space-between;row-gap:16px;padding-top:10px}
+.present .checks li{height:144px;padding:0 29px;gap:24px;--dot:58px}
+.present .checks .dot{font-size:24px}
+.present .checks b{font-size:22.7px}
+.present .checks p{font-size:18.7px;margin-top:4px}
+@media print{.top,.controls{display:none}html.js body{display:block;height:auto}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#1" aria-label="첫 장으로">BRAVO <span>AI LIFE</span></a>
+  <span id="location">멘토 설명회</span>
+  <div class="tools">
+    <button type="button" id="tocButton" aria-label="목차 열기"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>목차</span></button>
+    <button type="button" id="fullButton" aria-label="전체 화면"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>전체 화면</span></button>
+  </div>
+</header>
+
+<main id="stage" tabindex="-1">
+<div class="deck" id="deck">
+
+<section class="slide dark cover on" id="s1" data-section="시작" data-title="수업, 이렇게 진행합니다">
+  <div class="lead">
+    <p class="kicker">BRAVO AI LIFE · 멘토 설명회</p>
+    <h1>수업, 이렇게<br>진행합니다</h1>
+    <p class="sub">12월 1일 개강 · 화·목 저녁 7시~10시 · 3과목 12차시</p>
+    <p class="by">2026. 11. 12. · 강사 김태호</p>
+  </div>
+  <figure class="pic">
+    <div class="shot"><img src="img/cover.png" width="1440" height="810" alt="학생 교재의 첫 화면"></div>
+    <figcaption class="cap">수강생이 보는 교재의 첫 화면</figcaption>
+  </figure>
+</section>
+
+<section class="slide" id="s2" data-section="시작" data-title="오늘의 순서">
+  <h2>오늘의 순서</h2>
+  <div class="body">
+    <ol class="steps4">
+      <li class="card"><span class="dot">1</span><b>누구를 위한<br>수업인가</b><p>어떤 분께 권하면 되는지</p><em>3분</em></li>
+      <li class="card"><span class="dot">2</span><b>무엇을<br>만드는가</b><p>3과목 12차시와 수강생이 가져가는 결과물</p><em>7분</em></li>
+      <li class="card"><span class="dot">3</span><b>수업은 이렇게<br>진행합니다</b><p>교재를 열고 차시마다 하나씩 직접 해 봅니다</p><em>실습 1시간</em></li>
+      <li class="card"><span class="dot">4</span><b>모집 때 이렇게<br>안내해 주세요</b><p>자주 받는 질문과 개강 전에 확인할 것</p><em>8분</em></li>
+    </ol>
+    <p class="after muted">끝나면 “어떤 분께 권하면 되는지”를 한 문장으로 말씀하실 수 있게 하는 것이 오늘의 목표입니다.</p>
+  </div>
+</section>
+
+<section class="slide" id="s3" data-section="시작" data-title="강사 소개">
+  <h2>강사 소개</h2>
+  <div class="body two" style="--l:456px">
+    <div class="who">
+      <div class="idline">
+        <img class="avatar" src="img/avatar.jpg" width="420" height="420" alt="강사 캐릭터 그림">
+        <div><p class="name">김태호</p><p class="role muted">백엔드 개발자 · Bravo AI Life 강사</p></div>
+      </div>
+      <p class="intro">Java와 Python으로 서버를 만들어 온 개발자입니다.</p>
+      <div class="card career">
+        <p class="label">해 온 일</p>
+        <dl>
+          <div><dt>2015</dt><dd>삼성전자 갤럭시6 FA 시스템</dd></div>
+          <div><dt>2016</dt><dd>전국 시외버스 통합예매 시스템</dd></div>
+          <div><dt>2020~2022</dt><dd>블록체인 · 멀티월렛 · NFT</dd></div>
+          <div><dt>2023~2024</dt><dd>보조금통합포털 e나라도움</dd></div>
+          <div><dt>2024</dt><dd>AI 분석 골프장 코스관리 솔루션</dd></div>
+          <div><dt>2025</dt><dd>범정부 마이데이터 ‘온 마이데이터’</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="keeps">
+      <h3>이 수업에서 지키는 세 가지</h3>
+      <ol class="rows">
+        <li class="row"><span class="dot">1</span><div><b>한 번에 한 단계</b><p>한 장에 할 일 하나. 누를 곳은 번호와 테두리로 보여 드립니다.</p></div></li>
+        <li class="row"><span class="dot">2</span><div><b>실제 화면 그대로</b><p>AI를 실제로 실행한 화면으로 설명하고, 찍지 못한 단계는 그렇다고 적습니다.</p></div></li>
+        <li class="row"><span class="dot">3</span><div><b>AI의 답을 그대로 믿지 않기</b><p>틀린 답이 나온 장면도 그대로 싣고, 확인하는 방법을 함께 가르칩니다.</p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s4" data-section="어떤 수업인가" data-title="이런 분께 권해 주세요">
+  <h2>이런 분께 권해 주세요</h2>
+  <div class="body two" style="--l:470px;--g:48px">
+    <div class="quote">
+      <p class="q1">어렵게 배우지 말고,<br>직접 해보는 AI</p>
+      <p class="q2">과정 안내서의 첫 문장</p>
+      <p class="q3">매 차시, 손에 쥐고 가는<br>결과물 하나</p>
+    </div>
+    <ol class="rows">
+      <li class="row"><span class="dot">1</span><div><b>AI를 처음 써 보는 분</b><p>ChatGPT를 한 번도 열어 보지 않았어도 됩니다. 입력창 찾기부터 시작합니다.</p></div></li>
+      <li class="row"><span class="dot">2</span><div><b>컴퓨터가 익숙하지 않은 분</b><p>마우스와 키보드를 쓸 수 있으면 됩니다. 누를 곳을 번호로 보여 드립니다.</p></div></li>
+      <li class="row"><span class="dot">3</span><div><b>써 봤지만 어디에 쓸지 모르겠는 분</b><p>문서, 표, 발표자료, 그림, 영상을 직접 만들어 보면서 쓸 곳을 찾습니다.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide" id="s5" data-section="어떤 수업인가" data-title="3과목 12차시">
+  <h2>3과목 12차시 · 원하는 과목만 골라 듣습니다</h2>
+  <div class="body">
+    <p class="lede muted">화·목 저녁 7시~10시 · 한 과목 4차시(12시간) · 세 과목을 모두 들으면 6주</p>
+    <div class="courses">
+      <article class="card course">
+        <p class="label">과목 1</p><h3>AI로 똑똑하게 일하기</h3><p class="dates muted">12월 1 · 3 · 8 · 10일</p>
+        <ol>
+          <li><span class="dot ink">1</span>AI에게 제대로 부탁하는 법</li>
+          <li><span class="dot ink">2</span>엑셀도 AI에게 물어보세요</li>
+          <li><span class="dot ink">3</span>발표자료도 AI와 함께</li>
+          <li><span class="dot ink">4</span>말로 설명하면 이미지가 됩니다</li>
+        </ol>
+        <p class="tools muted">ChatGPT · Gemini · Excel · PowerPoint · Gamma · Canva</p>
+      </article>
+      <article class="card course">
+        <p class="label">과목 2</p><h3>AI 영상 놀이터</h3><p class="dates muted">12월 15 · 17 · 22 · 24일</p>
+        <ol>
+          <li><span class="dot ink">5</span>머릿속 장면을 AI에게 설명하기</li>
+          <li><span class="dot ink">6</span>사진이 움직이기 시작합니다</li>
+          <li><span class="dot ink">7</span>AI 영상에 목소리를 입혀볼까요?</li>
+          <li><span class="dot ink">8</span>내가 만든 영상을 세상에 공개하기</li>
+        </ol>
+        <p class="tools muted">ChatGPT · Google Flow · Vrew · YouTube</p>
+      </article>
+      <article class="card course">
+        <p class="label">과목 3</p><h3>나에게 딱 맞는 AI 만들기</h3><p class="dates muted">12월 29 · 31일, 1월 5 · 7일</p>
+        <ol>
+          <li><span class="dot ink">9</span>AI도 나를 알아야 잘 도와줍니다</li>
+          <li><span class="dot ink">10</span>내 자료를 읽는 AI 만들기</li>
+          <li><span class="dot ink">11</span>나에게 딱 맞는 AI 비서 만들기</li>
+          <li><span class="dot ink">12</span>말로 만드는 나만의 웹사이트</li>
+        </ol>
+        <p class="tools muted">ChatGPT · NotebookLM · Gemini 스킬(Gems) · Canvas</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s6" data-section="어떤 수업인가" data-title="하나로 이어지는 이야기">
+  <h2>12번의 수업이 하나의 이야기로 이어집니다</h2>
+  <div class="body">
+    <p class="lede">가상의 러닝화 브랜드를 창업한다고 가정하고, 앞 차시의 결과물을 다음 차시의 재료로 씁니다.</p>
+    <div class="shot map"><img src="img/map.png" width="1216" height="390" alt="교재의 12차시 지도: 사업을 세운다, 광고를 만든다, 고객을 맞는다"></div>
+    <p class="after muted">창업은 소재일 뿐입니다. 배우는 것은 문서, 표, 발표자료, 그림, 영상, 자료 정리처럼 누구나 쓰는 일입니다. 과목을 따로 들어도 첫 차시에 필요한 자료를 다시 드립니다.</p>
+  </div>
+</section>
+
+<section class="slide" id="s7" data-section="어떤 수업인가" data-title="수강생이 만들어 가는 결과물">
+  <h2>수강생이 만들어 가는 결과물</h2>
+  <div class="body">
+    <ul class="tiles">
+      <li><div class="shot"><img src="img/g1.jpg" width="900" height="540" alt="사업계획서 초안"></div><b>1차시 · 사업계획서 초안</b><p>메모 한 장에서 근거가 붙은 계획서로</p></li>
+      <li><div class="shot"><img src="img/g2.jpg" width="900" height="540" alt="직접 검산한 Excel"></div><b>2차시 · 직접 검산한 Excel</b><p>신청 3,046건 분석과 수식 확인</p></li>
+      <li><div class="shot"><img src="img/g3.jpg" width="900" height="540" alt="사업설명회 발표자료"></div><b>3차시 · 사업설명회 12장</b><p>숫자를 검산한 뒤 만든 발표자료</p></li>
+      <li><div class="shot"><img src="img/g4.jpg" width="900" height="540" alt="사전예약 안내 카드"></div><b>4차시 · 사전예약 안내 카드</b><p>날짜와 가격이 메모와 같은 카드</p></li>
+      <li><div class="shot"><img src="img/g5.jpg" width="900" height="540" alt="광고 이미지와 영상"></div><b>5~6차시 · 광고 이미지와 영상</b><p>이미지 6장을 8초 영상 3개로</p></li>
+      <li><div class="shot"><img src="img/g6.jpg" width="900" height="540" alt="24초 완성 광고의 한 장면"></div><b>7차시 · 24초 완성 광고</b><p>AI 목소리와 문구를 얹은 광고</p></li>
+      <li><div class="shot"><img src="img/g7.jpg" width="900" height="540" alt="규정 마인드맵"></div><b>10~11차시 · 내 자료를 읽는 AI</b><p>출처가 달린 답과 상담 비서</p></li>
+      <li><div class="shot"><img src="img/g8.jpg" width="900" height="540" alt="사전예약 웹페이지"></div><b>12차시 · 사전예약 웹페이지</b><p>말로 요청해 만들고 눌러 봅니다</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" id="s8" data-section="수업 진행 방식" data-title="교재는 웹페이지입니다">
+  <h2>교재는 웹페이지입니다 · 한 장에 한 단계</h2>
+  <div class="body two" style="--l:797px;--g:28px">
+    <div class="shot"><img src="img/page.png" width="1440" height="810" alt="교재의 한 장: 1차시 웹 검색 설명"></div>
+    <ol class="rows">
+      <li class="row"><span class="dot ink">1</span><div><b>한 장에 할 일 하나</b><p>글은 짧게, 설명한 순서 그대로 따라 합니다</p></div></li>
+      <li class="row"><span class="dot ink">2</span><div><b>실제 화면에 번호와 테두리</b><p>어디를 누를지 그림에서 바로 찾습니다</p></div></li>
+      <li class="row"><span class="dot ink">3</span><div><b>요청문은 복사 단추로</b><p>긴 글을 직접 치지 않아도 됩니다</p></div></li>
+      <li class="row"><span class="dot ink">4</span><div><b>‘다음’만 누르면 진행</b><p>집에서도 같은 주소로 다시 볼 수 있습니다</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide" id="s9" data-section="수업 진행 방식" data-title="기본 사용법부터">
+  <h2>처음 쓰는 프로그램은 기본 사용법부터</h2>
+  <div class="body two" style="--l:456px">
+    <div>
+      <p class="lede">프로그램마다 ‘화면 읽는 법’부터 시작합니다. 가계부나 산책 발표 같은 쉬운 예로 먼저 눌러 본 뒤 실습으로 넘어갑니다.</p>
+      <p class="label">기본 사용법이 들어 있는 도구</p>
+      <ul class="chips">
+        <li>ChatGPT ＋ 메뉴</li><li>Gemini</li><li>Excel</li><li>PowerPoint</li><li>Gamma</li><li>Canva</li>
+        <li>Google Flow</li><li>Vrew</li><li>YouTube Studio</li><li>NotebookLM</li><li>스킬(Gems)</li><li>Gemini Canvas</li>
+      </ul>
+    </div>
+    <figure>
+      <div class="shot"><img src="img/basics.png" width="1440" height="810" alt="교재 2차시의 Excel 기본 사용법"></div>
+      <figcaption class="cap">2차시 ‘Excel 기본 1 · 화면 읽는 법’</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="slide" id="s10" data-section="수업 진행 방식" data-title="AI의 답을 확인하는 법">
+  <h2>AI의 답을 확인하는 법까지 가르칩니다</h2>
+  <div class="body">
+    <div class="two" style="--l:432px;--g:33px">
+      <div class="big">
+        <p class="num">3,027</p>
+        <p class="real">실제로는 3,000건</p>
+        <p class="muted">AI가 만든 Excel을 다시 계산했더니 27건이 달랐습니다. 파일 안의 검산 칸은 차이가 0이라고 나왔는데도요.</p>
+      </div>
+      <figure>
+        <div class="shot"><img src="img/excel-wrong.jpg" width="1500" height="493" alt="실제 Windows Excel에서 다시 계산한 화면"></div>
+        <figcaption class="cap">2차시 · 실제 Windows Excel에서 다시 계산한 화면</figcaption>
+      </figure>
+    </div>
+    <ul class="cards3">
+      <li class="card"><p class="label">1차시</p><p>한 줄만 부탁하면 AI는 빈칸을 그럴듯한 숫자로 채웁니다. 내가 주지 않은 숫자를 찾아봅니다.</p></li>
+      <li class="card"><p class="label">2차시</p><p>AI가 만든 Excel을 실제 Excel에서 다시 계산해, 틀린 곳을 찾고 고치게 합니다.</p></li>
+      <li class="card"><p class="label">10차시</p><p>답에 붙은 출처 번호를 눌러 원문과 대조합니다.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" id="s11" data-section="수업 진행 방식" data-title="1시간 실습">
+  <h2>지금부터 1시간, 수강생이 되어 보세요</h2>
+  <div class="body">
+    <div class="open">
+      <div class="how">
+        <p class="lede">교재를 열고, 차시마다 가장 특징적인 실습을 하나씩 직접 해 봅니다. AI에게 보낼 요청문은 교재의 복사 단추로 가져옵니다.</p>
+        <a class="addr card" href="https://gptnara.com/renewal/index.html#start" target="_blank" rel="noopener">gptnara.com/renewal</a>
+      </div>
+      <figure class="qr"><img src="img/qr.png" width="546" height="546" alt="학생 교재 주소 QR 코드"><figcaption class="cap">학생 교재<br>QR</figcaption></figure>
+    </div>
+    <div class="courses practice">
+      <article class="card course">
+        <p class="label">과목 1 · AI로 똑똑하게 일하기</p>
+        <ol>
+          <li><span class="dot ink">1</span><div><b>한 줄 요청과 자료를 준 요청</b><span class="muted">ChatGPT</span></div></li>
+          <li><span class="dot ink">2</span><div><b>AI가 만든 Excel 다시 계산</b><span class="muted">ChatGPT · Excel</span></div></li>
+          <li><span class="dot ink">3</span><div><b>숫자 검산과 발표자료 12장</b><span class="muted">ChatGPT</span></div></li>
+          <li><span class="dot ink">4</span><div><b>문구를 정해 준 안내 카드</b><span class="muted">Canva</span></div></li>
+        </ol>
+      </article>
+      <article class="card course">
+        <p class="label">과목 2 · AI 영상 놀이터</p>
+        <ol>
+          <li><span class="dot ink">5</span><div><b>같은 신발로 광고 장면 이미지</b><span class="muted">ChatGPT</span></div></li>
+          <li><span class="dot ink">6</span><div><b>사진 두 장을 8초 영상으로</b><span class="muted">Google Flow</span></div></li>
+          <li><span class="dot ink">7</span><div><b>AI 목소리와 24초 광고</b><span class="muted">Vrew</span></div></li>
+          <li><span class="dot ink">8</span><div><b>게시 제목과 설명</b><span class="muted">ChatGPT · YouTube Studio</span></div></li>
+        </ol>
+      </article>
+      <article class="card course">
+        <p class="label">과목 3 · 나에게 딱 맞는 AI 만들기</p>
+        <ol>
+          <li><span class="dot ink">9</span><div><b>AI에게 줄 자료 가려내기</b><span class="muted">ChatGPT</span></div></li>
+          <li><span class="dot ink">10</span><div><b>출처 번호가 달린 답</b><span class="muted">NotebookLM</span></div></li>
+          <li><span class="dot ink">11</span><div><b>규정대로 답하는 상담 비서</b><span class="muted">Gemini 스킬</span></div></li>
+          <li><span class="dot ink">12</span><div><b>말로 만드는 웹페이지</b><span class="muted">Gemini Canvas</span></div></li>
+        </ol>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s12" data-section="모집 안내" data-title="모집할 때 이렇게 안내해 주세요">
+  <h2>모집할 때 이렇게 안내해 주세요</h2>
+  <div class="body">
+    <p class="pitch">“AI를 처음 쓰는 분도 버튼 하나부터 따라 하면서,<br>매 차시 결과물 하나를 만들어 가는 수업입니다.”</p>
+    <dl class="qa">
+      <div class="card"><dt><span>Q</span>컴퓨터를 잘 못해도 되나요?</dt><dd>마우스와 키보드를 쓸 수 있으면 됩니다. 교재가 누를 곳을 번호로 보여 주고, 프로그램마다 기본 사용법부터 시작합니다.</dd></div>
+      <div class="card"><dt><span>Q</span>한 과목만 들어도 되나요?</dt><dd>됩니다. 과목마다 첫 차시에 계정과 도구 준비, 필요한 자료부터 다시 시작합니다.</dd></div>
+      <div class="card"><dt><span>Q</span>수업을 빠지면 따라갈 수 있나요?</dt><dd>교재가 웹페이지라 집에서도 같은 화면을 보며 한 장씩 따라 할 수 있습니다.</dd></div>
+      <div class="card"><dt><span>Q</span>유료 결제가 필요한가요?</dt><dd>안내서 기준으로 무료 계정으로 따라올 수 있게 도구를 골랐습니다. 무료 계정의 하루 사용량은 개강 전에 다시 확인해 안내드립니다.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="slide" id="s13" data-section="모집 안내" data-title="개강 전에 확인할 것">
+  <h2>개강 전에 함께 확인하고 싶은 것</h2>
+  <div class="body">
+    <ul class="checks">
+      <li class="card"><span class="dot ok">✓</span><div><b>교실 PC</b><p>Windows, Chrome, 그리고 Excel과 PowerPoint가 설치되어 있는지</p></div></li>
+      <li class="card"><span class="dot ok">✓</span><div><b>인터넷</b><p>영상을 만들고 재생할 때 끊기지 않는 속도인지</p></div></li>
+      <li class="card"><span class="dot ok">✓</span><div><b>소리</b><p>2과목의 영상과 목소리 실습에 쓸 이어폰이나 스피커</p></div></li>
+      <li class="card"><span class="dot ok">✓</span><div><b>수강생 계정</b><p>본인 Google 계정과 ChatGPT 계정, 로그인 인증에 쓸 본인 휴대폰</p></div></li>
+      <li class="card"><span class="dot ok">✓</span><div><b>교재 주소 안내</b><p>문자나 단체방으로 미리 보낼지, 첫 시간에 안내할지</p></div></li>
+      <li class="card"><span class="dot ok">✓</span><div><b>강사 화면</b><p>수강생이 함께 볼 프로젝터나 TV</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide dark cover end" id="s14" data-section="모집 안내" data-title="질문 받겠습니다">
+  <div class="lead">
+    <p class="kicker">12월 1일 개강</p>
+    <h1>첫 질문부터<br>함께 시작합니다</h1>
+    <p class="sub">질문 받겠습니다</p>
+  </div>
+  <figure class="pic">
+    <a href="https://gptnara.com/renewal/index.html#start" target="_blank" rel="noopener"><img src="img/qr.png" width="546" height="546" alt="학생 교재 주소 QR 코드"></a>
+    <figcaption><b>학생 교재 열어 보기</b><span>gptnara.com/renewal</span></figcaption>
+  </figure>
+</section>
+
+</div>
+</main>
+
+<footer class="controls">
+  <div class="progress-track"><div id="progress"></div></div>
+  <button type="button" id="prev" class="back">← 이전</button>
+  <div class="position"><strong id="counter"></strong><span id="nextHint"></span></div>
+  <button type="button" id="next" class="primary">다음 →</button>
+</footer>
+
+<dialog id="toc" aria-label="목차">
+  <div class="dialog-head"><div><small>원하는 곳으로 바로 이동</small><h2>목차</h2></div><button type="button" id="tocClose" aria-label="목차 닫기">✕ 닫기</button></div>
+  <ol id="tocList"></ol>
+</dialog>
+
+<script>
+(function(){
+  var root=document.documentElement,stage=document.getElementById('stage'),deck=document.getElementById('deck');
+  var slides=Array.prototype.slice.call(deck.querySelectorAll('.slide')),n=slides.length,cur=0;
+  var loc=document.getElementById('location'),counter=document.getElementById('counter'),hint=document.getElementById('nextHint'),bar=document.getElementById('progress');
+  var prev=document.getElementById('prev'),next=document.getElementById('next'),toc=document.getElementById('toc'),list=document.getElementById('tocList');
+  root.classList.add('js');
+  function title(j){return slides[j].getAttribute('data-title')}
+  function go(k,keep){
+    cur=Math.max(0,Math.min(n-1,k));
+    slides.forEach(function(s,j){s.classList.toggle('on',j===cur)});
+    loc.textContent='멘토 설명회 · '+slides[cur].getAttribute('data-section');
+    counter.textContent=(cur+1)+' / '+n;
+    hint.textContent=cur<n-1?'다음: '+title(cur+1):'마지막 장입니다';
+    bar.style.width=((cur+1)/n*100)+'%';
+    prev.disabled=cur===0;next.disabled=cur===n-1;
+    stage.scrollTop=0;
+    if(!keep){try{history.replaceState(null,'','#'+(cur+1))}catch(e){}}
+  }
+  function layout(){           // wide stage: the 1280 x 720 slide scaled to fit; narrow: the slide laid out to be read
+    var w=stage.clientWidth,h=stage.clientHeight,wide=window.innerWidth>=900&&w>=h*1.15;
+    root.classList.toggle('present',wide);
+    if(wide)deck.style.setProperty('--k',Math.max(.2,Math.min((w-56)/1280,(h-36)/720)).toFixed(4));
+  }
+  function full(){
+    if(document.fullscreenElement){document.exitFullscreen()}
+    else if(root.requestFullscreen){root.requestFullscreen()}
+  }
+  // table of contents
+  var sec='',buttons=[];
+  slides.forEach(function(s,j){
+    var name=s.getAttribute('data-section');
+    if(name!==sec){sec=name;var h=document.createElement('li');h.className='sec';h.textContent=name;list.appendChild(h)}
+    var li=document.createElement('li'),b=document.createElement('button'),num=document.createElement('span');
+    b.type='button';num.textContent=String(j+1);b.appendChild(num);b.appendChild(document.createTextNode(title(j)));
+    b.addEventListener('click',function(){toc.close();go(j)});
+    li.appendChild(b);list.appendChild(li);buttons.push(b);
+  });
+  document.getElementById('tocButton').addEventListener('click',function(){
+    buttons.forEach(function(b,j){b.setAttribute('aria-current',j===cur?'true':'false')});
+    if(toc.showModal)toc.showModal();else toc.setAttribute('open','');
+    buttons[cur].focus();
+  });
+  document.getElementById('tocClose').addEventListener('click',function(){toc.close()});
+  toc.addEventListener('click',function(e){if(e.target===toc)toc.close()});
+  document.getElementById('fullButton').addEventListener('click',full);
+  prev.addEventListener('click',function(){go(cur-1)});
+  next.addEventListener('click',function(){go(cur+1)});
+  document.querySelector('.brand').addEventListener('click',function(e){e.preventDefault();go(0)});
+  document.addEventListener('keydown',function(e){
+    if(e.ctrlKey||e.metaKey||e.altKey||toc.open)return;
+    var k=e.key,onControl=e.target.closest&&e.target.closest('button,a');
+    if(k==='ArrowRight'||k==='PageDown'){go(cur+1);e.preventDefault()}
+    else if(k==='ArrowLeft'||k==='PageUp'){go(cur-1);e.preventDefault()}
+    else if(k===' '&&!onControl){go(e.shiftKey?cur-1:cur+1);e.preventDefault()}
+    else if(k==='Home'){go(0);e.preventDefault()}
+    else if(k==='End'){go(n-1);e.preventDefault()}
+    else if((k==='f'||k==='F')&&!onControl){full();e.preventDefault()}
+  });
+  window.addEventListener('resize',layout);
+  window.addEventListener('hashchange',function(){var h=/^#(\d+)$/.exec(location.hash);if(h)go(parseInt(h[1],10)-1,true)});
+  var m=/^#(\d+)$/.exec(location.hash);
+  go(m?parseInt(m[1],10)-1:0,true);layout();
+})();
+</script>
+</body>
+</html>
