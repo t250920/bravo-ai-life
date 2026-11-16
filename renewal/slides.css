@@ -62,7 +62,8 @@ button:disabled{opacity:.35;cursor:default}
 .steps{margin:0;padding:0;list-style:none;counter-reset:n;display:grid;gap:10px;max-width:980px}
 .steps li{counter-increment:n;display:flex;gap:16px;align-items:center;padding:16px 20px;background:var(--soft);border-radius:12px;font-size:21px;line-height:1.5}
 .steps li::before{content:counter(n);flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--top);color:#fff;font-weight:800;font-size:17px}
-.points{display:grid;grid-template-columns:1fr 1fr;gap:12px;list-style:none;padding:0;margin:0;max-width:1080px}
+/* two cards across while each one gets 240px or more; in a narrower column they go one under another */
+.points{display:grid;grid-template-columns:repeat(auto-fit,minmax(max(240px,calc(50% - 8px)),1fr));gap:12px;list-style:none;padding:0;margin:0;max-width:1080px}
 .points li{padding:18px 22px;background:var(--soft);border-radius:12px;font-size:21px;font-weight:700;color:#2b353f}
 .open-platform{display:inline-block;padding:14px 26px;background:var(--accent);border-radius:11px;color:#fff;font-size:19px;font-weight:700;text-decoration:none}
 .open-platform:hover{background:#244c86}
@@ -87,17 +88,21 @@ button:disabled{opacity:.35;cursor:default}
 .image-open.tl{bottom:auto;top:10px;right:auto;left:10px}
 .visual figcaption{align-self:stretch;font-size:13.5px;line-height:1.6;color:var(--mute);padding:0 4px}
 .visual.reference .frame{border-style:dashed;border-color:#b9bfc5}
-.visual.reference img{max-width:min(var(--mw,1040px),640px);opacity:.92}
+/* 100%: on a phone a reference picture that is also 'fit' (width:auto) ran 125px past its frame */
+.visual.reference img{max-width:min(var(--mw,1040px),640px,100%);opacity:.92}
 .ribbon{align-self:stretch;font-size:15px;font-weight:700;color:#5b4a12;background:#fbf3d9;border:1px solid #ead9a0;border-radius:9px;padding:9px 14px}
 .gif-toggle{background:var(--soft);color:#2e3b48;border:1px solid var(--line);padding:11px 20px;border-radius:9px;font-size:16px;font-weight:700}
 .gif-toggle:hover{background:#e3e6e8}
 
-/* portrait photos and videos sit beside the text and always fit the screen */
+/* portrait photos and videos sit beside the text and always fit the screen.
+   The picture takes at most 42% of the window, but never more than 646px: the slide stops growing at 1320px, so a
+   share of the window alone squeezed the text to a sliver on wide monitors (131px at 2560). 646px is what 42% gives
+   in a 1536px window, so windows up to that size look exactly as they did. */
 .slide.split{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:36px;align-items:start}
 .split .col{display:flex;flex-direction:column;gap:16px;min-width:0}
 .split .lead,.split .after{display:flex;flex-direction:column;gap:16px}
 .split .lead:empty,.split .after:empty{display:none}
-.split .visual{position:sticky;top:0;max-width:42vw}
+.split .visual{position:sticky;top:0;max-width:min(42vw,646px)}
 .split .visual .frame{width:auto;padding:10px}
 .split .visual img,.split .visual video{width:auto;max-width:100%;max-height:max(320px,calc(100dvh - 276px))}
 
