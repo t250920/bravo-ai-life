@@ -239,6 +239,28 @@ dialog::backdrop{background:#111a24b8}
 #toast:empty{display:none}
 noscript{display:block;padding:24px;font-size:18px}
 
+/* ---------- who may open which course (access.js) ---------- */
+/* until a student is signed in there is nothing to page through: no footer, no table of contents */
+.gated .controls{display:none}
+.gated #stage{grid-row:2/4}
+.gated #tocButton{visibility:hidden}
+.gate{gap:12px}
+.gate-form{display:grid;gap:8px;width:min(100%,440px);margin-top:6px}
+.gate-form>label{font-size:18px;font-weight:700;margin-top:8px}
+.gate-form input[type=text]{font:inherit;font-size:23px;font-weight:600;width:100%;padding:13px 16px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.gate-form input[type=text]:focus{border-color:var(--accent)}
+.gate-form input::placeholder{color:#9aa3ab;font-weight:500}
+.gate-form .gate-keep{display:flex;align-items:flex-start;gap:11px;margin:10px 0 4px;font-size:16.5px;font-weight:500;line-height:1.5;color:var(--sub);cursor:pointer}
+.gate-keep input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent)}
+.gate-form .start{justify-self:start}
+.gate .gate-msg{min-height:31px;font-size:18px;font-weight:700;line-height:1.7;color:#a3261e}
+.cover .cover-none{font-size:20px;font-weight:700;color:var(--check)}
+.cover .cover-who{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:14px;font-size:17px;color:var(--sub)}
+.cover-who button{padding:7px 13px;border-radius:9px;background:#fff;border:1px solid var(--line);font-size:15px;font-weight:600;color:var(--sub)}
+.cover-who button:hover{border-color:var(--accent);color:var(--accent)}
+.j-course li.locked{opacity:.45}
+.toc-none{font-size:17px;line-height:1.7;color:var(--sub)}
+
 /* ---------- short laptop screens ---------- */
 @media(max-height:720px) and (min-width:801px){
   body{grid-template-rows:52px minmax(0,1fr) 68px}
@@ -303,4 +325,6 @@ noscript{display:block;padding:24px;font-size:18px}
   #tocLessons button span{display:none}
   #more{bottom:82px;font-size:14px}
   #toast{bottom:86px;font-size:15px}
+  .gate-form>label{font-size:16.5px}.gate-form input[type=text]{font-size:20px;padding:12px 14px}
+  .gate .gate-msg{font-size:16px}.cover .cover-who{font-size:15.5px}
 }

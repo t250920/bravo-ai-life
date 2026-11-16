@@ -5,6 +5,10 @@ const all=[...D.slides,...D.extras],byId=new Map(all.map(s=>[s.id,s]));
 // A topic edition (another subject, same lessons) carries its own cover text and remembers its own place.
 const E=D.edition||null,KEY='bravo-slide'+(E?'-'+E.key:''),EDITIONS=window.BRAVO_EDITIONS||[];
 let current=null,optionalReturn=null,tocDay=1;
+// Who may open which course (access.js). Without a roster, or opened from a folder, everything is open and nothing is asked.
+const A=window.BRAVO_ACCESS||{state:{status:'off'},allows:()=>true,subscribe(){},start(){},refresh(){}};
+const allowed=day=>A.allows(day),gated=()=>A.state.status==='checking'||A.state.status==='out';
+const firstOpen=()=>D.lessons.find(l=>allowed(l.day))||null;
 
 // A section is a run of consecutive slides that share a name inside one lesson.
 const runs=[],runOf=new Map();
@@ -60,17 +64,20 @@ function figure(s){
 }
 
 function cover(){
- const last=saved();
- let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">'+(E?esc(E.cover):'12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.')+'</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions"><button class="primary start" id="startButton">1차시 시작　→</button>';
+ const first=firstOpen(),kept=saved(),last=kept&&allowed(kept.day)?kept:null,who=A.state.status==='in'?A.state:null;
+ let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">'+(E?esc(E.cover):'12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.')+'</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions">'+(first?'<button class="primary start" id="startButton">'+first.day+'차시 시작　→</button>':'<p class="cover-none">아직 열린 수업이 없습니다. 선생님께 말씀해 주세요.</p>');
  if(last&&last.number>1)html+='<button class="resume" id="resumeButton">이어서 보기 · '+last.day+'차시 '+last.number+'번째 장</button>';
- html+='</div><p class="small">다른 차시를 보려면 오른쪽 위 ‘목차’를 누르세요.</p><div class="cover-steps"><span>① 화면 보기</span>→<span>② 직접 해 보기</span>→<span>③ 다음 장</span></div>';
+ html+='</div>';
+ if(who)html+='<p class="cover-who"><span><b>'+esc(who.name)+'</b> 님'+(who.subjects.length?' · 열린 과목 Bravo AI Life '+who.subjects.join(' · '):'')+'</span><button id="signOut">다른 이름으로 들어가기</button></p>';
+ html+='<p class="small">다른 차시를 보려면 오른쪽 위 ‘목차’를 누르세요.</p><div class="cover-steps"><span>① 화면 보기</span>→<span>② 직접 해 보기</span>→<span>③ 다음 장</span></div>';
  // The same lessons on another subject: one line of links, the current edition marked.
  if(EDITIONS.length>1)html+='<nav class="cover-editions" aria-label="주제 고르기"><b>주제 고르기</b>'+EDITIONS.map(x=>(x.key===(E?E.key:'pace')?'<span class="here">':'<a href="'+esc(x.href)+'">')+esc(x.name)+'<small>'+esc(x.scope)+'</small>'+(x.key===(E?E.key:'pace')?'</span>':'</a>')).join('')+'</nav>';
  html+='</article>';
  $('#stage').innerHTML=html;
- $('#location').textContent='한 장씩 따라 하는 AI 수업';$('#counter').textContent='여기서 시작하세요';$('#nextHint').textContent='1차시 · '+lessonOf(1).title;
- $('#prev').disabled=true;$('#next').textContent='수업 시작 →';$('#progress').style.width='0%';document.title='Bravo AI Life · 한 장씩 따라 하기'+(E?' · '+E.name:'');
- $('#startButton').onclick=()=>go(D.slides[0].id);
+ $('#location').textContent='한 장씩 따라 하는 AI 수업';$('#counter').textContent='여기서 시작하세요';$('#nextHint').textContent=first?first.day+'차시 · '+first.title:'';
+ $('#prev').disabled=true;$('#next').disabled=!first;$('#next').textContent='수업 시작 →';$('#progress').style.width='0%';document.title='Bravo AI Life · 한 장씩 따라 하기'+(E?' · '+E.name:'');
+ if(first)$('#startButton').onclick=()=>go(first.id);
+ if($('#signOut'))$('#signOut').onclick=()=>A.signOut();
  if($('#resumeButton'))$('#resumeButton').onclick=()=>go(last.id);
 }
 
@@ -91,7 +98,7 @@ function journeyMap(j){
  let html='<div class="journey'+(j.courses.length===1?' one':'')+'">';
  j.courses.forEach((name,c)=>{
   html+='<section class="j-course'+(c+1===j.course?' now':'')+'"><h2><small>Bravo AI Life '+(c+1)+'</small>'+esc(name)+'</h2><ol>';
-  html+=j.stages.filter(st=>Math.ceil(st.day/4)===c+1).map(st=>'<li'+(st.day===j.day?' class="here"':'')+'><button data-jump="day-'+st.day+'"><b>'+st.day+'</b><span>'+esc(st.name)+'<small>'+esc(st.tool)+'</small></span>'+(st.day===j.day?'<em>오늘</em>':'')+'</button></li>').join('');
+  html+=j.stages.filter(st=>Math.ceil(st.day/4)===c+1).map(st=>'<li'+(st.day===j.day?' class="here"':allowed(st.day)?'':' class="locked"')+'><button data-jump="day-'+st.day+'"><b>'+st.day+'</b><span>'+esc(st.name)+'<small>'+esc(st.tool)+'</small></span>'+(st.day===j.day?'<em>오늘</em>':'')+'</button></li>').join('');
   html+='</ol></section>';
  });
  return html+'</div>';
@@ -145,24 +152,76 @@ function slide(s,extra){
  };
 }
 
+// Nobody is signed in yet: ask for the name and the four digits before anything of the lessons is shown.
+function gateScreen(){
+ document.body.classList.add('gated');current=null;
+ let html='<article class="slide cover gate"><span class="label">BRAVO AI LIFE</span><h1>수강생 확인</h1>';
+ if(A.state.status==='checking')html+='<p>잠시만 기다려 주세요.</p>';
+ else html+='<p>이름과 휴대폰 번호 뒷자리 네 개를 입력하면 수업 자료가 열립니다.</p>'
+  +'<form class="gate-form" id="gateForm" autocomplete="off" novalidate>'
+  +'<label for="gateName">이름</label><input id="gateName" type="text" maxlength="30" placeholder="예: 홍길동" autocomplete="off" autocapitalize="off" spellcheck="false">'
+  +'<label for="gateDigits">휴대폰 번호 뒷자리 네 개</label><input id="gateDigits" type="text" inputmode="numeric" maxlength="4" placeholder="예: 1234" autocomplete="off">'
+  +'<label class="gate-keep"><input id="gateKeep" type="checkbox"><span>내 컴퓨터나 내 휴대폰이면 누르세요. 다음부터 바로 열립니다.</span></label>'
+  +'<button class="primary start" id="gateButton">들어가기\u3000→</button>'
+  +'<p class="gate-msg" id="gateMsg" role="alert">'+(A.state.note==='gone'?'다시 확인이 필요합니다. 이름과 번호를 입력해 주세요.':'')+'</p></form>'
+  +'<p class="small">수강 신청 때 알려 주신 이름과 번호입니다. 열리지 않으면 선생님께 말씀해 주세요.</p>';
+ $('#stage').innerHTML=html+'</article>';
+ $('#location').textContent='한 장씩 따라 하는 AI 수업';document.title='Bravo AI Life · 수강생 확인';$('#stage').scrollTop=0;more();
+ const form=$('#gateForm');if(!form)return;
+ const say=t=>{$('#gateMsg').textContent=t;},digits=$('#gateDigits');
+ digits.addEventListener('input',()=>{digits.value=digits.value.replace(/\D/g,'').slice(0,4);});
+ digits.addEventListener('paste',e=>{e.preventDefault();digits.value=A.normDigits(e.clipboardData.getData('text'));});   // a whole phone number: keep its last four
+ form.onsubmit=async e=>{
+  e.preventDefault();
+  const name=$('#gateName').value,b=$('#gateButton');
+  if(!A.normName(name)){say('이름을 입력해 주세요.');$('#gateName').focus();return;}
+  if(A.normDigits(digits.value).length!==4){say('휴대폰 번호 뒷자리 네 개를 모두 입력해 주세요.');digits.focus();return;}
+  b.disabled=true;say('확인하고 있습니다.');
+  const result=await A.signIn(name,digits.value,$('#gateKeep').checked);
+  if(result==='in')return;   // the reader has already drawn itself again
+  b.disabled=false;
+  say(result==='unknown'?'명단에서 찾지 못했습니다. 이름과 번호 네 자리를 다시 확인해 주세요.':'지금은 확인할 수 없습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.');
+ };
+ if(matchMedia('(pointer:fine)').matches)$('#gateName').focus({preventScroll:true});
+}
+// A lesson of a course this student has not been given.
+function lockedScreen(s){
+ const c=Math.ceil(s.day/4),lesson=lessonOf(s.day),to=firstOpen(),later=D.lessons.find(l=>l.day>s.day&&allowed(l.day));
+ let html='<article class="slide cover gate"><span class="label">BRAVO AI LIFE '+c+'</span><h1>열리지 않은 과목입니다</h1><p>'+s.day+'차시 ‘'+esc(lesson.title)+'’는 <b>Bravo AI Life '+c+' · '+esc(courseNames[c])+'</b> 과목의 수업입니다. 수강 중인 과목의 수업만 볼 수 있습니다.</p><div class="cover-actions">';
+ if(to)html+='<button class="primary start" id="lockedGo">'+to.day+'차시로 가기\u3000→</button>';
+ html+='<button class="resume" id="lockedRetry">다시 확인하기</button></div><p class="small">수강 중인데 열리지 않으면 선생님께 말씀해 주세요.</p></article>';
+ $('#stage').innerHTML=html;
+ $('#location').textContent=s.day+'차시 · '+lesson.title;$('#counter').textContent='열리지 않은 과목';$('#nextHint').textContent='';
+ $('#prev').disabled=false;$('#next').disabled=false;$('#next').textContent=later?later.day+'차시로 →':'처음으로 →';$('#progress').style.width='0%';document.title='Bravo AI Life · 열리지 않은 과목';
+ if(to)$('#lockedGo').onclick=()=>go(to.id);
+ $('#lockedRetry').onclick=async()=>{
+  const b=$('#lockedRetry');b.disabled=true;b.textContent='확인하고 있습니다';
+  await A.refresh();
+  if(document.body.contains(b)){b.disabled=false;b.textContent='다시 확인하기';toast('아직 열리지 않았습니다.');}   // otherwise the lesson is already on the screen
+ };
+}
+
 function render(){
+ if(gated()){gateScreen();return;}
+ document.body.classList.remove('gated');
  let id=decodeURIComponent(location.hash.slice(1)||'start');
  if(/^day-\d+$/.test(id))id=lessonOf(Number(id.slice(4)))?.id||'start';
  current=byId.get(id)||null;
  $$('video,audio').forEach(v=>v.pause());
  if(!current){cover();$('#stage').scrollTop=0;more();return;}
+ if(!allowed(current.day)){lockedScreen(current);$('#stage').scrollTop=0;more();return;}
  const s=current,ix=D.slides.indexOf(s),extra=ix<0,lesson=lessonOf(s.day);
  tocDay=s.day;
  if(s.kind==='chapter')$('#stage').innerHTML=chapter(s);else slide(s,extra);
  $$('#stage [data-jump]').forEach(b=>b.onclick=()=>go(b.dataset.jump));
  $$('#stage [data-open-toc]').forEach(b=>b.onclick=()=>$('#tocButton').click());
- $('#prev').disabled=false;
+ $('#prev').disabled=false;$('#next').disabled=false;
  const mates=extra?matesOf(s):null,mi=mates?mates.indexOf(s):-1,mateNext=mates?mates[mi+1]:null;
  $('#next').textContent=extra?(mateNext?'다음 →':'수업으로 돌아가기 →'):ix===D.slides.length-1?'처음으로 →':'다음 →';
  $('#location').textContent=s.day+'차시 · '+lesson.title;
  $('#counter').textContent=mates?'선택 실습　'+(mi+1)+' / '+mates.length:extra?'선택 예제':s.day+'차시　'+s.number+' / '+s.total;
  const next=D.slides[ix+1];
- $('#nextHint').textContent=extra?(mateNext?'다음: '+mateNext.title:'원래 보던 수업으로 돌아갑니다'):next?(next.day!==s.day?'다음: '+next.day+'차시 시작':'다음: '+next.title):(E?E.last:'전체 수업의 마지막 장입니다');
+ $('#nextHint').textContent=extra?(mateNext?'다음: '+mateNext.title:'원래 보던 수업으로 돌아갑니다'):next?(next.day!==s.day?(allowed(next.day)?'다음: '+next.day+'차시 시작':'다음 차시는 열리지 않은 과목입니다'):'다음: '+next.title):(E?E.last:'전체 수업의 마지막 장입니다');
  $('#progress').style.width=mates?((mi+1)/mates.length*100)+'%':extra?'100%':(s.number/s.total*100)+'%';
  document.title=(mates?'선택 실습 '+(mi+1)+'/'+mates.length:extra?'선택 예제':s.day+'차시 '+s.number+'/'+s.total)+' · '+s.title;
  $('#stage').scrollTop=0;$('#stage').focus({preventScroll:true});more();
@@ -178,17 +237,32 @@ function leaveExtra(step){
  const mates=matesOf(current),to=mates?mates[mates.indexOf(current)+step]:null;
  go(to?to.id:optionalReturn||lessonOf(current.day).id);
 }
-function next(){if(!current)return go(D.slides[0].id);const i=D.slides.indexOf(current);if(i<0)return leaveExtra(1);go(D.slides[i+1]?.id||'start');}
-function prev(){if(!current)return;const i=D.slides.indexOf(current);if(i<0)return leaveExtra(-1);go(D.slides[i-1]?.id||'start');}
+function next(){
+ if(gated())return;
+ if(!current){const first=firstOpen();if(first)go(first.id);return;}
+ if(!allowed(current.day)){const later=D.lessons.find(l=>l.day>current.day&&allowed(l.day));return go(later?later.id:'start');}
+ const i=D.slides.indexOf(current);if(i<0)return leaveExtra(1);go(D.slides[i+1]?.id||'start');
+}
+function prev(){
+ if(gated()||!current)return;
+ if(!allowed(current.day)){const before=D.slides.filter(x=>x.day<current.day&&allowed(x.day)).pop();return go(before?before.id:'start');}
+ const i=D.slides.indexOf(current);if(i<0)return leaveExtra(-1);go(D.slides[i-1]?.id||'start');
+}
 
 function toc(){
  let lessons='';
  for(let c=1;c<=3;c++){
   if(!D.lessons.some(l=>Math.ceil(l.day/4)===c))continue;   // a topic edition may hold one course only
-  lessons+='<h3>Bravo AI Life '+c+'<small>'+esc(courseNames[c])+'</small></h3>';
-  lessons+=D.lessons.filter(l=>Math.ceil(l.day/4)===c).map(l=>'<button data-day="'+l.day+'"'+(l.day===tocDay?' class="active" aria-current="true"':'')+'><b>'+l.day+'</b><span>'+esc(l.title)+'</span></button>').join('');
+  const can=allowed(c*4);
+  lessons+='<h3>Bravo AI Life '+c+'<small>'+esc(courseNames[c])+(can?'':' · 열리지 않은 과목')+'</small></h3>';
+  lessons+=D.lessons.filter(l=>Math.ceil(l.day/4)===c).map(l=>'<button data-day="'+l.day+'"'+(can?'':' disabled')+(l.day===tocDay?' class="active" aria-current="true"':'')+'><b>'+l.day+'</b><span>'+esc(l.title)+'</span></button>').join('');
  }
  $('#tocLessons').innerHTML=lessons;
+ if(!allowed(tocDay)){   // nothing is open to this student (or not in this edition)
+  $('#tocSections').innerHTML='<h3>열린 수업이 없습니다</h3><p class="toc-none">수강 중인 과목의 수업만 열 수 있습니다. 선생님께 말씀해 주세요.</p>';
+  $$('#tocLessons button').forEach(b=>b.onclick=()=>{tocDay=Number(b.dataset.day);toc();});
+  return;
+ }
  const lesson=lessonOf(tocDay),first=byId.get(lesson.id),dayExtras=D.extras.filter(e=>e.day===tocDay);
  const series=[...seriesMap.entries()].filter(([k])=>k.startsWith(tocDay+'|')).map(([,v])=>v),extras=dayExtras.filter(e=>!e.series);
  let html='<h3>'+tocDay+'차시 · '+esc(lesson.title)+(first.meta?.date?'<small>'+esc(first.meta.date)+'</small>':'')+'</h3>';
@@ -203,7 +277,7 @@ function toc(){
   $('#toc').close();go(b.dataset.jump);
  });
 }
-$('#tocButton').onclick=()=>{tocDay=current?current.day:1;toc();$('#toc').showModal();};
+$('#tocButton').onclick=()=>{tocDay=current&&allowed(current.day)?current.day:(firstOpen()||{day:1}).day;toc();$('#toc').showModal();};
 $$('[data-close]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.close).close());
 $$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close();}));
 $('#prev').onclick=prev;$('#next').onclick=next;
@@ -213,5 +287,7 @@ document.addEventListener('keydown',e=>{
  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();next();}
  if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev();}
 });
-window.addEventListener('hashchange',render);render();
+// The roster answered, or somebody signed in or out: draw again with what is open now.
+A.subscribe(()=>{$$('dialog[open]').forEach(d=>d.close());render();});
+window.addEventListener('hashchange',render);A.start();render();
 })();
