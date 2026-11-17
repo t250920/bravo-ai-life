@@ -83,7 +83,9 @@ summary{cursor:pointer;font-size:16px;font-weight:700;color:var(--accent)}
 .bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
 .bar h2{margin:0}
 .bar .count{font-size:15px;color:var(--mute);flex:1;min-width:200px}
-.bar input{width:220px}
+.bar input{width:200px}
+.bar select{font:inherit;font-size:16px;padding:9px 10px;border:2px solid var(--line);border-radius:10px;background:#fff;max-width:240px}
+.many .row label.f{display:grid;gap:5px;font-size:14px;font-weight:700;color:var(--sub);min-width:200px}
 .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
 table{border-collapse:collapse;width:100%;min-width:680px}
 th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);font-size:17px;vertical-align:middle}
@@ -116,9 +118,9 @@ dialog .row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
   main{padding:14px 10px 50px}
   .card{padding:16px 14px}
   .add{grid-template-columns:1fr 110px}
-  .add .courses,.add label.memo,.add button{grid-column:1/-1}
+  .add .courses,.add label.group,.add button{grid-column:1/-1}
   .courses{flex-wrap:wrap}
-  .bar input{width:100%}
+  .bar input,.bar select{width:100%;max-width:none}
   th,td{padding:9px 8px;font-size:16px}
 }
 </style>
@@ -138,7 +140,7 @@ dialog .row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
     <label class="f">이름<input type="text" id="addName" maxlength="30" placeholder="예: 홍길동"></label>
     <label class="f">뒷자리 네 개<input type="text" id="addDigits" inputmode="numeric" maxlength="13" placeholder="예: 1234"></label>
     <div class="courses" id="addCourses"></div>
-    <label class="f memo">메모(선택)<input type="text" id="addMemo" maxlength="40" placeholder="예: 화요일 반"></label>
+    <label class="f group">반(개강일)<input type="text" id="addGroup" maxlength="40" list="groupList" placeholder="예: 12월 1일 개강"></label>
     <button class="primary">넣기</button>
     <p class="msg" id="addMsg" role="alert"></p>
    </form>
@@ -147,18 +149,19 @@ dialog .row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
     <form class="many" id="manyForm">
      <p class="hint">한 줄에 한 명씩, 이름과 번호를 붙여 넣으세요. 엑셀에서 두 칸을 복사해도 됩니다. 휴대폰 번호 전체를 넣으면 뒷자리 네 개만 남깁니다.</p>
      <textarea id="manyText" placeholder="홍길동 1234&#10;김영희 010-1234-5678"></textarea>
-     <div class="row"><div class="courses" id="manyCourses"></div><button class="primary">모두 넣기</button></div>
+     <div class="row"><label class="f">반(개강일)<input type="text" id="manyGroup" maxlength="40" list="groupList" placeholder="예: 12월 1일 개강"></label><div class="courses" id="manyCourses"></div><button class="primary">모두 넣기</button></div>
      <p class="msg" id="manyMsg" role="alert"></p>
     </form>
    </details>
   </section>
   <section class="card">
-   <div class="bar"><h2>명단</h2><span class="count" id="count"></span><input type="text" id="find" placeholder="이름·번호·메모로 찾기" aria-label="명단에서 찾기"><button class="quiet" id="reload">새로 고침</button></div>
-   <div class="scroll"><table><thead><tr><th>이름</th><th>뒷자리</th><th class="c" data-head="1"></th><th class="c" data-head="2"></th><th class="c" data-head="3"></th><th>메모</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
-   <p class="hint" style="margin-top:12px">과목 칸을 누르면 바로 저장됩니다. 학생 화면에는 몇 분 안에, 학생이 화면을 새로 고치면 바로 반영됩니다. 맨 윗줄의 칸은 지금 보이는 학생 모두에게 적용합니다.</p>
+   <div class="bar"><h2>명단</h2><span class="count" id="count"></span><select id="groupPick" aria-label="반 고르기"></select><input type="text" id="find" placeholder="이름·번호로 찾기" aria-label="명단에서 찾기"><button class="quiet danger" id="dropGroup" hidden>이 반 모두 지우기</button><button class="quiet" id="reload">새로 고침</button></div>
+   <div class="scroll"><table><thead><tr><th>이름</th><th>뒷자리</th><th class="c" data-head="1"></th><th class="c" data-head="2"></th><th class="c" data-head="3"></th><th>반</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+   <p class="hint" style="margin-top:12px">반(개강일)을 고르면 그 반 학생만 보입니다. 수업이 끝나고 3개월이 지나면 반을 고른 뒤 ‘이 반 모두 지우기’를 눌러 주세요. 과목 칸을 누르면 바로 저장됩니다. 학생 화면에는 몇 분 안에, 학생이 화면을 새로 고치면 바로 반영됩니다. 맨 윗줄의 칸은 지금 보이는 학생 모두에게 적용합니다.</p>
   </section>
  </div>
 </main>
+<datalist id="groupList"></datalist>
 <dialog id="ask"><p id="askText"></p><div class="row"><button id="askNo">취소</button><button id="askYes" class="primary">확인</button></div></dialog>
 <output id="toast" role="status"></output>
 <noscript>이 페이지는 JavaScript를 사용합니다.</noscript>
@@ -183,14 +186,14 @@ async function firebaseStore(){
   signIn(){const p=new au.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});return au.signInWithPopup(auth,p);},
   signOut:()=>au.signOut(auth),
   isTeacher:async email=>(await fs.getDoc(fs.doc(db,'admins',email))).exists(),
-  list:async()=>(await fs.getDocs(fs.collection(db,'roster'))).docs.map(d=>({key:d.id,memo:'',subjects:[],...d.data()})),
+  list:async()=>(await fs.getDocs(fs.collection(db,'roster'))).docs.map(d=>{const v=d.data();return {key:d.id,subjects:[],...v,group:v.group??v.memo??''};}),
   // Each student is two records that must agree: roster/{key} for the teacher, access/{key} for the reader.
   // A renamed student is the old pair deleted and the new pair written in one batch.
   async save(list,gone=[]){
    const steps=[];
    for(const key of gone)steps.push(b=>{b.delete(fs.doc(db,'roster',key));b.delete(fs.doc(db,'access',key));});
    for(const s of list)steps.push(b=>{
-    b.set(fs.doc(db,'roster',s.key),{name:s.name,last4:s.last4,subjects:s.subjects,memo:s.memo||'',createdAt:s.createdAt||fs.serverTimestamp(),updatedAt:fs.serverTimestamp()});
+    b.set(fs.doc(db,'roster',s.key),{name:s.name,last4:s.last4,subjects:s.subjects,group:s.group||'',createdAt:s.createdAt||fs.serverTimestamp(),updatedAt:fs.serverTimestamp()});
     b.set(fs.doc(db,'access',s.key),{subjects:s.subjects,updatedAt:fs.serverTimestamp()});
    });
    for(let i=0;i<steps.length;i+=200){const b=fs.writeBatch(db);steps.slice(i,i+200).forEach(f=>f(b));await b.commit();}   // 2 writes a step, 500 a batch
@@ -210,8 +213,8 @@ async function firebaseStore(){
 }
 function demoStore(){
  const who=new URLSearchParams(location.search).get('demo');let data=[],gate=false;
- const seed=[['홍길동','1234',[1],'화요일 반'],['김영희','5678',[1,2],'화요일 반'],['이철수','0000',[1,2,3],''],['박민수','4321',[],'목요일 반'],['최수진','2468',[2],'목요일 반']];
- const ready=Promise.all(seed.map(async([name,last4,subjects,memo])=>({key:await A.keyOf(name,last4),name,last4,subjects,memo}))).then(v=>{data=v;});
+ const seed=[['홍길동','1234',[1],'12월 1일 개강 화요일 반'],['김영희','5678',[1,2],'12월 1일 개강 화요일 반'],['이철수','0000',[1,2,3],''],['박민수','4321',[],'12월 3일 개강 목요일 반'],['최수진','2468',[2],'12월 3일 개강 목요일 반']];
+ const ready=Promise.all(seed.map(async([name,last4,subjects,group])=>({key:await A.keyOf(name,last4),name,last4,subjects,group}))).then(v=>{data=v;});
  const copy=s=>({...s,subjects:[...s.subjects]});
  return {
   watch:f=>{f({email:'demo@localhost',name:'미리 보기'});},
@@ -248,10 +251,20 @@ function ask(text,yes){
 const byKey=key=>students.find(s=>s.key===key);
 const courseBoxes=(id,checked)=>COURSES.map(c=>'<label><input type="checkbox" value="'+c.id+'"'+(checked.includes(c.id)?' checked':'')+'>'+c.id+'과목</label>').join('');
 const picked=id=>$$('#'+id+' input:checked').map(i=>Number(i.value));
+const NONE='(none)';   // the choice 'no class given'
+const groups=()=>[...new Set(students.map(s=>s.group||''))].sort((a,b)=>(a===''?1:b===''?-1:a.localeCompare(b,'ko',{numeric:true})));
 function visible(){
- const q=$('#find').value.trim(),n=A.normName(q);
- return students.filter(s=>!q||A.normName(s.name).includes(n)||s.last4.includes(q)||A.normName(s.memo).includes(n))
-  .sort((a,b)=>a.name.localeCompare(b.name,'ko')||a.last4.localeCompare(b.last4));
+ const q=$('#find').value.trim(),n=A.normName(q),g=$('#groupPick').value;
+ return students.filter(s=>(!g||(g===NONE?!s.group:s.group===g))&&(!q||A.normName(s.name).includes(n)||s.last4.includes(q)||A.normName(s.group).includes(n)))
+  .sort((a,b)=>(a.group||'￿').localeCompare(b.group||'￿','ko',{numeric:true})||a.name.localeCompare(b.name,'ko')||a.last4.localeCompare(b.last4));
+}
+// The class picker and the list of class names offered when typing one.
+function drawGroups(){
+ const list=groups(),pick=$('#groupPick'),was=pick.value,size=g=>students.filter(s=>(s.group||'')===g).length;
+ pick.innerHTML='<option value="">모든 반 ('+students.length+'명)</option>'+list.map(g=>'<option value="'+esc(g||NONE)+'">'+esc(g||'반 없음')+' ('+size(g)+'명)</option>').join('');
+ pick.value=[...pick.options].some(o=>o.value===was)?was:'';
+ $('#groupList').innerHTML=list.filter(Boolean).map(g=>'<option value="'+esc(g)+'">').join('');
+ const g=pick.value;$('#dropGroup').hidden=!g;
 }
 
 // ---------------------------------------------------------------- the door: before the roster may be shown
@@ -306,6 +319,7 @@ async function arrive(user){
 
 // ---------------------------------------------------------------- the roster
 function draw(){
+ drawGroups();
  const rows=visible(),count=c=>students.filter(s=>s.subjects.includes(c)).length;
  $('#lock').className='card lock'+(open?' is-open':'');
  $('#lock').innerHTML=open
@@ -321,10 +335,10 @@ function draw(){
  $('#rows').innerHTML=rows.map(s=>s.key===editing
   ?'<tr class="editing" data-key="'+s.key+'"><td class="n"><input type="text" data-f="name" maxlength="30" value="'+esc(s.name)+'" aria-label="이름"></td><td class="d"><input type="text" data-f="last4" inputmode="numeric" maxlength="13" value="'+esc(s.last4)+'" aria-label="뒷자리 네 개"></td>'
    +COURSES.map(c=>'<td class="c">'+(s.subjects.includes(c.id)?'✓':'')+'</td>').join('')
-   +'<td class="m"><input type="text" data-f="memo" maxlength="40" value="'+esc(s.memo)+'" aria-label="메모"></td><td class="a"><button class="primary" data-do="save">저장</button><button class="quiet" data-do="cancel">취소</button></td></tr>'
+   +'<td class="m"><input type="text" data-f="group" maxlength="40" value="'+esc(s.group)+'" aria-label="반"></td><td class="a"><button class="primary" data-do="save">저장</button><button class="quiet" data-do="cancel">취소</button></td></tr>'
   :'<tr data-key="'+s.key+'"'+(s.subjects.length?'':' class="none"')+'><td class="n">'+esc(s.name)+'</td><td class="d">'+esc(s.last4)+'</td>'
    +COURSES.map(c=>'<td class="c"><input type="checkbox" data-course="'+c.id+'"'+(s.subjects.includes(c.id)?' checked':'')+' aria-label="'+esc(s.name)+' '+c.id+'과목"></td>').join('')
-   +'<td class="m">'+esc(s.memo)+'</td><td class="a"><button class="quiet" data-do="edit">수정</button><button class="quiet danger" data-do="remove">삭제</button></td></tr>').join('');
+   +'<td class="m">'+esc(s.group)+'</td><td class="a"><button class="quiet" data-do="edit">수정</button><button class="quiet danger" data-do="remove">삭제</button></td></tr>').join('');
 }
 async function setCourse(key,course,on){
  const s=byKey(key),before=[...s.subjects];
@@ -347,12 +361,12 @@ async function setLock(){
 }
 async function saveEdit(row){
  const s=byKey(row.dataset.key),get=f=>row.querySelector('[data-f="'+f+'"]').value;
- const name=tidy(get('name')),last4=A.normDigits(get('last4')),memo=tidy(get('memo'));
+ const name=tidy(get('name')),last4=A.normDigits(get('last4')),group=tidy(get('group'));
  if(!A.normName(name)){toast('이름을 입력해 주세요.',true);return;}
  if(last4.length!==4){toast('뒷자리 네 개를 모두 입력해 주세요.',true);return;}
  const key=await A.keyOf(name,last4);
  if(key!==s.key&&byKey(key)){toast('이름과 번호가 같은 학생이 이미 명단에 있습니다.',true);return;}
- const next={...s,key,name,last4,memo};
+ const next={...s,key,name,last4,group};
  try{await store.save([next],key!==s.key?[s.key]:[]);students[students.indexOf(s)]=next;editing=null;draw();toast(name+' · 고쳤습니다');}
  catch(e){fail(e);}
 }
@@ -375,7 +389,7 @@ async function addMany(text,subjects){
   if(!one||!A.normName(one.name)){unread.push(i+1);continue;}
   const key=await A.keyOf(one.name,one.last4);
   if(byKey(key)||fresh.some(s=>s.key===key)){known++;continue;}
-  fresh.push({key,...one,subjects:[...subjects],memo:''});
+  fresh.push({key,...one,subjects:[...subjects],group:tidy($('#manyGroup').value)});
  }
  return {fresh,unread,known};
 }
@@ -389,7 +403,7 @@ $('#addForm').onsubmit=async e=>{
  if(last4.length!==4){say('휴대폰 번호 뒷자리 네 개를 입력해 주세요.');$('#addDigits').focus();return;}
  const key=await A.keyOf(name,last4);
  if(byKey(key)){say('이름과 번호가 같은 학생이 이미 명단에 있습니다.');return;}
- const s={key,name,last4,subjects:picked('addCourses').sort(),memo:tidy($('#addMemo').value)};
+ const s={key,name,last4,subjects:picked('addCourses').sort(),group:tidy($('#addGroup').value)};
  try{await store.save([s]);students.push(s);say('');$('#addName').value=$('#addDigits').value='';draw();toast(name+' · 명단에 넣었습니다');$('#addName').focus();}
  catch(err){fail(err);}
 };
@@ -403,6 +417,13 @@ $('#manyForm').onsubmit=async e=>{
  catch(err){fail(err);}
 };
 $('#find').oninput=()=>{editing=null;draw();};
+$('#groupPick').onchange=()=>{editing=null;draw();};
+$('#dropGroup').onclick=async()=>{
+ const g=$('#groupPick').value,gone=students.filter(s=>g===NONE?!s.group:s.group===g);
+ if(!g||!gone.length)return;
+ if(!(await ask('‘'+(g===NONE?'반 없음':g)+'’ 학생 '+gone.length+'명을 명단에서 지웁니다.\n이 학생들은 더 이상 교재에 들어갈 수 없고, 되돌릴 수 없습니다.','모두 지우기')))return;
+ try{await store.save([],gone.map(s=>s.key));students=students.filter(s=>!gone.includes(s));$('#groupPick').value='';draw();toast(gone.length+'명을 지웠습니다');}catch(e){fail(e);}
+};
 $('#reload').onclick=async()=>{try{[students,open]=await Promise.all([store.list(),store.getOpen()]);editing=null;draw();toast('명단을 다시 읽었습니다');}catch(e){fail(e);}};
 $('#leave').onclick=()=>store&&store.signOut();
 $('#rows').addEventListener('change',e=>{const t=e.target;if(t.dataset.course)setCourse(t.closest('tr').dataset.key,Number(t.dataset.course),t.checked);});
