@@ -253,6 +253,13 @@ noscript{display:block;padding:24px;font-size:18px}
 .gate-form .gate-keep{display:flex;align-items:flex-start;gap:11px;margin:10px 0 4px;font-size:16.5px;font-weight:500;line-height:1.5;color:var(--sub);cursor:pointer}
 .gate-keep input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent)}
 .gate-form .start{justify-self:start}
+.gate-consent{margin:0 0 6px}
+.gate-consent .gate-keep{margin:4px 0 2px}
+.gate-consent .gate-keep b{color:var(--ink)}
+.gate-consent summary{cursor:pointer;margin-left:33px;font-size:15px;font-weight:600;color:var(--accent)}
+.privacy{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;margin:10px 0 6px 33px;padding:12px 14px;background:var(--soft);border-radius:10px;font-size:15px;line-height:1.5}
+.privacy dt{font-weight:700;color:var(--sub)}.privacy dd{margin:0}
+.gate .privacy-note{margin-left:33px;font-size:14.5px;line-height:1.6;color:var(--mute)}
 .gate .gate-msg{min-height:31px;font-size:18px;font-weight:700;line-height:1.7;color:#a3261e}
 .cover .cover-none{font-size:20px;font-weight:700;color:var(--check)}
 .cover .cover-who{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:14px;font-size:17px;color:var(--sub)}

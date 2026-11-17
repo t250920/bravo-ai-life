@@ -153,6 +153,9 @@ function slide(s,extra){
 }
 
 // Nobody is signed in yet: ask for the name and the four digits before anything of the lessons is shown.
+// The notice about the name and digits (access-config.js: BRAVO_PRIVACY). Consent given on this browser is remembered.
+const P=window.BRAVO_PRIVACY||{who:'수업 강사',keep:'과정이 끝난 뒤 삭제'},AGREED='bravo-privacy-agreed';
+const agreed=()=>{try{return localStorage.getItem(AGREED)==='1';}catch(e){return false;}};
 function gateScreen(){
  document.body.classList.add('gated');current=null;
  let html='<article class="slide cover gate"><span class="label">BRAVO AI LIFE</span><h1>수강생 확인</h1>';
@@ -162,6 +165,14 @@ function gateScreen(){
   +'<label for="gateName">이름</label><input id="gateName" type="text" maxlength="30" placeholder="예: 홍길동" autocomplete="off" autocapitalize="off" spellcheck="false">'
   +'<label for="gateDigits">휴대폰 번호 뒷자리 네 개</label><input id="gateDigits" type="text" inputmode="numeric" maxlength="4" placeholder="예: 1234" autocomplete="off">'
   +'<label class="gate-keep"><input id="gateKeep" type="checkbox"><span>내 컴퓨터나 내 휴대폰이면 누르세요. 다음부터 바로 열립니다.</span></label>'
+  +'<div class="gate-consent"><label class="gate-keep"><input id="gateAgree" type="checkbox"'+(agreed()?' checked':'')+'><span><b>개인정보 수집·이용에 동의합니다</b> (필수)</span></label>'
+  +'<details><summary>안내 보기</summary><dl class="privacy">'
+  +'<dt>수집하는 곳</dt><dd>'+esc(P.who)+'</dd>'
+  +'<dt>수집 항목</dt><dd>이름, 휴대폰 번호 뒷자리 4자리</dd>'
+  +'<dt>이용 목적</dt><dd>수강생 확인과 과목별 수업 자료 열람</dd>'
+  +'<dt>보관 기간</dt><dd>'+esc(P.keep)+'</dd>'
+  +'<dt>저장 위치</dt><dd>Google Firebase(서울 지역 서버)</dd>'
+  +'</dl><p class="privacy-note">동의하지 않을 수 있습니다. 다만 동의하지 않으면 수업 자료에 들어갈 수 없습니다.</p></details></div>'
   +'<button class="primary start" id="gateButton">들어가기\u3000→</button>'
   +'<p class="gate-msg" id="gateMsg" role="alert">'+(A.state.note==='gone'?'다시 확인이 필요합니다. 이름과 번호를 입력해 주세요.':'')+'</p></form>'
   +'<p class="small">수강 신청 때 알려 주신 이름과 번호입니다. 열리지 않으면 선생님께 말씀해 주세요.</p>';
@@ -176,6 +187,8 @@ function gateScreen(){
   const name=$('#gateName').value,b=$('#gateButton');
   if(!A.normName(name)){say('이름을 입력해 주세요.');$('#gateName').focus();return;}
   if(A.normDigits(digits.value).length!==4){say('휴대폰 번호 뒷자리 네 개를 모두 입력해 주세요.');digits.focus();return;}
+  if(!$('#gateAgree').checked){say('개인정보 수집·이용에 동의해 주세요.');$('#gateAgree').focus();return;}
+  try{localStorage.setItem(AGREED,'1');}catch(e){}
   b.disabled=true;say('확인하고 있습니다.');
   const result=await A.signIn(name,digits.value,$('#gateKeep').checked);
   if(result==='in')return;   // the reader has already drawn itself again
