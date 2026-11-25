@@ -1,1 +1,1 @@
-window.BRAVO_EDITIONS=[{"key": "pace", "name": "러닝화 창업 · PACE 01", "scope": "1~3과목 · 12차시", "href": "index.html"}, {"key": "walk", "name": "걷기 모임 총무 · 느린걸음", "scope": "1과목 · 1~4차시", "href": "walk.html"}];
+window.BRAVO_EDITIONS=[{"key": "pace", "name": "러닝화 창업 · PACE 01", "scope": "1~3과목 · 12차시", "href": "index.html"}];
