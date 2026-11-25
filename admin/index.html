@@ -6,7 +6,8 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Bravo AI Life · 수강생 관리</title>
 <!--
-  The teacher's page: who is on the roster and which courses each student may open.
+  The teacher's page: who is on the roster, which courses each student may open, and which lessons are open
+  for each class today (a lesson of an open course opens when the teacher opens it for the student's class).
   Published at /admin/ beside /renewal/ (put.py); it is not part of the student ZIP.
   The page itself holds no names: they are read from Firestore after the teacher signs in with Google,
   and the security rules (firestore.rules) refuse everybody who is not listed under admins/.
@@ -67,6 +68,18 @@ main{max-width:1100px;margin:0 auto;padding:22px 20px 60px}
 .lock p{flex:1;min-width:260px;font-size:17px;line-height:1.6}
 .lock.is-open{background:var(--warn-soft);border-color:var(--warn-line)}
 .lock b{font-weight:800}
+.today .bar select{max-width:320px}
+.lessons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.lessons section{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}
+.lessons h3{margin:0 0 10px;font-size:16px}
+.lessons h3 small{display:block;font-size:13px;font-weight:500;color:var(--mute);margin-top:2px}
+.lessons .days{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.lessons button{display:grid;gap:2px;justify-items:center;padding:10px 4px;background:#fff;border:2px solid var(--line);color:var(--sub);font-size:16px}
+.lessons button small{font-size:13px;font-weight:600;color:var(--mute)}
+.lessons button:hover{border-color:var(--accent);background:#fff}
+.lessons button[aria-pressed=true]{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.lessons button[aria-pressed=true] small{color:var(--ok)}
+.lessons .pick{grid-column:1/-1;font-size:17px;color:var(--mute);padding:8px 2px}
 .alarm{background:var(--bad-soft);border-color:var(--bad-line);color:var(--bad);font-size:17px;line-height:1.6;font-weight:600}
 
 .add{display:grid;grid-template-columns:minmax(120px,1.1fr) 120px auto minmax(120px,1fr) auto;gap:10px 12px;align-items:end}
@@ -120,7 +133,8 @@ dialog .row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
   .add{grid-template-columns:1fr 110px}
   .add .courses,.add label.group,.add button{grid-column:1/-1}
   .courses{flex-wrap:wrap}
-  .bar input,.bar select{width:100%;max-width:none}
+  .bar input,.bar select,.today .bar select{width:100%;max-width:none}
+  .lessons{grid-template-columns:minmax(0,1fr)}
   th,td{padding:9px 8px;font-size:16px}
 }
 </style>
@@ -134,6 +148,11 @@ dialog .row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
  <div id="desk" hidden>
   <section class="card alarm" id="alarm" hidden></section>
   <section class="card lock" id="lock"></section>
+  <section class="card today">
+   <div class="bar"><h2>수업 열기</h2><select id="roomPick" aria-label="수업을 열 반 고르기"></select><span class="count" id="roomNote"></span></div>
+   <div class="lessons" id="lessons"></div>
+   <p class="hint" style="margin-top:12px">반을 고르고 오늘 수업할 차시를 누르면 그 반 학생에게 열립니다. 다시 누르면 닫힙니다. 학생은 아래 명단에서 열어 준 과목 가운데, 여기서 연 차시만 봅니다. 학생 화면에는 몇 분 안에, 학생이 ‘다시 확인하기’를 누르거나 화면을 새로 고치면 바로 반영됩니다.</p>
+  </section>
   <section class="card">
    <h2>학생 넣기</h2>
    <form class="add" id="addForm" autocomplete="off">
@@ -157,7 +176,7 @@ dialog .row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
   <section class="card">
    <div class="bar"><h2>명단</h2><span class="count" id="count"></span><select id="groupPick" aria-label="반 고르기"></select><input type="text" id="find" placeholder="이름·번호로 찾기" aria-label="명단에서 찾기"><button class="quiet danger" id="dropGroup" hidden>이 반 모두 지우기</button><button class="quiet" id="reload">새로 고침</button></div>
    <div class="scroll"><table><thead><tr><th>이름</th><th>뒷자리</th><th class="c" data-head="1"></th><th class="c" data-head="2"></th><th class="c" data-head="3"></th><th>반</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
-   <p class="hint" style="margin-top:12px">반(개강일)을 고르면 그 반 학생만 보입니다. 수업이 끝나고 3개월이 지나면 반을 고른 뒤 ‘이 반 모두 지우기’를 눌러 주세요. 과목 칸을 누르면 바로 저장됩니다. 학생 화면에는 몇 분 안에, 학생이 화면을 새로 고치면 바로 반영됩니다. 맨 윗줄의 칸은 지금 보이는 학생 모두에게 적용합니다.</p>
+   <p class="hint" style="margin-top:12px">새로 넣은 학생은 그 반에 이미 연 차시를 바로 봅니다. 반(개강일)을 고르면 그 반 학생만 보입니다. 수업이 끝나고 3개월이 지나면 반을 고른 뒤 ‘이 반 모두 지우기’를 눌러 주세요. 과목 칸을 누르면 바로 저장됩니다. 학생 화면에는 몇 분 안에, 학생이 화면을 새로 고치면 바로 반영됩니다. 맨 윗줄의 칸은 지금 보이는 학생 모두에게 적용합니다.</p>
   </section>
  </div>
 </main>
@@ -174,7 +193,7 @@ const DEMO=HERE&&new URLSearchParams(location.search).has('demo');   // a made-u
 const SDK='https://www.gstatic.com/firebasejs/13.3.0/';
 const BASE='https://firestore.googleapis.com/v1/projects/'+encodeURIComponent(C.projectId||'')+'/databases/(default)/documents/';
 const tidy=s=>String(s??'').normalize('NFC').trim().replace(/\s+/g,' ');
-let store=null,me=null,students=[],open=false,editing=null;
+let store=null,me=null,students=[],open=false,editing=null,rooms=new Map();   // rooms: class key -> the lessons opened for that class
 
 // ---------------------------------------------------------------- where the roster is kept
 async function firebaseStore(){
@@ -193,12 +212,16 @@ async function firebaseStore(){
    const steps=[];
    for(const key of gone)steps.push(b=>{b.delete(fs.doc(db,'roster',key));b.delete(fs.doc(db,'access',key));});
    for(const s of list)steps.push(b=>{
-    b.set(fs.doc(db,'roster',s.key),{name:s.name,last4:s.last4,subjects:s.subjects,group:s.group||'',createdAt:s.createdAt||fs.serverTimestamp(),updatedAt:fs.serverTimestamp()});
-    b.set(fs.doc(db,'access',s.key),{subjects:s.subjects,updatedAt:fs.serverTimestamp()});
+    b.set(fs.doc(db,'roster',s.key),{name:s.name,last4:s.last4,subjects:s.subjects,group:s.group||'',class:s.class,createdAt:s.createdAt||fs.serverTimestamp(),updatedAt:fs.serverTimestamp()});
+    b.set(fs.doc(db,'access',s.key),{subjects:s.subjects,class:s.class,updatedAt:fs.serverTimestamp()});
    });
    for(let i=0;i<steps.length;i+=200){const b=fs.writeBatch(db);steps.slice(i,i+200).forEach(f=>f(b));await b.commit();}   // 2 writes a step, 500 a batch
    for(const s of list)s.createdAt=s.createdAt||fs.Timestamp.now();
   },
+  // classes/{key}: the lessons the teacher has opened for one class. The reader fetches the one its student belongs to.
+  rooms:async()=>new Map((await fs.getDocs(fs.collection(db,'classes'))).docs.map(d=>[d.id,(d.data().days||[]).map(Number)])),
+  setRoom:(id,days)=>fs.setDoc(fs.doc(db,'classes',id),{days,updatedAt:fs.serverTimestamp()}),
+  dropRoom:id=>fs.deleteDoc(fs.doc(db,'classes',id)),
   getOpen:async()=>{const d=await fs.getDoc(fs.doc(db,'settings','gate'));return d.exists()&&d.data().open===true;},
   setOpen:v=>fs.setDoc(fs.doc(db,'settings','gate'),{open:!!v,updatedAt:fs.serverTimestamp()}),
   // The one thing that must never be true: the roster readable without signing in.
@@ -212,9 +235,10 @@ async function firebaseStore(){
  };
 }
 function demoStore(){
- const who=new URLSearchParams(location.search).get('demo');let data=[],gate=false;
+ const who=new URLSearchParams(location.search).get('demo');let data=[],gate=false;const kept=new Map();
  const seed=[['홍길동','1234',[1],'12월 1일 개강 화요일 반'],['김영희','5678',[1,2],'12월 1일 개강 화요일 반'],['이철수','0000',[1,2,3],''],['박민수','4321',[],'12월 3일 개강 목요일 반'],['최수진','2468',[2],'12월 3일 개강 목요일 반']];
- const ready=Promise.all(seed.map(async([name,last4,subjects,group])=>({key:await A.keyOf(name,last4),name,last4,subjects,group}))).then(v=>{data=v;});
+ // The first class has had its first two lessons; the students carry no class key yet, as records made before lessons opened by the day.
+ const ready=Promise.all(seed.map(async([name,last4,subjects,group])=>({key:await A.keyOf(name,last4),name,last4,subjects,group}))).then(async v=>{data=v;kept.set(await A.classOf(seed[0][3]),[1,2]);window.__demoRooms=Object.fromEntries(kept);});
  const copy=s=>({...s,subjects:[...s.subjects]});
  return {
   watch:f=>{f({email:'demo@localhost',name:'미리 보기'});},
@@ -226,6 +250,9 @@ function demoStore(){
    data=data.filter(s=>!gone.includes(s.key)&&!list.some(x=>x.key===s.key)).concat(list.map(copy));
    window.__demoRoster=data;
   },
+  rooms:async()=>{await ready;return new Map([...kept].map(([k,v])=>[k,[...v]]));},
+  async setRoom(id,days){if(who==='broken')throw Object.assign(new Error('demo'),{code:'unavailable'});kept.set(id,[...days]);window.__demoRooms=Object.fromEntries(kept);},
+  async dropRoom(id){kept.delete(id);window.__demoRooms=Object.fromEntries(kept);},
   getOpen:async()=>gate,setOpen:async v=>{gate=!!v;},
   leaks:async()=>[],
  };
@@ -249,6 +276,21 @@ function ask(text,yes){
  });
 }
 const byKey=key=>students.find(s=>s.key===key);
+// The key of a class (made from its name by access.js, as a student's key is). Every student record carries it.
+const roomKeys=new Map();
+async function roomKey(group){const g=group||'';if(!roomKeys.has(g))roomKeys.set(g,await A.classOf(g));return roomKeys.get(g);}
+async function save(list,gone=[]){
+ const was=list.map(s=>s.class);
+ for(const s of list)s.class=await roomKey(s.group);
+ try{return await store.save(list,gone);}catch(e){list.forEach((s,i)=>{s.class=was[i];});throw e;}
+}
+// After the roster is read: records written before lessons opened by the day carry no class key (or an old one).
+// They are written again, so that every student follows the lessons opened for the class.
+async function settle(){
+ for(const s of students)await roomKey(s.group);
+ const late=students.filter(s=>s.class!==roomKeys.get(s.group||''));
+ if(late.length)try{await save(late);}catch(e){console.error(e);}   // tried again the next time the roster is read; any later save of a student carries the key too
+}
 const courseBoxes=(id,checked)=>COURSES.map(c=>'<label><input type="checkbox" value="'+c.id+'"'+(checked.includes(c.id)?' checked':'')+'>'+c.id+'과목</label>').join('');
 const picked=id=>$$('#'+id+' input:checked').map(i=>Number(i.value));
 const NONE='(none)';   // the choice 'no class given'
@@ -307,7 +349,8 @@ async function arrive(user){
    try{await store.list();wrong='주의: 관리자가 아닌 계정으로도 명단이 읽힙니다. Firebase의 보안 규칙을 다시 게시해 주세요.';}catch(e){}
    door('stranger',wrong);return;
   }
-  [students,open]=await Promise.all([store.list(),store.getOpen()]);
+  [students,open,rooms]=await Promise.all([store.list(),store.getOpen(),store.rooms()]);
+  await settle();
  }catch(e){console.error(e);door('error',e);return;}
  $('#door').hidden=true;$('#desk').hidden=false;$('#leave').hidden=false;$('#me').textContent=user.email+(DEMO?' · 미리 보기(저장되지 않습니다)':'');
  editing=null;draw();
@@ -317,14 +360,38 @@ async function arrive(user){
  });
 }
 
+// ---------------------------------------------------------------- lessons opened for a class, day by day
+const inRoom=g=>students.filter(s=>(s.group||'')===(g===NONE?'':g));
+function drawRooms(){
+ const list=groups(),pick=$('#roomPick'),was=pick.value;
+ pick.innerHTML=(list.length===1?'':'<option value="">반을 고르세요</option>')+list.map(g=>'<option value="'+esc(g||NONE)+'">'+esc(g||'반 없음')+' ('+inRoom(g||NONE).length+'명)</option>').join('');
+ pick.value=[...pick.options].some(o=>o.value===was)?was:(pick.options[0]?pick.options[0].value:'');
+ const g=pick.value;
+ if(!g){$('#roomNote').textContent='';$('#lessons').innerHTML='<p class="pick">'+(students.length?'반을 고르면 차시가 나옵니다.':'아직 학생이 없습니다. 아래에서 학생을 넣으면 반이 생깁니다.')+'</p>';return;}
+ const days=rooms.get(roomKeys.get(g===NONE?'':g))||[],mates=inRoom(g);
+ $('#roomNote').textContent=days.length?'열린 차시: '+days.join(', '):'아직 연 차시가 없습니다';
+ $('#lessons').innerHTML=COURSES.map(c=>'<section><h3>'+c.id+'과목<small>이 반 '+mates.length+'명 중 '+mates.filter(s=>s.subjects.includes(c.id)).length+'명에게 열린 과목</small></h3><div class="days">'
+  +[1,2,3,4].map(i=>(c.id-1)*4+i).map(d=>'<button data-day="'+d+'" aria-pressed="'+days.includes(d)+'">'+d+'차시<small>'+(days.includes(d)?'열림':'닫힘')+'</small></button>').join('')+'</div></section>').join('');
+}
+async function setDay(day){
+ const g=$('#roomPick').value;if(!g)return;
+ const id=await roomKey(g===NONE?'':g),before=rooms.get(id)||[],on=!before.includes(day),name=g===NONE?'반 없음':g;
+ rooms.set(id,on?[...before,day].sort((a,b)=>a-b):before.filter(d=>d!==day));drawRooms();
+ try{
+  await store.setRoom(id,rooms.get(id));
+  const takers=inRoom(g).filter(s=>s.subjects.includes(Math.ceil(day/4))).length;
+  toast(name+' · '+day+'차시를 '+(on?'열었습니다':'닫았습니다')+(on&&!takers?' (이 반에는 '+Math.ceil(day/4)+'과목이 열린 학생이 없습니다)':''));
+ }catch(e){rooms.set(id,before);drawRooms();fail(e);}
+}
+
 // ---------------------------------------------------------------- the roster
 function draw(){
- drawGroups();
+ drawGroups();drawRooms();
  const rows=visible(),count=c=>students.filter(s=>s.subjects.includes(c)).length;
  $('#lock').className='card lock'+(open?' is-open':'');
  $('#lock').innerHTML=open
   ?'<p><b>과목 잠금이 꺼져 있습니다.</b> 지금은 이름을 묻지 않고, 누구에게나 모든 과목이 열립니다.</p><button class="primary" id="lockButton">다시 잠그기</button>'
-  :'<p><b>과목 잠금을 쓰고 있습니다.</b> 학생은 교재 첫 화면에서 이름과 휴대폰 번호 뒷자리 네 개로 들어가고, 아래에서 열어 준 과목만 봅니다.</p><button class="quiet" id="lockButton">잠금 끄기</button>';
+  :'<p><b>과목 잠금을 쓰고 있습니다.</b> 학생은 교재 첫 화면에서 이름과 휴대폰 번호 뒷자리 네 개로 들어가고, 열어 준 과목 가운데 수업하는 날 연 차시만 봅니다.</p><button class="quiet" id="lockButton">잠금 끄기</button>';
  $('#lockButton').onclick=setLock;
  $('#count').textContent='학생 '+students.length+'명 · '+COURSES.map(c=>c.id+'과목 '+count(c.id)+'명').join(' · ')+(rows.length!==students.length?' · 보이는 학생 '+rows.length+'명':'');
  for(const c of COURSES){
@@ -343,7 +410,7 @@ function draw(){
 async function setCourse(key,course,on){
  const s=byKey(key),before=[...s.subjects];
  s.subjects=on?[...new Set([...s.subjects,course])].sort():s.subjects.filter(c=>c!==course);draw();
- try{await store.save([s]);toast(s.name+' · '+course+'과목을 '+(on?'열었습니다':'닫았습니다'));}
+ try{await save([s]);toast(s.name+' · '+course+'과목을 '+(on?'열었습니다':'닫았습니다'));}
  catch(e){s.subjects=before;draw();fail(e);}
 }
 async function setAll(course,on){
@@ -351,12 +418,12 @@ async function setAll(course,on){
  if(!change.length||!(await ask('지금 보이는 학생 '+rows.length+'명 가운데 '+change.length+'명의 '+course+'과목을 '+(on?'엽니다.':'닫습니다.'),on?'열기':'닫기'))){draw();return;}
  const before=change.map(s=>[s,[...s.subjects]]);
  change.forEach(s=>{s.subjects=on?[...new Set([...s.subjects,course])].sort():s.subjects.filter(c=>c!==course);});draw();
- try{await store.save(change);toast(change.length+'명의 '+course+'과목을 '+(on?'열었습니다':'닫았습니다'));}
+ try{await save(change);toast(change.length+'명의 '+course+'과목을 '+(on?'열었습니다':'닫았습니다'));}
  catch(e){before.forEach(([s,b])=>{s.subjects=b;});draw();fail(e);}
 }
 async function setLock(){
  const to=!open;
- if(!(await ask(to?'과목 잠금을 끕니다.\n이름을 묻지 않고, 누구에게나 모든 과목이 열립니다.':'과목 잠금을 다시 켭니다.\n학생은 이름과 번호로 들어가고, 열어 준 과목만 봅니다.',to?'잠금 끄기':'다시 잠그기')))return;
+ if(!(await ask(to?'과목 잠금을 끕니다.\n이름을 묻지 않고, 누구에게나 모든 과목이 열립니다.':'과목 잠금을 다시 켭니다.\n학생은 이름과 번호로 들어가고, 열어 준 과목 가운데 수업하는 날 연 차시만 봅니다.',to?'잠금 끄기':'다시 잠그기')))return;
  try{await store.setOpen(to);open=to;draw();toast(to?'잠금을 껐습니다':'다시 잠갔습니다');}catch(e){fail(e);}
 }
 async function saveEdit(row){
@@ -367,13 +434,13 @@ async function saveEdit(row){
  const key=await A.keyOf(name,last4);
  if(key!==s.key&&byKey(key)){toast('이름과 번호가 같은 학생이 이미 명단에 있습니다.',true);return;}
  const next={...s,key,name,last4,group};
- try{await store.save([next],key!==s.key?[s.key]:[]);students[students.indexOf(s)]=next;editing=null;draw();toast(name+' · 고쳤습니다');}
+ try{await save([next],key!==s.key?[s.key]:[]);students[students.indexOf(s)]=next;editing=null;draw();toast(name+' · 고쳤습니다');}
  catch(e){fail(e);}
 }
 async function remove(key){
  const s=byKey(key);
  if(!(await ask(s.name+'('+s.last4+') 학생을 명단에서 지웁니다.\n이 학생은 더 이상 들어갈 수 없습니다.','지우기')))return;
- try{await store.save([],[key]);students=students.filter(x=>x!==s);draw();toast(s.name+' · 지웠습니다');}catch(e){fail(e);}
+ try{await save([],[key]);students=students.filter(x=>x!==s);draw();toast(s.name+' · 지웠습니다');}catch(e){fail(e);}
 }
 // One line of a pasted list: the words with letters are the name; the last four of all the digits are the number.
 function readLine(line){
@@ -404,7 +471,7 @@ $('#addForm').onsubmit=async e=>{
  const key=await A.keyOf(name,last4);
  if(byKey(key)){say('이름과 번호가 같은 학생이 이미 명단에 있습니다.');return;}
  const s={key,name,last4,subjects:picked('addCourses').sort(),group:tidy($('#addGroup').value)};
- try{await store.save([s]);students.push(s);say('');$('#addName').value=$('#addDigits').value='';draw();toast(name+' · 명단에 넣었습니다');$('#addName').focus();}
+ try{await save([s]);students.push(s);say('');$('#addName').value=$('#addDigits').value='';draw();toast(name+' · 명단에 넣었습니다');$('#addName').focus();}
  catch(err){fail(err);}
 };
 $('#manyForm').onsubmit=async e=>{
@@ -413,18 +480,25 @@ $('#manyForm').onsubmit=async e=>{
  const notes=(known?'\n이미 명단에 있는 '+known+'명은 건너뜁니다.':'')+(unread.length?'\n읽지 못한 줄: '+unread.join(', ')+'번째 (이름과 번호 네 자리가 있어야 합니다)':'');
  if(!fresh.length){say('넣을 학생이 없습니다.'+notes.replace(/\n/g,' '));return;}
  if(!(await ask(fresh.length+'명을 명단에 넣습니다.'+notes,'넣기')))return;
- try{await store.save(fresh);students.push(...fresh);say(unread.length?'읽지 못한 줄: '+unread.join(', ')+'번째':'');if(!unread.length)$('#manyText').value='';draw();toast(fresh.length+'명을 명단에 넣었습니다');}
+ try{await save(fresh);students.push(...fresh);say(unread.length?'읽지 못한 줄: '+unread.join(', ')+'번째':'');if(!unread.length)$('#manyText').value='';draw();toast(fresh.length+'명을 명단에 넣었습니다');}
  catch(err){fail(err);}
 };
 $('#find').oninput=()=>{editing=null;draw();};
 $('#groupPick').onchange=()=>{editing=null;draw();};
+$('#roomPick').onchange=drawRooms;
+$('#lessons').addEventListener('click',e=>{const b=e.target.closest('button[data-day]');if(b)setDay(Number(b.dataset.day));});
 $('#dropGroup').onclick=async()=>{
  const g=$('#groupPick').value,gone=students.filter(s=>g===NONE?!s.group:s.group===g);
  if(!g||!gone.length)return;
  if(!(await ask('‘'+(g===NONE?'반 없음':g)+'’ 학생 '+gone.length+'명을 명단에서 지웁니다.\n이 학생들은 더 이상 교재에 들어갈 수 없고, 되돌릴 수 없습니다.','모두 지우기')))return;
- try{await store.save([],gone.map(s=>s.key));students=students.filter(s=>!gone.includes(s));$('#groupPick').value='';draw();toast(gone.length+'명을 지웠습니다');}catch(e){fail(e);}
+ try{
+  await save([],gone.map(s=>s.key));students=students.filter(s=>!gone.includes(s));
+  const id=await roomKey(g===NONE?'':g);
+  if(rooms.has(id)){await store.dropRoom(id);rooms.delete(id);}
+  $('#groupPick').value='';draw();toast(gone.length+'명을 지웠습니다');
+ }catch(e){fail(e);}
 };
-$('#reload').onclick=async()=>{try{[students,open]=await Promise.all([store.list(),store.getOpen()]);editing=null;draw();toast('명단을 다시 읽었습니다');}catch(e){fail(e);}};
+$('#reload').onclick=async()=>{try{[students,open,rooms]=await Promise.all([store.list(),store.getOpen(),store.rooms()]);await settle();editing=null;draw();toast('명단을 다시 읽었습니다');}catch(e){fail(e);}};
 $('#leave').onclick=()=>store&&store.signOut();
 $('#rows').addEventListener('change',e=>{const t=e.target;if(t.dataset.course)setCourse(t.closest('tr').dataset.key,Number(t.dataset.course),t.checked);});
 $('#rows').addEventListener('click',e=>{
@@ -439,7 +513,7 @@ $('#rows').addEventListener('keydown',e=>{const row=e.target.closest('tr.editing
 document.querySelector('thead').addEventListener('change',e=>{const t=e.target;if(t.dataset.all)setAll(Number(t.dataset.all),t.checked);});
 
 (async()=>{
- if(!A||!crypto.subtle){$('#door').innerHTML='<h1>수강생 관리</h1><p>이 페이지를 열 수 없습니다. 주소가 https로 시작하는지 확인해 주세요.</p>';return;}
+ if(!A){$('#door').innerHTML='<h1>수강생 관리</h1><p>이 페이지를 열 수 없습니다. 교재 파일(renewal/access.js)이 함께 있는지 확인해 주세요.</p>';return;}
  if(DEMO)store=demoStore();
  else if(!C.projectId){door('none');return;}
  else{door('loading');try{store=await firebaseStore();}catch(e){console.error(e);door('error',e);return;}}
