@@ -171,14 +171,12 @@ function gateScreen(){
   +'<form class="gate-form" id="gateForm" autocomplete="off" novalidate>'
   +'<label for="gateName">이름</label><input id="gateName" type="text" maxlength="30" placeholder="예: 홍길동" autocomplete="off" autocapitalize="off" spellcheck="false">'
   +'<label for="gateDigits">휴대폰 번호 뒷자리 네 개</label><input id="gateDigits" type="text" inputmode="numeric" maxlength="4" placeholder="예: 1234" autocomplete="off">'
-  +'<label class="gate-keep"><input id="gateKeep" type="checkbox"><span>내 컴퓨터나 내 휴대폰이면 누르세요. 다음부터 바로 열립니다.</span></label>'
   +'<div class="gate-consent"><label class="gate-keep"><input id="gateAgree" type="checkbox"'+(agreed()?' checked':'')+'><span><b>개인정보 수집·이용에 동의합니다</b> (필수)</span></label>'
   +'<details><summary>안내 보기</summary><dl class="privacy">'
   +'<dt>수집하는 곳</dt><dd>'+esc(P.who)+'</dd>'
   +'<dt>수집 항목</dt><dd>이름, 휴대폰 번호 뒷자리 4자리</dd>'
   +'<dt>이용 목적</dt><dd>수강생 확인과 과목별 수업 자료 열람</dd>'
   +'<dt>보관 기간</dt><dd>'+esc(P.keep)+'</dd>'
-  +'<dt>저장 위치</dt><dd>Google Firebase(서울 지역 서버)</dd>'
   +'</dl><p class="privacy-note">동의하지 않을 수 있습니다. 다만 동의하지 않으면 수업 자료에 들어갈 수 없습니다.</p></details></div>'
   +'<button class="primary start" id="gateButton">들어가기\u3000→</button>'
   +'<p class="gate-msg" id="gateMsg" role="alert">'+(A.state.note==='gone'?'다시 확인이 필요합니다. 이름과 번호를 입력해 주세요.':'')+'</p></form>'
@@ -197,7 +195,7 @@ function gateScreen(){
   if(!$('#gateAgree').checked){say('개인정보 수집·이용에 동의해 주세요.');$('#gateAgree').focus();return;}
   try{localStorage.setItem(AGREED,'1');}catch(e){}
   b.disabled=true;say('확인하고 있습니다.');
-  const result=await A.signIn(name,digits.value,$('#gateKeep').checked);
+  const result=await A.signIn(name,digits.value);
   if(result==='in')return;   // the reader has already drawn itself again
   b.disabled=false;
   say(result==='unknown'?'명단에서 찾지 못했습니다. 이름과 번호 네 자리를 다시 확인해 주세요.':'지금은 확인할 수 없습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.');

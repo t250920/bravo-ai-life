@@ -12,7 +12,7 @@ const C=window.BRAVO_ACCESS_CONFIG||{};
 const ON=!!C.projectId&&/^https?:$/.test(location.protocol);
 const BASE='https://firestore.googleapis.com/v1/projects/'+encodeURIComponent(C.projectId||'')+'/databases/(default)/documents/';
 const STORE='bravo-access',OPEN='bravo-access-open',COOKIE='bravo_in';
-const HOUR=3600e3,KEEP=30*24*HOUR,VISIT=12*HOUR,RECHECK=5*60e3;
+const HOUR=3600e3,VISIT=12*HOUR,RECHECK=5*60e3;
 const COURSES=[{id:1,name:'AI로 똑똑하게 일하기',days:'1~4차시'},{id:2,name:'AI 영상 놀이터',days:'5~8차시'},{id:3,name:'나에게 딱 맞는 AI 만들기',days:'9~12차시'}];
 
 // The admin page makes the key with these same three functions; change them and no student matches the roster.
@@ -51,12 +51,14 @@ const classOf=group=>hex('bravo-ai-life:class:v1:'+normName(group));
 
 const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}};
 const write=(k,v)=>{try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v));}catch(e){}};
-// Without 'keep' a visit ends when the browser is closed: a cookie with no date lives exactly that long.
+// A visit ends when the browser is closed (a cookie with no date lives exactly that long) or after twelve hours:
+// the student signs in again on every visit. (Until 2026-11-26 a box kept a sign-in for 30 days; the user asked to drop it.
+// A sign-in kept that way is no longer honoured: without the cookie it ends.)
 const hasCookie=()=>document.cookie.split('; ').includes(COOKIE+'=1');
 const setCookie=on=>{document.cookie=COOKIE+'='+(on?'1':'')+';path=/;SameSite=Lax'+(location.protocol==='https:'?';Secure':'')+(on?'':';max-age=0');};
 function session(){
  const s=read(STORE);
- if(s&&s.key&&Array.isArray(s.subjects)&&s.until>Date.now()&&(s.keep||hasCookie()))return s;
+ if(s&&s.key&&Array.isArray(s.subjects)&&s.until>Date.now()&&hasCookie())return s;
  if(s)write(STORE,null);
  return null;
 }
@@ -111,7 +113,6 @@ function refresh(){
     if(!klass){now.klass='';now.days=null;}
     else if(klass===asked.klass){if(room.status==='fulfilled')now.days=daysOf(room.value);}
     else{try{const days=daysOf(await record('classes/'+klass));now.klass=klass;now.days=days;}catch(e){}}   // moved to another class; asked again next time if this got no answer
-    if(now.keep)now.until=last+KEEP;
     const still=session();   // signed out, or in as someone else, while the class was being asked
     if(still&&still.key===now.key)write(STORE,now);else now=still;
    }
@@ -121,7 +122,7 @@ function refresh(){
  return busy;
 }
 // 'in' · 'unknown' (no such name and digits on the roster) · 'offline' (the roster gave no answer)
-async function signIn(name,digits,keep){
+async function signIn(name,digits){
  if(!ON)return 'in';
  if(!normName(name)||normDigits(digits).length!==4)return 'unknown';
  let key,fields,klass='',days=null;
@@ -130,7 +131,7 @@ async function signIn(name,digits,keep){
   if(fields===null)return 'unknown';
   klass=classIn(fields);if(klass)days=daysOf(await record('classes/'+klass));
  }catch(e){return 'offline';}
- write(STORE,{name:String(name).trim().replace(/\s+/g,' '),key,subjects:subjectsOf(fields),klass,days,keep:!!keep,until:Date.now()+(keep?KEEP:VISIT)});
+ write(STORE,{name:String(name).trim().replace(/\s+/g,' '),key,subjects:subjectsOf(fields),klass,days,until:Date.now()+VISIT});
  setCookie(true);S.note='';
  settle(S.status==='open',session());
  return 'in';
