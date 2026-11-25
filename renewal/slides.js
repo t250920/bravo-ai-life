@@ -8,6 +8,8 @@ let current=null,optionalReturn=null,tocDay=1;
 // Who may open which course (access.js). Without a roster, or opened from a folder, everything is open and nothing is asked.
 const A=window.BRAVO_ACCESS||{state:{status:'off'},allows:()=>true,subscribe(){},start(){},refresh(){}};
 const allowed=day=>A.allows(day),gated=()=>A.state.status==='checking'||A.state.status==='out';
+// 'day': the course is the student's, but the teacher has not opened this lesson for the class yet (lessons open on the day they are taught)
+const notYet=day=>!!A.why&&A.why(day)==='day';
 const firstOpen=()=>D.lessons.find(l=>allowed(l.day))||null;
 
 // A section is a run of consecutive slides that share a name inside one lesson.
@@ -65,7 +67,7 @@ function figure(s){
 
 function cover(){
  const first=firstOpen(),kept=saved(),last=kept&&allowed(kept.day)?kept:null,who=A.state.status==='in'?A.state:null;
- let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">'+(E?esc(E.cover):'12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.')+'</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions">'+(first?'<button class="primary start" id="startButton">'+first.day+'차시 시작　→</button>':'<p class="cover-none">아직 열린 수업이 없습니다. 선생님께 말씀해 주세요.</p>');
+ let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">'+(E?esc(E.cover):'12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.')+'</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions">'+(first?'<button class="primary start" id="startButton">'+first.day+'차시 시작　→</button>':(who&&who.subjects.length?'<p class="cover-none">아직 열린 수업이 없습니다. 수업하는 날 선생님이 엽니다.</p><button class="resume" id="coverRetry">다시 확인하기</button>':'<p class="cover-none">아직 열린 수업이 없습니다. 선생님께 말씀해 주세요.</p>'));
  if(last&&last.number>1)html+='<button class="resume" id="resumeButton">이어서 보기 · '+last.day+'차시 '+last.number+'번째 장</button>';
  html+='</div>';
  if(who)html+='<p class="cover-who"><span><b>'+esc(who.name)+'</b> 님'+(who.subjects.length?' · 열린 과목 Bravo AI Life '+who.subjects.join(' · '):'')+'</span><button id="signOut">다른 이름으로 들어가기</button></p>';
@@ -78,6 +80,11 @@ function cover(){
  $('#prev').disabled=true;$('#next').disabled=!first;$('#next').textContent='수업 시작 →';$('#progress').style.width='0%';document.title='Bravo AI Life · 한 장씩 따라 하기'+(E?' · '+E.name:'');
  if(first)$('#startButton').onclick=()=>go(first.id);
  if($('#signOut'))$('#signOut').onclick=()=>A.signOut();
+ if($('#coverRetry'))$('#coverRetry').onclick=async()=>{
+  const b=$('#coverRetry');b.disabled=true;b.textContent='확인하고 있습니다';
+  await A.refresh();
+  if(document.body.contains(b)){b.disabled=false;b.textContent='다시 확인하기';toast('아직 열리지 않았습니다.');}   // otherwise the cover was drawn again with the lesson
+ };
  if($('#resumeButton'))$('#resumeButton').onclick=()=>go(last.id);
 }
 
@@ -197,15 +204,16 @@ function gateScreen(){
  };
  if(matchMedia('(pointer:fine)').matches)$('#gateName').focus({preventScroll:true});
 }
-// A lesson of a course this student has not been given.
+// A lesson of a course this student has not been given, or a lesson the teacher has not opened for the class yet.
 function lockedScreen(s){
- const c=Math.ceil(s.day/4),lesson=lessonOf(s.day),to=firstOpen(),later=D.lessons.find(l=>l.day>s.day&&allowed(l.day));
- let html='<article class="slide cover gate"><span class="label">BRAVO AI LIFE '+c+'</span><h1>열리지 않은 과목입니다</h1><p>'+s.day+'차시 ‘'+esc(lesson.title)+'’는 <b>Bravo AI Life '+c+' · '+esc(courseNames[c])+'</b> 과목의 수업입니다. 수강 중인 과목의 수업만 볼 수 있습니다.</p><div class="cover-actions">';
- if(to)html+='<button class="primary start" id="lockedGo">'+to.day+'차시로 가기\u3000→</button>';
- html+='<button class="resume" id="lockedRetry">다시 확인하기</button></div><p class="small">수강 중인데 열리지 않으면 선생님께 말씀해 주세요.</p></article>';
+ const c=Math.ceil(s.day/4),lesson=lessonOf(s.day),to=firstOpen(),later=D.lessons.find(l=>l.day>s.day&&allowed(l.day)),soon=notYet(s.day),what=soon?'아직 열리지 않은 수업':'열리지 않은 과목';
+ let html='<article class="slide cover gate"><span class="label">BRAVO AI LIFE '+c+'</span><h1>'+what+'입니다</h1><p>'+s.day+'차시 ‘'+esc(lesson.title)+'’는 '
+  +(soon?'수업하는 날 선생님이 엽니다. 수업이 시작되었으면 아래 ‘다시 확인하기’를 눌러 주세요.':'<b>Bravo AI Life '+c+' · '+esc(courseNames[c])+'</b> 과목의 수업입니다. 수강 중인 과목의 수업만 볼 수 있습니다.')+'</p><div class="cover-actions">';
+ if(to)html+='<button class="'+(soon?'resume':'primary start')+'" id="lockedGo">'+to.day+'차시로 가기\u3000→</button>';
+ html+='<button class="'+(soon?'primary start':'resume')+'" id="lockedRetry">다시 확인하기</button></div><p class="small">'+(soon?'계속 열리지 않으면 선생님께 말씀해 주세요.':'수강 중인데 열리지 않으면 선생님께 말씀해 주세요.')+'</p></article>';
  $('#stage').innerHTML=html;
- $('#location').textContent=s.day+'차시 · '+lesson.title;$('#counter').textContent='열리지 않은 과목';$('#nextHint').textContent='';
- $('#prev').disabled=false;$('#next').disabled=false;$('#next').textContent=later?later.day+'차시로 →':'처음으로 →';$('#progress').style.width='0%';document.title='Bravo AI Life · 열리지 않은 과목';
+ $('#location').textContent=s.day+'차시 · '+lesson.title;$('#counter').textContent=what;$('#nextHint').textContent='';
+ $('#prev').disabled=false;$('#next').disabled=false;$('#next').textContent=later?later.day+'차시로 →':'처음으로 →';$('#progress').style.width='0%';document.title='Bravo AI Life · '+what;
  if(to)$('#lockedGo').onclick=()=>go(to.id);
  $('#lockedRetry').onclick=async()=>{
   const b=$('#lockedRetry');b.disabled=true;b.textContent='확인하고 있습니다';
@@ -234,7 +242,7 @@ function render(){
  $('#location').textContent=s.day+'차시 · '+lesson.title;
  $('#counter').textContent=mates?'선택 실습　'+(mi+1)+' / '+mates.length:extra?'선택 예제':s.day+'차시　'+s.number+' / '+s.total;
  const next=D.slides[ix+1];
- $('#nextHint').textContent=extra?(mateNext?'다음: '+mateNext.title:'원래 보던 수업으로 돌아갑니다'):next?(next.day!==s.day?(allowed(next.day)?'다음: '+next.day+'차시 시작':'다음 차시는 열리지 않은 과목입니다'):'다음: '+next.title):(E?E.last:'전체 수업의 마지막 장입니다');
+ $('#nextHint').textContent=extra?(mateNext?'다음: '+mateNext.title:'원래 보던 수업으로 돌아갑니다'):next?(next.day!==s.day?(allowed(next.day)?'다음: '+next.day+'차시 시작':notYet(next.day)?'다음 차시는 수업하는 날 열립니다':'다음 차시는 열리지 않은 과목입니다'):'다음: '+next.title):(E?E.last:'전체 수업의 마지막 장입니다');
  $('#progress').style.width=mates?((mi+1)/mates.length*100)+'%':extra?'100%':(s.number/s.total*100)+'%';
  document.title=(mates?'선택 실습 '+(mi+1)+'/'+mates.length:extra?'선택 예제':s.day+'차시 '+s.number+'/'+s.total)+' · '+s.title;
  $('#stage').scrollTop=0;$('#stage').focus({preventScroll:true});more();
@@ -266,13 +274,13 @@ function toc(){
  let lessons='';
  for(let c=1;c<=3;c++){
   if(!D.lessons.some(l=>Math.ceil(l.day/4)===c))continue;   // a topic edition may hold one course only
-  const can=allowed(c*4);
-  lessons+='<h3>Bravo AI Life '+c+'<small>'+esc(courseNames[c])+(can?'':' · 열리지 않은 과목')+'</small></h3>';
-  lessons+=D.lessons.filter(l=>Math.ceil(l.day/4)===c).map(l=>'<button data-day="'+l.day+'"'+(can?'':' disabled')+(l.day===tocDay?' class="active" aria-current="true"':'')+'><b>'+l.day+'</b><span>'+esc(l.title)+'</span></button>').join('');
+  const mine=D.lessons.filter(l=>Math.ceil(l.day/4)===c),given=mine.some(l=>allowed(l.day)||notYet(l.day));   // the course is the student's, whether or not a lesson is open yet
+  lessons+='<h3>Bravo AI Life '+c+'<small>'+esc(courseNames[c])+(given?'':' · 열리지 않은 과목')+'</small></h3>';
+  lessons+=mine.map(l=>'<button data-day="'+l.day+'"'+(allowed(l.day)?'':' disabled')+(l.day===tocDay?' class="active" aria-current="true"':'')+'><b>'+l.day+'</b><span>'+esc(l.title)+(notYet(l.day)?'<small>수업하는 날 열립니다</small>':'')+'</span></button>').join('');
  }
  $('#tocLessons').innerHTML=lessons;
  if(!allowed(tocDay)){   // nothing is open to this student (or not in this edition)
-  $('#tocSections').innerHTML='<h3>열린 수업이 없습니다</h3><p class="toc-none">수강 중인 과목의 수업만 열 수 있습니다. 선생님께 말씀해 주세요.</p>';
+  $('#tocSections').innerHTML='<h3>열린 수업이 없습니다</h3><p class="toc-none">'+(D.lessons.some(l=>notYet(l.day))?'수업하는 날 선생님이 그날의 수업을 엽니다.':'수강 중인 과목의 수업만 열 수 있습니다. 선생님께 말씀해 주세요.')+'</p>';
   $$('#tocLessons button').forEach(b=>b.onclick=()=>{tocDay=Number(b.dataset.day);toc();});
   return;
  }

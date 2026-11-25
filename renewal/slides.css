@@ -219,6 +219,7 @@ dialog::backdrop{background:#111a24b8}
 #tocLessons button b,.toc-list button b{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft);font-size:14px}
 #tocLessons button:hover,.toc-list button:hover{border-color:var(--accent)}
 #tocLessons button.active{background:var(--top);color:#fff;border-color:var(--top)}
+#tocLessons button span small{display:block;font-size:13px;font-weight:500;color:var(--mute)}
 #tocLessons button.active b{background:#fff;color:var(--top)}
 #tocSections h3{font-size:21px;margin-bottom:12px}
 #tocSections h3 small{font-size:14px;color:var(--mute);font-weight:600;margin-left:10px}
