@@ -3,7 +3,9 @@
    the main action. One step per slide; the page may scroll, panes never do. */
 :root{
   --bg:#e9e9e7; --card:#fbfbfa; --ink:#1f252b; --sub:#434c55; --mute:#59636d; --line:#d5d8db; --soft:#eef0f1;
-  --accent:#2c5a9c; --accent-soft:#e8eff8; --accent-line:#bfd0e6;
+  /* accent: charcoal, not blue (2026-11-26, user: “저 파란색 … PPT 기본 버튼색 같아서 싫어”). Change the colour here. */
+  --accent:#2f3439; --accent-soft:#f3f1ec; --accent-line:#d8d3c9;
+  --btn-top:#40464c; --btn-bottom:#2a2f34; --btn-edge:#22262a; --btn-hover-top:#363c42; --btn-hover-bottom:#1e2226;
   --result:#256e4e; --result-soft:#e6f2eb; --result-line:#bcdccb;
   --check:#8a5206; --check-soft:#fbf2df; --check-line:#ecd5a4;
   --prep:#56478f; --prep-soft:#efecf7;
@@ -31,10 +33,10 @@ p,li{word-break:keep-all;overflow-wrap:anywhere}
 .tools button:hover{background:#4a4e52}
 .controls{position:relative;display:flex;align-items:center;gap:22px;justify-content:center;padding:12px 28px;background:#f7f7f5;border-top:1px solid var(--line)}
 .progress-track{height:4px;position:absolute;top:-1px;left:0;right:0;background:var(--line)}
-#progress{height:100%;background:#4f73a3;transition:width .2s}
+#progress{height:100%;background:var(--accent);transition:width .2s}
 .controls button{border-radius:11px;padding:13px 28px;font-weight:700;min-width:132px;font-size:18px}
 .primary{background:var(--accent);color:#fff}
-.primary:hover{background:#244c86}
+.primary:hover{background:var(--btn-hover-bottom)}
 .back{background:#e4e7e9;color:#2e3843}
 .back:hover{background:#d8dcdf}
 button:disabled{opacity:.35;cursor:default}
@@ -66,7 +68,7 @@ button:disabled{opacity:.35;cursor:default}
 .points{display:grid;grid-template-columns:repeat(auto-fit,minmax(max(240px,calc(50% - 8px)),1fr));gap:12px;list-style:none;padding:0;margin:0;max-width:1080px}
 .points li{padding:18px 22px;background:var(--soft);border-radius:12px;font-size:21px;font-weight:700;color:#2b353f}
 .open-platform{display:inline-block;padding:14px 26px;background:var(--accent);border-radius:11px;color:#fff;font-size:19px;font-weight:700;text-decoration:none}
-.open-platform:hover{background:#244c86}
+.open-platform:hover{background:var(--btn-hover-bottom)}
 .downloads{display:flex;gap:12px;flex-wrap:wrap}
 .downloads a{display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--accent-line);border-radius:12px;padding:14px 20px;text-decoration:none;font-size:18px;font-weight:700;color:var(--accent);max-width:100%;overflow-wrap:anywhere}
 .downloads a::before{content:"↓";font-size:22px;line-height:1}
@@ -112,10 +114,10 @@ button:disabled{opacity:.35;cursor:default}
 .prompt-head{display:flex;align-items:center;justify-content:space-between;gap:18px;font-size:16px;font-weight:800;color:var(--accent);margin-bottom:10px;min-height:46px}
 .prompt.answer .prompt-head{color:var(--result)}
 .copy{display:grid;place-items:center;background:#fff;color:var(--accent);border:1px solid var(--accent-line);width:46px;height:46px;border-radius:10px;flex:none}
-.copy:hover{background:#f3f7fc}
+.copy:hover{background:#faf9f6}
 .copy svg{width:22px;height:22px}
 .copy.done{background:var(--result);border-color:var(--result);color:#fff}
-.prompt pre{font:inherit;font-size:19.5px;line-height:1.8;max-width:1000px;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;margin:0;color:#1d3247;tab-size:2}
+.prompt pre{font:inherit;font-size:19.5px;line-height:1.8;max-width:1000px;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;margin:0;color:var(--ink);tab-size:2}
 .reflow-note{font-size:13.5px;color:var(--mute);padding-left:4px;margin-top:-6px}
 .checkbox{border-radius:14px;padding:18px 26px 20px;background:var(--check-soft);border:1px solid var(--check-line)}
 .checkbox h2{font-size:16px;font-weight:800;color:var(--check);margin-bottom:8px}
@@ -204,8 +206,8 @@ button:disabled{opacity:.35;cursor:default}
 #more[hidden]{display:none}
 
 /* ---------- dialogs ---------- */
-dialog{border:1px solid var(--line);border-radius:18px;padding:22px 24px;color:var(--ink);background:var(--card);width:min(1040px,94vw);max-height:90dvh;box-shadow:0 30px 100px #0d1c2c55}
-dialog::backdrop{background:#111a24b8}
+dialog{border:1px solid var(--line);border-radius:18px;padding:22px 24px;color:var(--ink);background:var(--card);width:min(1040px,94vw);max-height:90dvh;box-shadow:0 30px 100px #0b0e1155}
+dialog::backdrop{background:#111417b8}
 .dialog-head{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:16px}
 .dialog-head h2{margin:2px 0 0;font-size:26px}
 .dialog-head small,.dialog-head p{color:var(--mute);font-size:15px;font-weight:600}
@@ -231,12 +233,12 @@ dialog::backdrop{background:#111a24b8}
 .toc-list button.here{border-color:var(--accent);background:var(--accent-soft)}
 .toc-list .from-start{background:var(--accent);color:#fff;border-color:var(--accent)}
 .toc-list .from-start b{background:#ffffff26;color:#fff}
-.toc-list .from-start small{color:#dbe6f5}
+.toc-list .from-start small{color:#e2e4e6}
 .toc-list.extra button{font-size:15.5px;padding:11px 14px;font-weight:500}
 #zoom{width:96vw;max-width:none;height:94dvh;max-height:94dvh}
 #zoom .zoom-body{height:calc(100% - 66px);overflow:auto;background:#eef0f1;border-radius:10px;display:flex;align-items:flex-start;justify-content:center}
 #zoom img{max-width:none;min-width:70%;height:auto}
-#toast{position:fixed;left:50%;bottom:98px;transform:translateX(-50%);background:#16304a;color:#fff;border-radius:10px;padding:13px 24px;z-index:100;font-size:17px;font-weight:600;max-width:92vw;text-align:center}
+#toast{position:fixed;left:50%;bottom:98px;transform:translateX(-50%);background:#22272b;color:#fff;border-radius:10px;padding:13px 24px;z-index:100;font-size:17px;font-weight:600;max-width:92vw;text-align:center}
 #toast:empty{display:none}
 noscript{display:block;padding:24px;font-size:18px}
 
@@ -280,24 +282,24 @@ noscript{display:block;padding:24px;font-size:18px}
 /* ---------- buttons, one quiet style (2026-11-26, user: “버튼이 너무 투박해.. 좀 세련되게 전체적으로”) ----------
    Main action: soft blue gradient and a light shadow. Second action: white with a thin line. Both lift a little under the
    mouse and settle when pressed. Sizes stay large enough for older students (44px and more, 17px text and more). */
-:root{--btn-shadow:0 1px 2px #10203812,0 2px 6px -2px #10203814;--btn-lift:0 2px 4px #10203814,0 8px 18px -8px #1020383d;--focus:0 0 0 3px #fff,0 0 0 5px #2c5a9c99}
+:root{--btn-shadow:0 1px 2px #14181c12,0 2px 6px -2px #14181c14;--btn-lift:0 2px 4px #14181c14,0 8px 18px -8px #14181c3d;--focus:0 0 0 3px #fff,0 0 0 5px #2f3439b3}
 button,.open-platform,.downloads a{transition:background-color .15s,border-color .15s,box-shadow .15s,transform .15s,color .15s}
 button:focus-visible,a:focus-visible{outline:0;box-shadow:var(--focus)}
 input:focus-visible{outline:0}
 button:disabled{opacity:.4;box-shadow:none!important;transform:none!important}
-.primary,.cover .start,.open-platform,.consent-actions .start{background:linear-gradient(180deg,#3a6db3,#2c5a9c);color:#fff;border:1px solid #27508c;box-shadow:inset 0 1px 0 #ffffff26,var(--btn-shadow);font-weight:700;letter-spacing:-.2px}
-.primary:hover:not(:disabled),.cover .start:hover,.open-platform:hover,.consent-actions .start:hover{background:linear-gradient(180deg,#3466ac,#264f8b);box-shadow:inset 0 1px 0 #ffffff26,var(--btn-lift);transform:translateY(-1px)}
-.primary:active:not(:disabled),.cover .start:active,.open-platform:active,.consent-actions .start:active{transform:none;box-shadow:inset 0 1px 2px #0b1f3d40}
+.primary,.cover .start,.open-platform,.consent-actions .start{background:linear-gradient(180deg,var(--btn-top),var(--btn-bottom));color:#fff;border:1px solid var(--btn-edge);box-shadow:inset 0 1px 0 #ffffff26,var(--btn-shadow);font-weight:700;letter-spacing:-.2px}
+.primary:hover:not(:disabled),.cover .start:hover,.open-platform:hover,.consent-actions .start:hover{background:linear-gradient(180deg,var(--btn-hover-top),var(--btn-hover-bottom));box-shadow:inset 0 1px 0 #ffffff26,var(--btn-lift);transform:translateY(-1px)}
+.primary:active:not(:disabled),.cover .start:active,.open-platform:active,.consent-actions .start:active{transform:none;box-shadow:inset 0 1px 2px #0000004d}
 .back,.cover .resume,.consent-actions .resume,.gif-toggle,.dialog-head button,.ch-start button,.ch-outline button,.cover-who button{background:#fff;color:var(--ink);border:1px solid #cfd6de;box-shadow:var(--btn-shadow);font-weight:600}
 .cover .resume,.consent-actions .resume{color:var(--accent)}
 .back:hover:not(:disabled),.cover .resume:hover,.consent-actions .resume:hover,.gif-toggle:hover,.dialog-head button:hover,.ch-start button:hover,.ch-outline button:hover,.cover-who button:hover{background:#f7f9fb;border-color:#aebccc;box-shadow:var(--btn-lift);transform:translateY(-1px)}
-.back:active:not(:disabled),.cover .resume:active,.consent-actions .resume:active,.gif-toggle:active,.dialog-head button:active{transform:none;box-shadow:inset 0 1px 2px #10203818;background:#f1f4f7}
+.back:active:not(:disabled),.cover .resume:active,.consent-actions .resume:active,.gif-toggle:active,.dialog-head button:active{transform:none;box-shadow:inset 0 1px 2px #14181c18;background:#f1f4f7}
 .controls button{border-radius:12px;padding:12px 26px;min-width:124px;font-size:17.5px}
 .cover .start,.consent-actions .start{padding:16px 30px;font-size:20px;border-radius:14px}
 .cover .resume,.consent-actions .resume{padding:16px 24px;font-size:18px;border-radius:14px}
 .open-platform{padding:13px 24px;border-radius:12px;font-size:18px}
-.downloads a{border:1px solid #c9d6e6;box-shadow:var(--btn-shadow);border-radius:12px;font-weight:600}
-.downloads a:hover{background:var(--accent-soft);border-color:#9fb6d3;box-shadow:var(--btn-lift);transform:translateY(-1px)}
+.downloads a{border:1px solid var(--accent-line);box-shadow:var(--btn-shadow);border-radius:12px;font-weight:600}
+.downloads a:hover{background:var(--accent-soft);border-color:#b9b2a5;box-shadow:var(--btn-lift);transform:translateY(-1px)}
 .gif-toggle,.dialog-head button{border-radius:10px}
 .ch-start button,.ch-outline button,.j-course button,#tocLessons button,.toc-list button,.cover-editions a{box-shadow:var(--btn-shadow)}
 .j-course button:hover,#tocLessons button:hover:not(:disabled):not(.active),.toc-list button:hover,.cover-editions a:hover{box-shadow:var(--btn-lift)}
@@ -307,8 +309,8 @@ button:disabled{opacity:.4;box-shadow:none!important;transform:none!important}
 .image-open:hover{box-shadow:var(--btn-lift)}
 .tools button{background:transparent;border:1px solid #ffffff2b;border-radius:10px;color:#eef0f1}
 .tools button:hover{background:#ffffff14;border-color:#ffffff47}
-.gate-form input[type=text]{border-width:1px;border-color:#c9d0d8;box-shadow:inset 0 1px 2px #10203810}
-.gate-form input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 4px #2c5a9c26}
+.gate-form input[type=text]{border-width:1px;border-color:#c9d0d8;box-shadow:inset 0 1px 2px #14181c10}
+.gate-form input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 4px #2f34391f}
 
 /* ---------- short laptop screens ---------- */
 @media(max-height:720px) and (min-width:801px){
