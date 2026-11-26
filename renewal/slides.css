@@ -255,6 +255,14 @@ noscript{display:block;padding:24px;font-size:18px}
 .gate-keep input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent)}
 .gate-form .start{justify-self:start}
 .gate-consent{margin:0 0 6px}
+#consent{width:min(620px,94vw)}
+#consent .consent-lead{margin:0 0 12px;font-size:18px;line-height:1.6;color:var(--sub)}
+#consent .privacy{margin:0 0 10px;font-size:16.5px}
+#consent .privacy-note{margin:0;font-size:15px;line-height:1.6;color:var(--mute)}
+.consent-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.consent-actions button{padding:16px 26px;font-size:19px;border-radius:12px;font-weight:800}
+.consent-actions .resume{background:#fff;border:2px solid var(--accent-line);color:var(--accent);font-weight:700}
+.gate-privacy{background:none;border:0;padding:0;font:inherit;color:var(--accent);font-weight:600;text-decoration:underline;cursor:pointer}
 .gate-consent .gate-keep{margin:4px 0 2px}
 .gate-consent .gate-keep b{color:var(--ink)}
 .gate-consent summary{cursor:pointer;margin-left:33px;font-size:15px;font-weight:600;color:var(--accent)}
@@ -268,6 +276,39 @@ noscript{display:block;padding:24px;font-size:18px}
 .cover-who button:hover{border-color:var(--accent);color:var(--accent)}
 .j-course li.locked{opacity:.45}
 .toc-none{font-size:17px;line-height:1.7;color:var(--sub)}
+
+/* ---------- buttons, one quiet style (2026-11-26, user: “버튼이 너무 투박해.. 좀 세련되게 전체적으로”) ----------
+   Main action: soft blue gradient and a light shadow. Second action: white with a thin line. Both lift a little under the
+   mouse and settle when pressed. Sizes stay large enough for older students (44px and more, 17px text and more). */
+:root{--btn-shadow:0 1px 2px #10203812,0 2px 6px -2px #10203814;--btn-lift:0 2px 4px #10203814,0 8px 18px -8px #1020383d;--focus:0 0 0 3px #fff,0 0 0 5px #2c5a9c99}
+button,.open-platform,.downloads a{transition:background-color .15s,border-color .15s,box-shadow .15s,transform .15s,color .15s}
+button:focus-visible,a:focus-visible{outline:0;box-shadow:var(--focus)}
+input:focus-visible{outline:0}
+button:disabled{opacity:.4;box-shadow:none!important;transform:none!important}
+.primary,.cover .start,.open-platform,.consent-actions .start{background:linear-gradient(180deg,#3a6db3,#2c5a9c);color:#fff;border:1px solid #27508c;box-shadow:inset 0 1px 0 #ffffff26,var(--btn-shadow);font-weight:700;letter-spacing:-.2px}
+.primary:hover:not(:disabled),.cover .start:hover,.open-platform:hover,.consent-actions .start:hover{background:linear-gradient(180deg,#3466ac,#264f8b);box-shadow:inset 0 1px 0 #ffffff26,var(--btn-lift);transform:translateY(-1px)}
+.primary:active:not(:disabled),.cover .start:active,.open-platform:active,.consent-actions .start:active{transform:none;box-shadow:inset 0 1px 2px #0b1f3d40}
+.back,.cover .resume,.consent-actions .resume,.gif-toggle,.dialog-head button,.ch-start button,.ch-outline button,.cover-who button{background:#fff;color:var(--ink);border:1px solid #cfd6de;box-shadow:var(--btn-shadow);font-weight:600}
+.cover .resume,.consent-actions .resume{color:var(--accent)}
+.back:hover:not(:disabled),.cover .resume:hover,.consent-actions .resume:hover,.gif-toggle:hover,.dialog-head button:hover,.ch-start button:hover,.ch-outline button:hover,.cover-who button:hover{background:#f7f9fb;border-color:#aebccc;box-shadow:var(--btn-lift);transform:translateY(-1px)}
+.back:active:not(:disabled),.cover .resume:active,.consent-actions .resume:active,.gif-toggle:active,.dialog-head button:active{transform:none;box-shadow:inset 0 1px 2px #10203818;background:#f1f4f7}
+.controls button{border-radius:12px;padding:12px 26px;min-width:124px;font-size:17.5px}
+.cover .start,.consent-actions .start{padding:16px 30px;font-size:20px;border-radius:14px}
+.cover .resume,.consent-actions .resume{padding:16px 24px;font-size:18px;border-radius:14px}
+.open-platform{padding:13px 24px;border-radius:12px;font-size:18px}
+.downloads a{border:1px solid #c9d6e6;box-shadow:var(--btn-shadow);border-radius:12px;font-weight:600}
+.downloads a:hover{background:var(--accent-soft);border-color:#9fb6d3;box-shadow:var(--btn-lift);transform:translateY(-1px)}
+.gif-toggle,.dialog-head button{border-radius:10px}
+.ch-start button,.ch-outline button,.j-course button,#tocLessons button,.toc-list button,.cover-editions a{box-shadow:var(--btn-shadow)}
+.j-course button:hover,#tocLessons button:hover:not(:disabled):not(.active),.toc-list button:hover,.cover-editions a:hover{box-shadow:var(--btn-lift)}
+.copy{border-radius:10px;box-shadow:var(--btn-shadow)}
+.copy:hover{box-shadow:var(--btn-lift);transform:translateY(-1px)}
+.image-open{border-radius:999px;padding:7px 14px;background:#ffffffe6;border:1px solid #d4dae1;box-shadow:var(--btn-shadow);backdrop-filter:blur(4px)}
+.image-open:hover{box-shadow:var(--btn-lift)}
+.tools button{background:transparent;border:1px solid #ffffff2b;border-radius:10px;color:#eef0f1}
+.tools button:hover{background:#ffffff14;border-color:#ffffff47}
+.gate-form input[type=text]{border-width:1px;border-color:#c9d0d8;box-shadow:inset 0 1px 2px #10203810}
+.gate-form input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 4px #2c5a9c26}
 
 /* ---------- short laptop screens ---------- */
 @media(max-height:720px) and (min-width:801px){
@@ -310,7 +351,7 @@ noscript{display:block;padding:24px;font-size:18px}
   .controls button{padding:12px 14px;min-width:84px;font-size:16px}
   .position{min-width:0;flex:1}
   .position strong{font-size:13px}.position span{font-size:11px}
-  .cover{padding:24px 20px}.cover h1{font-size:34px}.cover p{font-size:17px}.cover .start{font-size:19px;padding:15px 24px}.cover .resume{font-size:16px;padding:14px 18px}
+  .cover{padding:24px 20px}.cover h1{font-size:34px}.cover p{font-size:17px}.cover .start,.consent-actions .start{font-size:18.5px;padding:14px 24px}.cover .resume,.consent-actions .resume{font-size:16.5px;padding:13px 18px}
   .cover-steps{flex-wrap:wrap;font-size:13px}
   .chapter{flex-direction:column;padding:22px 18px;gap:18px}
   .chapter h1{font-size:30px}.ch-lead{font-size:18px}

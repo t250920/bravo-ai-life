@@ -67,7 +67,7 @@ function figure(s){
 
 function cover(){
  const first=firstOpen(),kept=saved(),last=kept&&allowed(kept.day)?kept:null,who=A.state.status==='in'?A.state:null;
- let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">'+(E?esc(E.cover):'12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.')+'</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions">'+(first?'<button class="primary start" id="startButton">'+first.day+'차시 시작　→</button>':(who&&who.subjects.length?'<p class="cover-none">아직 열린 수업이 없습니다. 수업하는 날 선생님이 엽니다.</p><button class="resume" id="coverRetry">다시 확인하기</button>':'<p class="cover-none">아직 열린 수업이 없습니다. 선생님께 말씀해 주세요.</p>'));
+ let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">'+(E?esc(E.cover):'12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.')+'</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions">'+(first?'<button class="primary start" id="startButton">'+first.day+'차시 시작 →</button>':(who&&who.subjects.length?'<p class="cover-none">아직 열린 수업이 없습니다. 수업하는 날 선생님이 엽니다.</p><button class="resume" id="coverRetry">다시 확인하기</button>':'<p class="cover-none">아직 열린 수업이 없습니다. 선생님께 말씀해 주세요.</p>'));
  if(last&&last.number>1)html+='<button class="resume" id="resumeButton">이어서 보기 · '+last.day+'차시 '+last.number+'번째 장</button>';
  html+='</div>';
  if(who)html+='<p class="cover-who"><span><b>'+esc(who.name)+'</b> 님'+(who.subjects.length?' · 열린 과목 Bravo AI Life '+who.subjects.join(' · '):'')+'</span><button id="signOut">다른 이름으로 들어가기</button></p>';
@@ -160,9 +160,38 @@ function slide(s,extra){
 }
 
 // Nobody is signed in yet: ask for the name and the four digits before anything of the lessons is shown.
-// The notice about the name and digits (access-config.js: BRAVO_PRIVACY). Consent given on this browser is remembered.
+// The notice about the name and digits (access-config.js: BRAVO_PRIVACY). It pops up once, on the first visit of this browser,
+// and once agreed it does not come back (2026-11-26, user: “처음만 뜨고 그다음은 안뜨게”). The link under the form shows it again.
 const P=window.BRAVO_PRIVACY||{who:'수업 강사',keep:'과정이 끝난 뒤 삭제'},AGREED='bravo-privacy-agreed';
-const agreed=()=>{try{return localStorage.getItem(AGREED)==='1';}catch(e){return false;}};
+let agreedNow=false,declinedNow=false;   // in this tab: for a browser that keeps nothing, and so a refusal is not asked again at once
+const agreed=()=>{if(agreedNow)return true;try{return localStorage.getItem(AGREED)==='1';}catch(e){return false;}};
+// ask: true asks for consent (resolves true when given); false only shows the notice.
+function consentDialog(ask){
+ let d=$('#consent');
+ if(!d){d=document.createElement('dialog');d.id='consent';d.setAttribute('aria-labelledby','consentTitle');document.body.append(d);}
+ if(d.open)return Promise.resolve(false);
+ d.innerHTML='<div class="dialog-head"><div><small>'+(ask?'처음 한 번만 묻습니다':'동의한 내용')+'</small><h2 id="consentTitle">개인정보 수집·이용 동의</h2></div></div>'
+  +(ask?'<p class="consent-lead">수업 자료를 열려면 아래 내용에 동의해 주세요.</p>':'')
+  +'<dl class="privacy">'
+  +'<dt>수집하는 곳</dt><dd>'+esc(P.who)+'</dd>'
+  +'<dt>수집 항목</dt><dd>이름, 휴대폰 번호 뒷자리 4자리</dd>'
+  +'<dt>이용 목적</dt><dd>수강생 확인과 과목별 수업 자료 열람</dd>'
+  +'<dt>보관 기간</dt><dd>'+esc(P.keep)+'</dd>'
+  +'</dl><p class="privacy-note">동의하지 않을 수 있습니다. 다만 동의하지 않으면 수업 자료에 들어갈 수 없습니다.</p>'
+  +'<div class="consent-actions">'+(ask?'<button class="primary start" id="consentYes">동의합니다</button><button class="resume" id="consentNo">동의하지 않습니다</button>':'<button class="resume" id="consentNo">닫기</button>')+'</div>';
+ return new Promise(done=>{
+  const finish=ok=>{
+   d.oncancel=null;if(d.open)d.close();
+   if(ask&&ok){agreedNow=true;declinedNow=false;try{localStorage.setItem(AGREED,'1');}catch(e){}}
+   else if(ask)declinedNow=true;
+   done(ask&&ok);
+  };
+  if(ask)$('#consentYes').onclick=()=>finish(true);
+  $('#consentNo').onclick=()=>finish(false);
+  d.oncancel=e=>{e.preventDefault();finish(false);};   // Escape: the same as declining
+  d.showModal();
+ });
+}
 function gateScreen(){
  document.body.classList.add('gated');current=null;
  let html='<article class="slide cover gate"><span class="label">BRAVO AI LIFE</span><h1>수강생 확인</h1>';
@@ -171,20 +200,17 @@ function gateScreen(){
   +'<form class="gate-form" id="gateForm" autocomplete="off" novalidate>'
   +'<label for="gateName">이름</label><input id="gateName" type="text" maxlength="30" placeholder="예: 홍길동" autocomplete="off" autocapitalize="off" spellcheck="false">'
   +'<label for="gateDigits">휴대폰 번호 뒷자리 네 개</label><input id="gateDigits" type="text" inputmode="numeric" maxlength="4" placeholder="예: 1234" autocomplete="off">'
-  +'<div class="gate-consent"><label class="gate-keep"><input id="gateAgree" type="checkbox"'+(agreed()?' checked':'')+'><span><b>개인정보 수집·이용에 동의합니다</b> (필수)</span></label>'
-  +'<details><summary>안내 보기</summary><dl class="privacy">'
-  +'<dt>수집하는 곳</dt><dd>'+esc(P.who)+'</dd>'
-  +'<dt>수집 항목</dt><dd>이름, 휴대폰 번호 뒷자리 4자리</dd>'
-  +'<dt>이용 목적</dt><dd>수강생 확인과 과목별 수업 자료 열람</dd>'
-  +'<dt>보관 기간</dt><dd>'+esc(P.keep)+'</dd>'
-  +'</dl><p class="privacy-note">동의하지 않을 수 있습니다. 다만 동의하지 않으면 수업 자료에 들어갈 수 없습니다.</p></details></div>'
-  +'<button class="primary start" id="gateButton">들어가기\u3000→</button>'
+  +'<button class="primary start" id="gateButton">들어가기\ →</button>'
   +'<p class="gate-msg" id="gateMsg" role="alert">'+(A.state.note==='gone'?'다시 확인이 필요합니다. 이름과 번호를 입력해 주세요.':'')+'</p></form>'
-  +'<p class="small">수강 신청 때 알려 주신 이름과 번호입니다. 열리지 않으면 선생님께 말씀해 주세요.</p>';
+  +'<p class="small">수강 신청 때 알려 주신 이름과 번호입니다. 열리지 않으면 선생님께 말씀해 주세요.</p>'
+  +'<p class="small"><button type="button" class="gate-privacy" id="privacyLink">개인정보 수집·이용 안내</button></p>';
  $('#stage').innerHTML=html+'</article>';
  $('#location').textContent='한 장씩 따라 하는 AI 수업';document.title='Bravo AI Life · 수강생 확인';$('#stage').scrollTop=0;more();
  const form=$('#gateForm');if(!form)return;
  const say=t=>{$('#gateMsg').textContent=t;},digits=$('#gateDigits');
+ const refused='개인정보 수집·이용에 동의해야 수업 자료에 들어갈 수 있습니다. 아래 ‘개인정보 수집·이용 안내’에서 동의할 수 있습니다.';
+ const name1=()=>{if(matchMedia('(pointer:fine)').matches)$('#gateName').focus({preventScroll:true});};
+ $('#privacyLink').onclick=async()=>{if(agreed())consentDialog(false);else if(await consentDialog(true)){say('');name1();}};
  digits.addEventListener('input',()=>{digits.value=digits.value.replace(/\D/g,'').slice(0,4);});
  digits.addEventListener('paste',e=>{e.preventDefault();digits.value=A.normDigits(e.clipboardData.getData('text'));});   // a whole phone number: keep its last four
  form.onsubmit=async e=>{
@@ -192,22 +218,22 @@ function gateScreen(){
   const name=$('#gateName').value,b=$('#gateButton');
   if(!A.normName(name)){say('이름을 입력해 주세요.');$('#gateName').focus();return;}
   if(A.normDigits(digits.value).length!==4){say('휴대폰 번호 뒷자리 네 개를 모두 입력해 주세요.');digits.focus();return;}
-  if(!$('#gateAgree').checked){say('개인정보 수집·이용에 동의해 주세요.');$('#gateAgree').focus();return;}
-  try{localStorage.setItem(AGREED,'1');}catch(e){}
+  if(!agreed()&&!await consentDialog(true)){say(refused);return;}
   b.disabled=true;say('확인하고 있습니다.');
   const result=await A.signIn(name,digits.value);
   if(result==='in')return;   // the reader has already drawn itself again
   b.disabled=false;
   say(result==='unknown'?'명단에서 찾지 못했습니다. 이름과 번호 네 자리를 다시 확인해 주세요.':'지금은 확인할 수 없습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.');
  };
- if(matchMedia('(pointer:fine)').matches)$('#gateName').focus({preventScroll:true});
+ if(agreed())name1();
+ else if(!declinedNow)consentDialog(true).then(ok=>ok?name1():say(refused));   // first visit of this browser: ask once, before the form
 }
 // A lesson of a course this student has not been given, or a lesson the teacher has not opened for the class yet.
 function lockedScreen(s){
  const c=Math.ceil(s.day/4),lesson=lessonOf(s.day),to=firstOpen(),later=D.lessons.find(l=>l.day>s.day&&allowed(l.day)),soon=notYet(s.day),what=soon?'아직 열리지 않은 수업':'열리지 않은 과목';
  let html='<article class="slide cover gate"><span class="label">BRAVO AI LIFE '+c+'</span><h1>'+what+'입니다</h1><p>'+s.day+'차시 ‘'+esc(lesson.title)+'’는 '
   +(soon?'수업하는 날 선생님이 엽니다. 수업이 시작되었으면 아래 ‘다시 확인하기’를 눌러 주세요.':'<b>Bravo AI Life '+c+' · '+esc(courseNames[c])+'</b> 과목의 수업입니다. 수강 중인 과목의 수업만 볼 수 있습니다.')+'</p><div class="cover-actions">';
- if(to)html+='<button class="'+(soon?'resume':'primary start')+'" id="lockedGo">'+to.day+'차시로 가기\u3000→</button>';
+ if(to)html+='<button class="'+(soon?'resume':'primary start')+'" id="lockedGo">'+to.day+'차시로 가기\ →</button>';
  html+='<button class="'+(soon?'primary start':'resume')+'" id="lockedRetry">다시 확인하기</button></div><p class="small">'+(soon?'계속 열리지 않으면 선생님께 말씀해 주세요.':'수강 중인데 열리지 않으면 선생님께 말씀해 주세요.')+'</p></article>';
  $('#stage').innerHTML=html;
  $('#location').textContent=s.day+'차시 · '+lesson.title;$('#counter').textContent=what;$('#nextHint').textContent='';
