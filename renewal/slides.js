@@ -67,11 +67,11 @@ function figure(s){
 
 function cover(){
  const first=firstOpen(),kept=saved(),last=kept&&allowed(kept.day)?kept:null,who=A.state.status==='in'?A.state:null;
- let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">'+(E?esc(E.cover):'12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.')+'</p><p>시작을 누르면 첫 번째 화면부터 안내합니다.<br>다음 장으로 갈 때는 아래 ‘다음’ 또는 키보드의 → 키를 누르세요.</p><div class="cover-actions">'+(first?'<button class="primary start" id="startButton">'+first.day+'차시 시작 →</button>':(who&&who.subjects.length?'<p class="cover-none">아직 열린 수업이 없습니다. 수업하는 날 선생님이 엽니다.</p><button class="resume" id="coverRetry">다시 확인하기</button>':'<p class="cover-none">아직 열린 수업이 없습니다. 선생님께 말씀해 주세요.</p>'));
+ let html='<article class="slide cover"><span class="label">BRAVO AI LIFE</span><h1>한 장씩 보고,<br>그대로 따라 하세요.</h1><p class="cover-story">'+(E?esc(E.cover):'12번의 수업이 하나의 사업으로 이어집니다. 가상 러닝화 브랜드 <b>PACE 01</b>의 사업계획부터 광고, 고객 응대, 웹페이지까지 직접 만듭니다.')+'</p><div class="cover-actions">'+(first?'<button class="primary start" id="startButton">'+first.day+'차시 시작 →</button>':(who&&who.subjects.length?'<p class="cover-none">아직 열린 수업이 없습니다. 수업하는 날 선생님이 엽니다.</p><button class="resume" id="coverRetry">다시 확인하기</button>':'<p class="cover-none">아직 열린 수업이 없습니다. 선생님께 말씀해 주세요.</p>'));
  if(last&&last.number>1)html+='<button class="resume" id="resumeButton">이어서 보기 · '+last.day+'차시 '+last.number+'번째 장</button>';
  html+='</div>';
  if(who)html+='<p class="cover-who"><span><b>'+esc(who.name)+'</b> 님'+(who.subjects.length?' · 열린 과목 Bravo AI Life '+who.subjects.join(' · '):'')+'</span><button id="signOut">다른 이름으로 들어가기</button></p>';
- html+='<p class="small">다른 차시를 보려면 오른쪽 위 ‘목차’를 누르세요.</p><div class="cover-steps"><span>① 화면 보기</span>→<span>② 직접 해 보기</span>→<span>③ 다음 장</span></div>';
+ // 2026-11-29 (user: the first page has too much text): only the title, the one-line story, the start button and who is signed in.
  // The same lessons on another subject: one line of links, the current edition marked.
  if(EDITIONS.length>1)html+='<nav class="cover-editions" aria-label="주제 고르기"><b>주제 고르기</b>'+EDITIONS.map(x=>(x.key===(E?E.key:'pace')?'<span class="here">':'<a href="'+esc(x.href)+'">')+esc(x.name)+'<small>'+esc(x.scope)+'</small>'+(x.key===(E?E.key:'pace')?'</span>':'</a>')).join('')+'</nav>';
  html+='</article>';
@@ -122,7 +122,7 @@ function slide(s,extra){
  if(mates)head+='<span class="series">선택 실습 · '+esc(s.series)+'</span><span class="step">'+(mates.indexOf(s)+1)+' / '+mates.length+'</span>';
  head+='</p><h1>'+esc(s.title)+'</h1></header>';
  let lead='';
- if(s.text?.length)lead+='<div class="instructions">'+s.text.map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>';
+ if(s.text?.length)lead+=s.brief?'<ul class="instructions brief">'+s.text.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>':'<div class="instructions">'+s.text.map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>';   // brief: short bullets (brief.py)
  if(s.steps?.length)lead+='<ol class="steps">'+s.steps.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ol>';
  if(s.points?.length)lead+='<ul class="points">'+s.points.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>';
  if(s.journey)lead+=journeyMap(s.journey);

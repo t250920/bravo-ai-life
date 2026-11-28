@@ -279,6 +279,11 @@ noscript{display:block;padding:24px;font-size:18px}
 .j-course li.locked{opacity:.45}
 .toc-none{font-size:17px;line-height:1.7;color:var(--sub)}
 
+/* short bullets under the title (brief.py · 2026-11-29) */
+.instructions.brief{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.instructions.brief li{position:relative;padding-left:22px;line-height:1.55}
+.instructions.brief li::before{content:"";position:absolute;left:4px;top:.68em;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+
 /* ---------- buttons, one quiet style (2026-11-26, user: “버튼이 너무 투박해.. 좀 세련되게 전체적으로”) ----------
    Main action: soft blue gradient and a light shadow. Second action: white with a thin line. Both lift a little under the
    mouse and settle when pressed. Sizes stay large enough for older students (44px and more, 17px text and more). */
